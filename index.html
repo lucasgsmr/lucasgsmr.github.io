@@ -575,7 +575,9 @@ function blocoVolume(){
   for(let w=Math.max(1,S.week-1);w<=S.week;w++)P.forEach((p,d)=>{const r=S.readiness[key(w,d)];if(!r)return;
     if(Object.values(r).filter(v=>v===1).length>=2)fl.push(p.n+' (sem '+sem(w)+')');});
   if(fl.length>=2)h+=`<div class="alert" style="margin:13px 0 0"><b>Sinal de excesso de volume.</b> ${fl.join(', ')}. Corte uma série por grupo.</div>`;
-  h+=`<div style="height:13px"></div><button class="btn g" onclick="proxSemana()">Avançar semana</button></div>`;
+  h+=`<div style="height:13px"></div>
+    <div class="frow"><button class="btn g" onclick="voltaSemana()">Voltar</button>
+    <button class="btn" onclick="proxSemana()">Avançar semana</button></div></div>`;
   return h;}
 
 function cel(i,k){const x=exDe(i),L=mkLog(S.week,day);
@@ -646,10 +648,7 @@ function nota(v){mkLog(S.week,day).notes=v;save();}
 /* ================= PROGRESSO ================= */
 function ajustes(){
   const last=S.body[S.body.length-1]||{},first=S.body[0];
-  let h=`<div class="card"><h2>Semana</h2>
-    <p>Semana ${sem(S.week)} de 7 · bloco ${bloco(S.week)} · ${esc(fase(S.week).t)}</p>
-    <button class="btn g" onclick="voltaSemana()">Voltar uma semana</button></div>`;
-  h+=`<div class="card"><h2>Medidas</h2><div class="grid">`;
+  let h=`<div class="card"><h2>Medidas</h2><div class="grid">`;
   [['peso','Peso (kg)'],['ombro','Ombro (cm)'],['peito','Peito (cm)'],['cintura','Cintura (cm)'],['braco','Braço (cm)']]
     .forEach(([k,lb])=>h+=`<div class="fld"><label>${lb}</label><input type="number" inputmode="decimal" step="0.1" id="m_${k}" placeholder="${last[k]||'—'}"></div>`);
   h+=`</div><button class="btn g" onclick="salvaMedidas()">Salvar medidas de hoje</button>`;
