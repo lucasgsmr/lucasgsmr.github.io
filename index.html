@@ -31,6 +31,9 @@ h1{font-size:26px;font-weight:700;margin:0;letter-spacing:-.02em}
 .days::-webkit-scrollbar{display:none}
 .day{flex:0 0 auto;padding:9px 16px;border-radius:22px;background:var(--card);border:1px solid var(--edge);
   font-size:15.5px;font-weight:600;white-space:nowrap;color:var(--mid)}
+.day small{display:block;font-size:10.5px;font-weight:700;letter-spacing:.04em;
+  text-transform:uppercase;color:var(--sig);line-height:1;margin-top:2px}
+.day.next:not(.on){border-color:var(--sig);color:var(--sig)}
 .day.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 .day.done{border-color:var(--go);color:var(--go)}
 .day.on.done{background:var(--go);border-color:var(--go);color:#fff}
@@ -296,7 +299,7 @@ recalcGrupos();
 
 /* ================= ESTADO ================= */
 const KEY='tracker-hipertrofia-v3';
-let S={week:1,dia:0,rest:null,logs:{},body:[],readiness:{},swaps:{},extras:{},flags:{},notas:{},uni:{}};
+let S={week:1,dia:0,rest:null,ultimo:0,logs:{},body:[],readiness:{},swaps:{},extras:{},flags:{},notas:{},uni:{}};
 let day=0,tab='1',tSave=null,pend=false,vivo=true,saida='';
 const aberto=new Set();   // exercícios concluídos que o usuário reabriu (só em memória)
 
@@ -348,9 +351,11 @@ function nS(x,w){const f=fase(w);
   if(f.ramp===2&&x.iso&&x.s>=4)return x.s-1;
   return x.s;}
 const key=(w,d)=>'w'+w+'d'+d;
+const hojeLocal=()=>{const d=new Date();
+  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');};
 const getLog=(w,d)=>S.logs[key(w,d)];
 function mkLog(w,d){const k=key(w,d);
-  if(!S.logs[k])S.logs[k]={sets:{},notes:'',rir:{},date:new Date().toISOString().slice(0,10)};
+  if(!S.logs[k])S.logs[k]={sets:{},notes:'',rir:{},date:hojeLocal()};
   if(!S.logs[k].rir)S.logs[k].rir={};
   return S.logs[k];}
 const cheio=v=>v!==''&&v!=null;
@@ -449,18 +454,20 @@ function tDe(i){const x=exDe(i);desc(x.d,nome(S.week,day,x.e).slice(0,26));}
 /* ================= TREINO ================= */
 function render(){topo();abas();treino();if(tab==='2')ajustes();}
 function topo(){const f=fase(S.week);
-  document.getElementById('crumb').textContent='Bloco '+bloco(S.week)+' · Semana '+sem(S.week)+' de 7';
+  document.getElementById('crumb').textContent='Bloco '+bloco(S.week)+' · Ciclo '+sem(S.week)+' de 7';
   document.getElementById('dn').textContent=P[day].n;
   document.getElementById('df').textContent=P[day].f;
   const t=document.getElementById('tg');
   if(f.dl||f.ramp){t.textContent=f.t;t.className='tag'+(f.dl?' dl':'');}
   else t.className='tag hide';}
-function abas(){const c=document.getElementById('days');c.innerHTML='';
-  P.forEach((p,i)=>{const L=getLog(S.week,i);
-    const fez=L&&Object.values(L.sets||{}).some(a=>a.some(val));
+const feitoDia=(w,d)=>{const L=getLog(w,d);return !!(L&&Object.values(L.sets||{}).some(a=>a.some(val)));};
+function proxima(){for(let d=0;d<P.length;d++)if(!feitoDia(S.week,d))return d;return -1;}
+function abas(){const c=document.getElementById('days');c.innerHTML='';const nx=proxima();
+  P.forEach((p,i)=>{const fez=feitoDia(S.week,i);
     const b=document.createElement('button');
-    b.className='day'+(i===day?' on':'')+(fez?' done':'');
-    b.textContent=p.n;b.onclick=()=>vaiDia(i);c.appendChild(b);});}
+    b.className='day'+(i===day?' on':'')+(fez?' done':'')+(i===nx?' next':'');
+    b.innerHTML=esc(p.n)+(i===nx&&i!==day?'<small>próximo</small>':'');
+    b.onclick=()=>vaiDia(i);c.appendChild(b);});}
 function vaiDia(i){day=i;S.dia=i;aberto.clear();save();render();scrollTo(0,0);}
 const ROL='tracker-rolagem';
 function guardaRolagem(){ try{
@@ -475,12 +482,12 @@ function voltaRolagem(){ try{
 function treino(){
   const L=getLog(S.week,day)||{sets:{},notes:'',rir:{}},f=fase(S.week);
   let h='';
-  if(f.dl)h+='<div class="alert"><b>Semana de deload.</b> Mesmas cargas, metade das séries, longe da falha.</div>';
-  else if(f.ramp)h+='<div class="alert i"><b>Rampa de volume.</b> Isoladores com séries a menos de propósito — o número original aparece riscado. Volume cheio na semana 3.</div>';
+  if(f.dl)h+='<div class="alert"><b>Ciclo de deload.</b> Mesmas cargas, metade das séries, longe da falha.</div>';
+  else if(f.ramp)h+='<div class="alert i"><b>Rampa de volume.</b> Isoladores com séries a menos de propósito — o número original aparece riscado. Volume cheio a partir do ciclo 3.</div>';
   const feitosDias=P.filter((_,d)=>{const Q=getLog(S.week,d);
     return Q&&Object.values(Q.sets||{}).some(a=>a.some(val));}).length;
-  if(feitosDias>=P.length)h+=`<div class="alert i"><b>Semana completa.</b> As ${P.length} sessões estão registradas. Avance a semana para que estas cargas virem a referência da próxima.
-    <button class="btn" style="margin-top:11px" onclick="proxSemana()">Avançar para a semana ${sem(S.week)+1>7?1:sem(S.week)+1}</button></div>`;
+  if(feitosDias>=P.length)h+=`<div class="alert i"><b>Ciclo completo.</b> As ${P.length} sessões estão registradas. Avance o ciclo para que estas cargas virem a referência do próximo.
+    <button class="btn" style="margin-top:11px" onclick="proxSemana()">Avançar para o ciclo ${sem(S.week)+1>7?1:sem(S.week)+1}</button></div>`;
 
   lista(S.week,day).forEach((x,i)=>{
     const n=nS(x,S.week),ex=nome(S.week,day,x.e),troc=ex!==x.e,uni=ehUni(x.e);
@@ -507,7 +514,7 @@ function treino(){
           ${x.extra?`<button class="rm" onclick="rmExtra(${i})">remover</button>`:''}
         </div></div>
       <div class="tip pnl hide" id="nt${i}">
-        <textarea class="finp" id="nti${i}" rows="2" placeholder="Sua observação para este exercício — vale em todas as semanas.">${esc(S.notas[norm(x.e)]||'')}</textarea>
+        <textarea class="finp" id="nti${i}" rows="2" placeholder="Sua observação para este exercício — vale em todos os ciclos.">${esc(S.notas[norm(x.e)]||'')}</textarea>
         <button class="btn" onclick="salvaN(${i})">Salvar nota</button></div>
       <div class="tip pnl hide" id="sw${i}">
         ${subDe(x).length?`<div class="subs">${subDe(x).map(v=>
@@ -517,8 +524,8 @@ function treino(){
         <div class="frow"><button class="btn g" onclick="resetT(${i})">Original</button>
         <button class="btn" onclick="salvaT(${i})">Usar este</button></div></div>`;
 
-    if(prev&&prev.outro)h+=`<div class="tip">Referência de ${esc(P[prev.d]?P[prev.d].n:'outra sessão')}, semana ${sem(prev.w)}${norm(prev.de)===norm(x.e)&&prev.de!==x.e?' ("'+esc(prev.de)+'")':''}.</div>`;
-    if(pr&&pr.up)h+=`<div class="tip up">${pr.largo?'Chegou a '+x.b+' na 1ª série':'Fechou '+x.b+' reps em tudo'} na semana ${sem(prev.w)}. ${pr.bw?'Adicione carga ou suba as reps.':'Suba para <b>'+pr.kg+'kg</b>.'}</div>`;
+    if(prev&&prev.outro)h+=`<div class="tip">Referência de ${esc(P[prev.d]?P[prev.d].n:'outra sessão')}, ciclo ${sem(prev.w)}${norm(prev.de)===norm(x.e)&&prev.de!==x.e?' ("'+esc(prev.de)+'")':''}.</div>`;
+    if(pr&&pr.up)h+=`<div class="tip up">${pr.largo?'Chegou a '+x.b+' na 1ª série':'Fechou '+x.b+' reps em tudo'} no ciclo ${sem(prev.w)}. ${pr.bw?'Adicione carga ou suba as reps.':'Suba para <b>'+pr.kg+'kg</b>.'}</div>`;
     else if(pr)h+=`<div class="tip">Mantenha${pr.kg!=null?' '+pr.kg+'kg':''}. ${pr.largo?'A 1ª série precisa chegar a '+x.b+' (as outras, a '+x.a+').':'Falta'+(pr.falta>1?'m':'')+' '+pr.falta+' série'+(pr.falta>1?'s':'')+' chegando a '+x.b+'.'}</div>`;
     else if(x.note)h+=`<div class="tip">${esc(x.note)}</div>`;
     if(S.notas[norm(x.e)])h+=`<div class="tip pes">${esc(S.notas[norm(x.e)])}</div>`;
@@ -549,7 +556,7 @@ function treino(){
     <button class="btn" onclick="addExtra()">Adicionar</button></div></div>`;
 
   h+=`<div class="card"><h2>Como foi hoje</h2>
-    <p>Dois marcadores em "ruim" por duas semanas seguidas: corte uma série por grupo.</p>`;
+    <p>Dois marcadores em "ruim" por dois ciclos seguidos: corte uma série por grupo.</p>`;
   [['sono','Sono'],['vontade','Vontade de treinar'],['artic','Articulações']].forEach(([k,lb])=>{
     const v=(S.readiness[key(S.week,day)]||{})[k];
     h+=`<div class="rd"><span>${lb}</span>
@@ -564,7 +571,7 @@ function blocoVolume(){
   const f=fase(S.week),AL=alvoSemana(S.week),feito={};
   P.forEach((p,d)=>{const L=getLog(S.week,d);if(!L)return;
     lista(S.week,d).forEach(x=>{feito[x.m]=(feito[x.m]||0)+(L.sets[x.e]||[]).filter(val).length;});});
-  let h=`<div class="card"><h2>Séries desta semana</h2>`;
+  let h=`<div class="card"><h2>Séries deste ciclo</h2>`;
   Object.entries(AL).sort((a,b)=>b[1]-a[1]).forEach(([m,t])=>{const c=feito[m]||0,acima=c>t;
     h+=`<div class="vr"><div class="vn">${m}</div><div class="vb">
       <div class="vf ${acima?'over':(c>=t?'full':(PRIO.includes(m)?'pri':''))}" style="width:${t?Math.min(100,c/t*100):0}%"></div></div>
@@ -573,11 +580,11 @@ function blocoVolume(){
   if(ex.length)h+=`<div class="alert i" style="margin:13px 0 0"><b>Acima do planejado:</b> ${ex.map(([m,t])=>m+' '+feito[m]+' de '+t).join(', ')}.</div>`;
   const fl=[];
   for(let w=Math.max(1,S.week-1);w<=S.week;w++)P.forEach((p,d)=>{const r=S.readiness[key(w,d)];if(!r)return;
-    if(Object.values(r).filter(v=>v===1).length>=2)fl.push(p.n+' (sem '+sem(w)+')');});
+    if(Object.values(r).filter(v=>v===1).length>=2)fl.push(p.n+' (ciclo '+sem(w)+')');});
   if(fl.length>=2)h+=`<div class="alert" style="margin:13px 0 0"><b>Sinal de excesso de volume.</b> ${fl.join(', ')}. Corte uma série por grupo.</div>`;
   h+=`<div style="height:13px"></div>
     <div class="frow"><button class="btn g" onclick="voltaSemana()">Voltar</button>
-    <button class="btn" onclick="proxSemana()">Avançar semana</button></div></div>`;
+    <button class="btn" onclick="proxSemana()">Avançar ciclo</button></div></div>`;
   return h;}
 
 function cel(i,k){const x=exDe(i),L=mkLog(S.week,day);
@@ -586,7 +593,7 @@ function cel(i,k){const x=exDe(i),L=mkLog(S.week,day);
   return L.sets[x.e][k];}
 function leCel(i,k){const x=exDe(i),L=getLog(S.week,day);          // leitura não cria estado
   return (L&&L.sets[x.e]&&L.sets[x.e][k])||null;}
-function põe(i,k,f,v){const s=cel(i,k);s[f]=v;
+function põe(i,k,f,v){const s=cel(i,k);s[f]=v;S.ultimo=Date.now();
   const sf=/D$/.test(f)?'D':'', lb=ehUni(exDe(i).e)?(sf||'E'):'';
   const r=document.getElementById('r'+i+'_'+k+lb);
   if(r)r.classList.toggle('ok',cheio(s['reps'+sf]));
@@ -691,7 +698,7 @@ function mostra(tipo){
     Object.entries(S.logs).sort().forEach(([k,lg])=>{const m=k.match(/^w(\d+)d(\d+)$/);if(!m)return;
       const w=+m[1],d=+m[2],ss=Object.entries(lg.sets||{}).filter(([,a])=>a.some(val));
       if(!ss.length)return;
-      L.push('SEMANA '+sem(w)+' · '+(P[d]?P[d].n:'Sessão '+(d+1))+(lg.date?' · '+lg.date.split('-').reverse().join('/'):''));
+      L.push('CICLO '+sem(w)+' · '+(P[d]?P[d].n:'Sessão '+(d+1))+(lg.date?' · '+lg.date.split('-').reverse().join('/'):''));
       ss.forEach(([e,a])=>L.push('  '+nome(w,d,e)+' — '+a.filter(val).map(s=>
         cheio(s.repsD)?((s.kg||s.kgD?(s.kg||s.kgD)+'×':'')+(s.reps||'–')+'/'+s.repsD+' (E/D)')
                       :((s.kg?s.kg+'×':'')+s.reps)).join(', ')));
@@ -746,7 +753,7 @@ function importaPrograma(){const v=document.getElementById('pbox').value.trim();
     ()=>{S.prog=o;aplicaPrograma(o);save();render();scrollTo(0,0);toast('Programa aplicado.');});}
 function baixaBackup(){
   mostra('backup');
-  const d=new Date().toISOString().slice(0,10);
+  const d=hojeLocal();
   try{
     const b=new Blob([saida],{type:'application/json'});
     const a=document.createElement('a');
@@ -784,7 +791,7 @@ function restaura(){
   if(!novas&&!atualizadas&&!pulou){toast('Nada novo nesse backup — tudo já estava aqui.');return;}
   save();render();
   toast(novas+' sessão(ões) restaurada(s)'+(atualizadas?' e '+atualizadas+' completada(s)':'')
-    +(pulou?' · agora na semana '+sem(pulou)+' do bloco '+bloco(pulou):'')+'.');}
+    +(pulou?' · agora no ciclo '+sem(pulou)+' do bloco '+bloco(pulou):'')+'.');}
 function copia(){const t=document.getElementById('out');
   t.removeAttribute('readonly');t.focus();t.select();t.setSelectionRange(0,999999);
   let ok=false;try{ok=document.execCommand('copy');}catch(e){}
@@ -792,16 +799,16 @@ function copia(){const t=document.getElementById('out');
   if(ok)toast('Copiado.');
   else if(navigator.clipboard)navigator.clipboard.writeText(t.value).then(()=>toast('Copiado.'),()=>toast('Selecionado — copie pelo teclado.',1));
   else toast('Selecionado — copie pelo teclado.',1);}
-function salvaMedidas(){const o={date:new Date().toISOString().slice(0,10)};let a=0;
+function salvaMedidas(){const o={date:hojeLocal()};let a=0;
   ['peso','ombro','peito','cintura','braco'].forEach(k=>{const v=document.getElementById('m_'+k).value;if(v){o[k]=+v;a=1;}});
   if(!a){toast('Preencha ao menos um campo.',1);return;}
   const i=S.body.findIndex(b=>b.date===o.date);
   if(i>=0)S.body[i]=Object.assign(S.body[i],o);else S.body.push(o);
   save();ajustes();toast('Medidas salvas.');}
-function proxSemana(){ask('Avançar para a semana '+(S.week+1)+'?\n\nAs cargas desta semana viram a referência da próxima.',
-  ()=>{S.week++;aberto.clear();save();flush();render();scrollTo(0,0);toast('Semana '+sem(S.week)+' do bloco '+bloco(S.week)+'.');});}
-function voltaSemana(){if(S.week<=1){toast('Já está na primeira semana.');return;}
-  ask('Voltar para a semana '+(S.week-1)+'?',()=>{S.week--;aberto.clear();save();render();});}
+function proxSemana(){ask('Avançar para o ciclo '+(S.week+1)+'?\n\nAs cargas deste ciclo viram a referência do próximo.',
+  ()=>{S.week++;aberto.clear();day=0;S.dia=0;save();flush();render();scrollTo(0,0);toast('Ciclo '+sem(S.week)+' do bloco '+bloco(S.week)+'.');});}
+function voltaSemana(){if(S.week<=1){toast('Já está no primeiro ciclo.');return;}
+  ask('Voltar para o ciclo '+(S.week-1)+'?',()=>{S.week--;aberto.clear();save();render();});}
 
 let rolagem=0;
 function abreCfg(){rolagem=window.scrollY||0;tab='2';ajustes();
@@ -823,6 +830,8 @@ function fechaCfg(){tab='1';document.getElementById('cfg').classList.add('hide')
     ask('Aplicar o programa "'+(doLink.nome||'sem nome')+'"?\n\n'+doLink.dias.length+' sessões. Seu histórico não é apagado.',
       ()=>{S.prog=doLink;aplicaPrograma(doLink);save();render();scrollTo(0,0);toast('Programa aplicado.');});}
   day=Math.min(Math.max(0,+S.dia||0),P.length-1);
+  const noMeio=S.ultimo&&(Date.now()-S.ultimo<3*3600000);
+  if(!noMeio){const nx=proxima(); if(nx>=0)day=nx;}
   render(); retomaTimer(); voltaRolagem(); await flush();
 })();
 </script>
