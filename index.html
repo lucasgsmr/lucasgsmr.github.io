@@ -278,20 +278,37 @@ const subDe=x=>x.sub&&x.sub.length?x.sub:(SUBS[norm(x.e)]||[]);
 let GRUPOS=[],PRIO=["Peito","Ombro lat","Costas"],NOME="Hipertrofia 6× · peito, ombro e costas";
 function recalcGrupos(){GRUPOS=[...new Set(P.flatMap(p=>p.ex.map(x=>x.m)))];}
 function programaAtual(){return{nome:NOME,prio:PRIO,dias:P};}
+const limpaTxt=(v,max)=>String(v==null?'':v).replace(/[<>"`]/g,'').replace(/\s+/g,' ').trim().slice(0,max);
+const numOk=(v,min,max)=>{const n=+v;return Number.isFinite(n)&&n>=min&&n<=max?n:NaN;};
+// Limpa e valida no lugar. Devolve a mensagem de erro, ou null se estiver tudo certo.
 function validaPrograma(o){
-  if(!o||!Array.isArray(o.dias)||!o.dias.length)return 'Faltam os dias de treino.';
+  if(!o||typeof o!=='object'||!Array.isArray(o.dias)||!o.dias.length)return 'Faltam os dias de treino.';
+  if(o.dias.length>7)return 'Um programa pode ter no máximo 7 sessões.';
+  o.nome=limpaTxt(o.nome,60)||'Programa';
+  o.prio=(Array.isArray(o.prio)?o.prio:[]).map(p=>limpaTxt(p,24)).filter(Boolean);
   for(const d of o.dias){
-    if(!d.n||!Array.isArray(d.ex)||!d.ex.length)return 'Um dos dias está sem nome ou sem exercícios.';
+    if(!d||typeof d!=='object'||!Array.isArray(d.ex)||!d.ex.length)return 'Um dos dias está sem exercícios.';
+    if(d.ex.length>15)return 'Uma sessão pode ter no máximo 15 exercícios.';
+    d.n=limpaTxt(d.n,24); d.f=limpaTxt(d.f,40);
+    if(!d.n)return 'Um dos dias está sem nome.';
     const vistos=new Set();
-    for(const x of d.ex){const nn=norm(x.e);
-      if(vistos.has(nn))return 'Exercício repetido em '+d.n+': '+x.e;
-      vistos.add(nn);}
     for(const x of d.ex){
+      if(!x||typeof x!=='object')return 'Exercício inválido em '+d.n+'.';
+      x.e=limpaTxt(x.e,60); x.m=limpaTxt(x.m,24); x.r=limpaTxt(x.r,5)||'1';
+      if(x.note!=null&&x.note!=='')x.note=limpaTxt(x.note,220); else delete x.note;
+      if(Array.isArray(x.sub))x.sub=x.sub.map(v=>limpaTxt(v,60)).filter(Boolean); else delete x.sub;
+      x.s=numOk(x.s,1,10); x.a=numOk(x.a,1,50); x.b=numOk(x.b,1,50);
+      x.d=Number.isFinite(numOk(x.d,10,600))?+x.d:90;
+      x.inc=Number.isFinite(numOk(x.inc,0,50))?+x.inc:2.5;
+      if(x.iso)x.iso=1; else delete x.iso;
+      if(x.bw)x.bw=1; else delete x.bw;
       if(!x.e)return 'Um exercício está sem nome.';
-      if(!(x.s>0))return x.e+': número de séries inválido.';
-      if(!(x.a>0)||!(x.b>=x.a))return x.e+': faixa de repetições inválida.';
       if(!x.m)return x.e+': falta o grupo muscular.';
-      if(!(x.d>0))x.d=90;}}
+      if(!Number.isFinite(x.s))return x.e+': séries devem ir de 1 a 10.';
+      if(!Number.isFinite(x.a)||!Number.isFinite(x.b)||x.b<x.a)return x.e+': faixa de repetições inválida.';
+      const nn=norm(x.e);
+      if(vistos.has(nn))return 'Exercício repetido em '+d.n+': '+x.e;
+      vistos.add(nn);}}
   return null;}
 function aplicaPrograma(o){P=o.dias;PRIO=o.prio||[];NOME=o.nome||'Programa';
   recalcGrupos(); if(day>=P.length)day=0;}
@@ -504,7 +521,7 @@ function treino(){
     const total=Math.max(n,arr.length),mud=n!==x.s;
     h+=`<div class="ex"><div class="exh">
         <div class="exn">${esc(ex)}${troc?`<small>no lugar de ${esc(x.e)}</small>`:''}${x.extra?'<small>adicionado nesta sessão</small>':''}</div>
-        <div class="exm">${mud?`<s>${x.s}</s> <b>${n}</b>`:n} × ${x.a}-${x.b} reps · RIR ${f.dl?'3-4':x.r} · ${x.m}</div>
+        <div class="exm">${mud?`<s>${x.s}</s> <b>${n}</b>`:n} × ${x.a}-${x.b} reps · RIR ${f.dl?'3-4':esc(x.r)} · ${esc(x.m)}</div>
         ${rec?`<div class="rec">Recorde ${rec.kg}kg × ${rec.reps}</div>`:''}
         <div class="acts">
           <button onclick="tDe(${i})">descanso ${Math.floor(x.d/60)}:${String(x.d%60).padStart(2,'0')}</button>
@@ -551,7 +568,7 @@ function treino(){
     <div class="frow"><input class="finp" id="nxS" type="number" inputmode="numeric" placeholder="séries">
       <input class="finp" id="nxA" type="number" inputmode="numeric" placeholder="rep mín">
       <input class="finp" id="nxB" type="number" inputmode="numeric" placeholder="rep máx"></div>
-    <select class="finp" id="nxM">${GRUPOS.map(m=>`<option>${m}</option>`).join('')}</select>
+    <select class="finp" id="nxM">${GRUPOS.map(m=>`<option>${esc(m)}</option>`).join('')}</select>
     <div class="frow"><button class="btn g" onclick="abreAdd()">Cancelar</button>
     <button class="btn" onclick="addExtra()">Adicionar</button></div></div>`;
 
@@ -573,14 +590,14 @@ function blocoVolume(){
     lista(S.week,d).forEach(x=>{feito[x.m]=(feito[x.m]||0)+(L.sets[x.e]||[]).filter(val).length;});});
   let h=`<div class="card"><h2>Séries deste ciclo</h2>`;
   Object.entries(AL).sort((a,b)=>b[1]-a[1]).forEach(([m,t])=>{const c=feito[m]||0,acima=c>t;
-    h+=`<div class="vr"><div class="vn">${m}</div><div class="vb">
+    h+=`<div class="vr"><div class="vn">${esc(m)}</div><div class="vb">
       <div class="vf ${acima?'over':(c>=t?'full':(PRIO.includes(m)?'pri':''))}" style="width:${t?Math.min(100,c/t*100):0}%"></div></div>
       <div class="vv ${acima?'over':''}"><b>${c}</b>/${t}</div></div>`;});
   const ex=Object.entries(AL).filter(([m,t])=>(feito[m]||0)>t);
-  if(ex.length)h+=`<div class="alert i" style="margin:13px 0 0"><b>Acima do planejado:</b> ${ex.map(([m,t])=>m+' '+feito[m]+' de '+t).join(', ')}.</div>`;
+  if(ex.length)h+=`<div class="alert i" style="margin:13px 0 0"><b>Acima do planejado:</b> ${ex.map(([m,t])=>esc(m)+' '+feito[m]+' de '+t).join(', ')}.</div>`;
   const fl=[];
   for(let w=Math.max(1,S.week-1);w<=S.week;w++)P.forEach((p,d)=>{const r=S.readiness[key(w,d)];if(!r)return;
-    if(Object.values(r).filter(v=>v===1).length>=2)fl.push(p.n+' (ciclo '+sem(w)+')');});
+    if(Object.values(r).filter(v=>v===1).length>=2)fl.push(esc(p.n)+' (ciclo '+sem(w)+')');});
   if(fl.length>=2)h+=`<div class="alert" style="margin:13px 0 0"><b>Sinal de excesso de volume.</b> ${fl.join(', ')}. Corte uma série por grupo.</div>`;
   h+=`<div style="height:13px"></div>
     <div class="frow"><button class="btn g" onclick="voltaSemana()">Voltar</button>
