@@ -59,6 +59,8 @@ main{padding:2px 16px 0;max-width:620px;margin:0 auto}
 .sn i{font-style:normal;display:block;font-size:12px;color:var(--sig);font-weight:700;line-height:1}
 .vf.over{background:var(--sig)} .vv.over{color:var(--sig)}
 .acts button.act{color:var(--sig)}
+.aquece{margin:0 0 12px;padding:11px 14px;border-radius:10px;background:var(--soft);font-size:14px;color:var(--mid)}
+.aquece b{color:var(--ink)}
 .corte{margin:4px 0 14px;padding:12px 14px;border-radius:10px;background:var(--soft);
   border-left:3px solid var(--go)}
 .corte b{display:block;font-size:15px;color:var(--go)} .corte span{font-size:13.5px;color:var(--mid)}
@@ -206,18 +208,18 @@ let P=[
 {n:"Lower",f:"Pernas",ex:[
  {e:"Hack squat",s:3,a:6,b:10,r:"1-2",d:30,m:"Quadríceps",inc:5,par:1,note:"Em par com a elevação lateral: faça a elevação no meio do descanso do hack."},
  {e:"Elevação lateral máquina",s:3,a:12,b:20,r:"0-1",d:150,m:"Ombro lat",inc:1,iso:1,note:"Terceiro estímulo de ombro lateral no ciclo. Leve para o ombro, sem cansar a perna."},
- {e:"Terra romeno",s:3,a:6,b:10,r:"2",d:150,m:"Posterior",inc:5,note:"Quadril para trás, joelho quase fixo. Pare quando a lombar quiser ceder."},
- {e:"Cadeira flexora sentada",s:3,a:10,b:15,r:"0-1",d:30,m:"Posterior",inc:2.5,iso:1,par:1,note:"Em par com a panturrilha: alterne as séries."},
- {e:"Panturrilha sentado",s:3,a:10,b:15,r:"0-1",d:75,m:"Panturrilha",inc:2.5,iso:1},
+ {e:"Terra romeno",s:3,a:6,b:10,r:"2",d:30,m:"Posterior",inc:5,par:1,note:"Em par com a panturrilha. Quadril para trás, joelho quase fixo; pare quando a lombar quiser ceder."},
+ {e:"Panturrilha sentado",s:3,a:10,b:15,r:"0-1",d:150,m:"Panturrilha",inc:2.5,iso:1,note:"Pausa de 1s embaixo, no alongamento. Sem quicar."},
+ {e:"Cadeira flexora sentada",s:3,a:10,b:15,r:"0-1",d:30,m:"Posterior",inc:2.5,iso:1,par:1,note:"Em par com a extensora: alterne as séries."},
+ {e:"Cadeira extensora",s:3,a:12,b:15,r:"0-1",d:75,m:"Quadríceps",inc:2.5,iso:1,note:"Pausa de 1s no topo."},
  {e:"Leg press amplitude total",s:2,a:10,b:15,r:"1",d:45,m:"Quadríceps",inc:5,c:1,par:1,note:"Em par com o voador: alterne as séries. Desça até o quadril quase enrolar."},
  {e:"Voador",s:2,a:12,b:15,r:"0-1",d:90,m:"Peito",inc:2.5,iso:1,c:1,note:"Terceiro estímulo de peito no ciclo. Alongamento completo, pausa curta no fechamento."},
- {e:"Cadeira extensora",s:2,a:12,b:15,r:"0-1",d:30,m:"Quadríceps",inc:2.5,iso:1,c:1,par:1,note:"Em par com o abdominal: alterne as séries."},
- {e:"Abdominal com carga",s:3,a:10,b:15,r:"1",d:60,m:"Abdômen",inc:2.5,iso:1,c:1},
- {e:"Hip thrust",s:2,a:8,b:12,r:"1",d:120,m:"Glúteo",inc:5,c:1}]},
-{n:"Upper B",f:"Peito superior e largura",ex:[
+ {e:"Hip thrust",s:2,a:8,b:12,r:"1",d:30,m:"Glúteo",inc:5,c:1,par:1,note:"Em par com o abdominal: alterne as séries."},
+ {e:"Abdominal com carga",s:3,a:10,b:15,r:"1",d:60,m:"Abdômen",inc:2.5,iso:1,c:1}]},
+{n:"Upper B",f:"Peito e largura",ex:[
  {e:"Supino inclinado máquina/Smith",s:4,a:8,b:12,r:"1",d:150,m:"Peito",inc:2.5},
  {e:"Puxada aberta pronada",s:4,a:8,b:12,r:"1",d:120,m:"Costas",inc:2.5},
- {e:"Crossover de baixo para cima",s:3,a:12,b:15,r:"0-1",d:75,m:"Peito",inc:2.5,iso:1},
+ {e:"Crossover na polia média",s:3,a:12,b:15,r:"0-1",d:75,m:"Peito",inc:2.5,iso:1,note:"Polias na altura do peito. Alongamento completo atrás, mãos se encontrando à frente do esterno."},
  {e:"Remada baixa na polia",s:3,a:10,b:15,r:"1",d:30,m:"Costas",inc:2.5,par:1,note:"Em par com a elevação lateral: alterne as séries."},
  {e:"Elevação lateral na polia",s:5,a:12,b:20,r:"0-1",d:75,m:"Ombro lat",inc:1,iso:1},
  {e:"Crucifixo inverso máquina",s:3,a:15,b:20,r:"0-1",d:60,m:"Ombro post",inc:1,iso:1,c:1},
@@ -269,6 +271,7 @@ const SUBS={
 "elevacao lateral com halteres":["Elevação lateral na polia","Elevação lateral máquina","Elevação lateral em banco inclinado"],
 "rosca na polia baixa atras do corpo":["Rosca inclinada no banco","Rosca direta com halteres","Rosca Scott"],
 "elevacao lateral maquina":["Elevação lateral com halteres","Elevação lateral na polia","Elevação lateral unilateral na polia"],
+"crossover na polia media":["Peck deck","Voador","Crucifixo com halteres em banco reto"],
 "voador":["Peck deck","Crossover na polia média","Crucifixo com halteres"],
 "elevacao de pernas":["Elevação de joelhos suspenso","Abdominal infra no banco","Canivete"]};
 const subDe=x=>x.sub&&x.sub.length?x.sub:(SUBS[norm(x.e)]||[]);
@@ -353,12 +356,17 @@ function ask(msg,sim){const a=document.getElementById('ask');document.getElement
 const esc=s=>String(s==null?'':s).replace(/[<>&"]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c]));
 
 /* ================= BLOCO ================= */
-const bloco=w=>Math.floor((w-(S.inicio||1))/7)+1, sem=w=>((w-1)%7)+1;
+// Blocos de NB ciclos a partir do início do programa atual. Semanas anteriores seguem o esquema antigo (7).
+const NB=10, ini=()=>S.inicio||1;
+const bloco=w=>w<ini()?Math.floor((w-1)/7)+1:Math.floor((w-ini())/NB)+1;
+const sem=w=>w<ini()?((w-1)%7)+1:((w-ini())%NB)+1;
 function fase(w){const s=sem(w);
-  if(s===7)return{t:'Deload · metade das séries, RIR 3-4',dl:1};
+  if(w<ini()){                                   // programa antigo: só importa saber o que foi deload
+    if(s===7)return{t:'Deload',dl:1}; if(s===1)return{t:'Rampa',ramp:1}; if(s===2)return{t:'Rampa',ramp:2};
+    return{t:'Volume cheio'};}
+  if(s===NB)return{t:'Deload · metade das séries, RIR 3-4',dl:1};
   if(s===1)return{t:'Rampa · isoladores com 1 série a menos',ramp:1};
-  if(s===2)return{t:'Rampa · volume quase cheio',ramp:2};
-  if(s<=4)return{t:'Volume cheio · RIR 1-2'};
+  if(s<=5)return{t:'Volume cheio · RIR 1-2'};
   return{t:'Intensificação · RIR 0-1 nos isoladores'};}
 function nS(x,w){const f=fase(w);
   if(x.fixo)return x.s;
@@ -479,7 +487,7 @@ function tDe(i){const x=exDe(i);desc(x.d,nome(S.week,day,x.e).slice(0,26));}
 /* ================= TREINO ================= */
 function render(){topo();abas();treino();if(tab==='2')ajustes();}
 function topo(){const f=fase(S.week);
-  document.getElementById('crumb').textContent='Bloco '+bloco(S.week)+' · Ciclo '+sem(S.week)+' de 7';
+  document.getElementById('crumb').textContent='Bloco '+bloco(S.week)+' · Ciclo '+sem(S.week)+' de '+NB;
   document.getElementById('dn').textContent=P[day].n;
   document.getElementById('df').textContent=P[day].f;
   const t=document.getElementById('tg');
@@ -515,11 +523,12 @@ function treino(){
   const L=getLog(S.week,day)||{sets:{},notes:'',rir:{}},f=fase(S.week);
   let h='';
   if(f.dl)h+='<div class="alert"><b>Ciclo de deload.</b> Mesmas cargas, metade das séries, longe da falha.</div>';
-  else if(f.ramp)h+='<div class="alert i"><b>Rampa de volume.</b> Isoladores com séries a menos de propósito — o número original aparece riscado. Volume cheio a partir do ciclo 3.</div>';
+  h+='<div class="aquece"><b>Antes do 1º exercício:</b> 2 a 3 séries de aquecimento subindo a carga (≈50%, 70% e 85% da carga de trabalho), poucas reps, sem cansar. Não registre. A 1ª série valendo já deve ser pesada.</div>';
+  if(f.ramp)h+='<div class="alert i"><b>Rampa de volume.</b> Isoladores com séries a menos de propósito — o número original aparece riscado. Volume cheio a partir do ciclo 2.</div>';
   const feitosDias=P.filter((_,d)=>{const Q=getLog(S.week,d);
     return Q&&Object.values(Q.sets||{}).some(a=>a.some(val));}).length;
   if(feitosDias>=P.length)h+=`<div class="alert i"><b>Ciclo completo.</b> As ${P.length} sessões estão registradas. Avance o ciclo para que estas cargas virem a referência do próximo.
-    <button class="btn" style="margin-top:11px" onclick="proxSemana()">Avançar para o ciclo ${sem(S.week)+1>7?1:sem(S.week)+1}</button></div>`;
+    <button class="btn" style="margin-top:11px" onclick="proxSemana()">Avançar para o ciclo ${sem(S.week+1)}</button></div>`;
 
   const LS=lista(S.week,day), iC=LS.findIndex(x=>x.c);
   LS.forEach((x,i)=>{
