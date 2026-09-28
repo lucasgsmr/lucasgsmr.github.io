@@ -59,6 +59,11 @@ main{padding:2px 16px 0;max-width:620px;margin:0 auto}
 .sn i{font-style:normal;display:block;font-size:12px;color:var(--sig);font-weight:700;line-height:1}
 .vf.over{background:var(--sig)} .vv.over{color:var(--sig)}
 .acts button.act{color:var(--sig)}
+.corte{margin:4px 0 14px;padding:12px 14px;border-radius:10px;background:var(--soft);
+  border-left:3px solid var(--go)}
+.corte b{display:block;font-size:15px;color:var(--go)} .corte span{font-size:13.5px;color:var(--mid)}
+.ex.par{margin-bottom:4px;border-bottom-left-radius:4px;border-bottom-right-radius:4px}
+.tip.down{background:var(--bad-bg);color:var(--bad);font-weight:500}
 .rec{font-size:13.5px;color:var(--go);font-weight:600;margin-top:5px}
 .tip.pes{background:var(--sig-bg);color:var(--sig);border-left:3px solid var(--sig)}
 .foot{justify-content:flex-end}
@@ -189,52 +194,38 @@ select.finp{appearance:none;-webkit-appearance:none}
 <script>
 /* ================= PROGRAMA ================= */
 let P=[
-{n:"Push A",f:"Peito prioritário",ex:[
- {e:"Crucifixo polia baixa→média",s:3,a:12,b:15,r:"1",d:90,m:"Peito",inc:2.5,iso:1,note:"Pré-exaustão: o peito deve chegar cansado no supino. Amplitude ampla, sem travar os cotovelos."},
- {e:"Supino inclinado halteres 30°",s:4,a:6,b:10,r:"1",d:180,m:"Peito",inc:2.5,note:"Escápula travada. Excêntrica 2-3s. Não trave o cotovelo em cima."},
- {e:"Supino reto barra ou halteres",s:3,a:8,b:12,r:"1",d:180,m:"Peito",inc:2.5,note:"Aqueça até perto da carga de trabalho: a 1ª série valendo já tem que ser pesada."},
- {e:"Elevação lateral polia",s:5,a:12,b:20,r:"0-1",d:75,m:"Ombro lat",inc:1,iso:1,note:"Sem balanço. Cotovelo levemente à frente do corpo, subindo até a altura do ombro."},
- {e:"Tríceps francês ou testa",s:3,a:8,b:12,r:"0-1",d:90,m:"Tríceps",inc:2.5,iso:1},
- {e:"Tríceps corda",s:2,a:12,b:15,r:"0",d:60,m:"Tríceps",inc:2.5,iso:1}]},
-{n:"Pull A",f:"Espessura",ex:[
- {e:"Barra fixa ou puxada neutra",s:4,a:6,b:10,r:"1",d:180,m:"Costas",inc:2.5,bw:1,note:"Puxe com o cotovelo, não com a mão. Sem encolher o ombro na orelha."},
- {e:"Remada curvada barra",s:4,a:6,b:10,r:"1",d:180,m:"Costas",inc:2.5},
- {e:"Pullover polia",s:3,a:10,b:15,r:"0-1",d:90,m:"Costas",inc:2.5,iso:1},
- {e:"Crucifixo inverso",s:4,a:15,b:20,r:"0-1",d:60,m:"Ombro post",inc:1,iso:1},
- {e:"Rosca inclinada no banco",s:3,a:8,b:12,r:"0-1",d:90,m:"Bíceps",inc:1,iso:1,note:"Ombro em extensão alonga a cabeça longa. Sem balanço."},
- {e:"Rosca martelo",s:2,a:10,b:15,r:"0",d:60,m:"Bíceps",inc:1,iso:1}]},
-{n:"Lower A",f:"Quadríceps + peito leve",ex:[
- {e:"Agachamento livre",s:3,a:5,b:8,r:"2",d:210,m:"Quadríceps",inc:5},
- {e:"Leg press amplitude total",s:3,a:8,b:12,r:"1-2",d:180,m:"Quadríceps",inc:5,note:"Desça até o quadril quase enrolar. Meia amplitude não conta."},
- {e:"Cadeira extensora",s:3,a:12,b:15,r:"0-1",d:90,m:"Quadríceps",inc:2.5,iso:1},
- {e:"Mesa flexora",s:3,a:8,b:12,r:"1",d:120,m:"Posterior",inc:2.5,iso:1},
- {e:"Panturrilha sentado",s:4,a:10,b:15,r:"0-1",d:90,m:"Panturrilha",inc:2.5,iso:1},
- {e:"Peck deck ou crossover",s:2,a:12,b:20,r:"0-1",d:90,m:"Peito",inc:2.5,iso:1,note:"Terceira exposição semanal do peito. Carga leve, sem comprometer a sessão de perna."},
- {e:"Abdominal com carga",s:3,a:10,b:15,r:"1",d:60,m:"Abdômen",inc:2.5,iso:1}]},
-{n:"Push B",f:"Peito superior + ombro",ex:[
- {e:"Supino inclinado máquina/Smith",s:4,a:8,b:12,r:"1",d:120,m:"Peito",inc:2.5},
- {e:"Crossover de baixo para cima",s:3,a:12,b:15,r:"0-1",d:90,m:"Peito",inc:2.5,iso:1},
- {e:"Supino reto máquina",s:2,a:10,b:15,r:"0-1",d:90,m:"Peito",inc:2.5},
- {e:"Elevação lateral halteres",s:5,a:12,b:20,r:"0-1",d:75,m:"Ombro lat",inc:1,iso:1,note:"Sem balanço. Suba até a altura do ombro e controle a descida."},
- {e:"Desenvolvimento máquina",s:2,a:10,b:15,r:"1",d:90,m:"Ombro lat",inc:2.5},
- {e:"Tríceps polia acima da cabeça",s:3,a:10,b:15,r:"0-1",d:90,m:"Tríceps",inc:2.5,iso:1}]},
-{n:"Pull B",f:"Largura",ex:[
+{n:"Upper A",f:"Peito e costas",ex:[
+ {e:"Supino inclinado halteres 30°",s:4,a:6,b:10,r:"1",d:150,m:"Peito",inc:2.5,note:"Escápula travada. Excêntrica 2-3s. Não trave o cotovelo em cima."},
+ {e:"Puxada neutra na polia",s:3,a:6,b:10,r:"1",d:150,m:"Costas",inc:2.5,note:"Puxe com o cotovelo, não com a mão. Sem encolher o ombro na orelha."},
+ {e:"Supino reto máquina",s:3,a:8,b:12,r:"1",d:120,m:"Peito",inc:2.5},
+ {e:"Remada máquina apoiada no peito",s:3,a:8,b:12,r:"1",d:30,m:"Costas",inc:2.5,par:1,note:"Em par com a elevação lateral: alterne as séries."},
+ {e:"Elevação lateral com halteres",s:5,a:12,b:20,r:"0-1",d:75,m:"Ombro lat",inc:1,iso:1,note:"Sem balanço. Cotovelo levemente à frente do corpo, subindo até a altura do ombro."},
+ {e:"Crucifixo inverso",s:3,a:15,b:20,r:"0-1",d:60,m:"Ombro post",inc:1,iso:1,c:1},
+ {e:"Tríceps francês ou testa",s:3,a:8,b:12,r:"0-1",d:30,m:"Tríceps",inc:2.5,iso:1,c:1,par:1,note:"Em par com a rosca: alterne as séries."},
+ {e:"Rosca na polia baixa atrás do corpo",s:3,a:8,b:12,r:"0-1",d:75,m:"Bíceps",inc:1,iso:1,c:1}]},
+{n:"Lower",f:"Pernas",ex:[
+ {e:"Hack squat",s:3,a:6,b:10,r:"1-2",d:30,m:"Quadríceps",inc:5,par:1,note:"Em par com a elevação lateral: faça a elevação no meio do descanso do hack."},
+ {e:"Elevação lateral máquina",s:3,a:12,b:20,r:"0-1",d:150,m:"Ombro lat",inc:1,iso:1,note:"Terceiro estímulo de ombro lateral no ciclo. Leve para o ombro, sem cansar a perna."},
+ {e:"Terra romeno",s:3,a:6,b:10,r:"2",d:150,m:"Posterior",inc:5,note:"Quadril para trás, joelho quase fixo. Pare quando a lombar quiser ceder."},
+ {e:"Cadeira flexora sentada",s:3,a:10,b:15,r:"0-1",d:30,m:"Posterior",inc:2.5,iso:1,par:1,note:"Em par com a panturrilha: alterne as séries."},
+ {e:"Panturrilha sentado",s:3,a:10,b:15,r:"0-1",d:75,m:"Panturrilha",inc:2.5,iso:1},
+ {e:"Leg press amplitude total",s:2,a:10,b:15,r:"1",d:45,m:"Quadríceps",inc:5,c:1,par:1,note:"Em par com o voador: alterne as séries. Desça até o quadril quase enrolar."},
+ {e:"Voador",s:2,a:12,b:15,r:"0-1",d:90,m:"Peito",inc:2.5,iso:1,c:1,note:"Terceiro estímulo de peito no ciclo. Alongamento completo, pausa curta no fechamento."},
+ {e:"Cadeira extensora",s:2,a:12,b:15,r:"0-1",d:30,m:"Quadríceps",inc:2.5,iso:1,c:1,par:1,note:"Em par com o abdominal: alterne as séries."},
+ {e:"Abdominal com carga",s:3,a:10,b:15,r:"1",d:60,m:"Abdômen",inc:2.5,iso:1,c:1},
+ {e:"Hip thrust",s:2,a:8,b:12,r:"1",d:120,m:"Glúteo",inc:5,c:1}]},
+{n:"Upper B",f:"Peito superior e largura",ex:[
+ {e:"Supino inclinado máquina/Smith",s:4,a:8,b:12,r:"1",d:150,m:"Peito",inc:2.5},
  {e:"Puxada aberta pronada",s:4,a:8,b:12,r:"1",d:120,m:"Costas",inc:2.5},
- {e:"Remada máquina apoiada no peito",s:3,a:10,b:15,r:"0-1",d:120,m:"Costas",inc:2.5},
- {e:"Puxada unilateral polia alta",s:3,a:10,b:15,r:"0-1",d:90,m:"Costas",inc:2.5,iso:1},
- {e:"Crucifixo inverso máquina",s:4,a:15,b:20,r:"0-1",d:60,m:"Ombro post",inc:1,iso:1},
- {e:"Elevação lateral na polia",s:4,a:15,b:20,r:"0-1",d:60,m:"Ombro lat",inc:1,iso:1},
- {e:"Rosca Scott ou polia",s:3,a:10,b:15,r:"0-1",d:90,m:"Bíceps",inc:1,iso:1}]},
-{n:"Lower B",f:"Posterior + glúteo",ex:[
- {e:"Terra romeno",s:3,a:6,b:10,r:"2",d:180,m:"Posterior",inc:5,note:"Quadril para trás, joelho quase fixo. Pare quando a lombar quiser ceder."},
- {e:"Hack squat",s:3,a:8,b:12,r:"1-2",d:180,m:"Quadríceps",inc:5},
- {e:"Cadeira flexora sentada",s:3,a:10,b:15,r:"0-1",d:120,m:"Posterior",inc:2.5,iso:1},
- {e:"Hip thrust",s:3,a:8,b:12,r:"1",d:120,m:"Glúteo",inc:5},
- {e:"Búlgaro",s:2,a:8,b:12,r:"1-2",d:120,m:"Glúteo",inc:2.5,bw:1},
- {e:"Panturrilha em pé",s:4,a:8,b:15,r:"0-1",d:90,m:"Panturrilha",inc:2.5,iso:1},
- {e:"Elevação de pernas",s:3,a:10,b:15,r:"1",d:60,m:"Abdômen",inc:0,iso:1,bw:1}]}];
+ {e:"Crossover de baixo para cima",s:3,a:12,b:15,r:"0-1",d:75,m:"Peito",inc:2.5,iso:1},
+ {e:"Remada baixa na polia",s:3,a:10,b:15,r:"1",d:30,m:"Costas",inc:2.5,par:1,note:"Em par com a elevação lateral: alterne as séries."},
+ {e:"Elevação lateral na polia",s:5,a:12,b:20,r:"0-1",d:75,m:"Ombro lat",inc:1,iso:1},
+ {e:"Crucifixo inverso máquina",s:3,a:15,b:20,r:"0-1",d:60,m:"Ombro post",inc:1,iso:1,c:1},
+ {e:"Tríceps polia acima da cabeça",s:3,a:10,b:15,r:"0-1",d:30,m:"Tríceps",inc:2.5,iso:1,c:1,par:1,note:"Em par com a rosca: alterne as séries."},
+ {e:"Rosca Scott ou polia",s:3,a:10,b:15,r:"0-1",d:75,m:"Bíceps",inc:1,iso:1,c:1}]}];
 const norm=s=>String(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'')
   .replace(/[^a-z0-9]+/g,' ').trim();
+const normH=s=>norm(s).replace(/\b(com|na|no|nas|nos|de|da|do|em|e|ou)\b/g,' ').replace(/\s+/g,' ').trim();
 const SUBS={
 "crucifixo polia baixa media":["Peck deck","Crossover na polia média","Crucifixo halteres em banco inclinado"],
 "supino inclinado halteres 30":["Supino inclinado com barra 30°","Supino inclinado no Smith","Supino inclinado máquina"],
@@ -273,9 +264,15 @@ const SUBS={
 "hip thrust":["Elevação pélvica na máquina","Ponte de glúteo com barra","Extensão de quadril na polia"],
 "bulgaro":["Afundo caminhando","Passada no Smith","Leg press unilateral"],
 "panturrilha em pe":["Panturrilha no Smith","Panturrilha no leg press com joelho estendido","Panturrilha unilateral"],
+"puxada neutra na polia":["Barra fixa pegada neutra","Puxada supinada","Pulldown unilateral máquina"],
+"remada baixa na polia":["Remada máquina apoiada no peito","Remada serrote com halter","Remada cavalinho"],
+"elevacao lateral com halteres":["Elevação lateral na polia","Elevação lateral máquina","Elevação lateral em banco inclinado"],
+"rosca na polia baixa atras do corpo":["Rosca inclinada no banco","Rosca direta com halteres","Rosca Scott"],
+"elevacao lateral maquina":["Elevação lateral com halteres","Elevação lateral na polia","Elevação lateral unilateral na polia"],
+"voador":["Peck deck","Crossover na polia média","Crucifixo com halteres"],
 "elevacao de pernas":["Elevação de joelhos suspenso","Abdominal infra no banco","Canivete"]};
 const subDe=x=>x.sub&&x.sub.length?x.sub:(SUBS[norm(x.e)]||[]);
-let GRUPOS=[],PRIO=["Peito","Ombro lat","Costas"],NOME="Hipertrofia 6× · peito, ombro e costas";
+let GRUPOS=[],PRIO=["Peito","Ombro lat","Costas"],NOME="Upper/Lower em rotação · núcleo + complementar";
 function recalcGrupos(){GRUPOS=[...new Set(P.flatMap(p=>p.ex.map(x=>x.m)))];}
 function programaAtual(){return{nome:NOME,prio:PRIO,dias:P};}
 const limpaTxt=(v,max)=>String(v==null?'':v).replace(/[<>"`]/g,'').replace(/\s+/g,' ').trim().slice(0,max);
@@ -302,6 +299,8 @@ function validaPrograma(o){
       x.inc=Number.isFinite(numOk(x.inc,0,50))?+x.inc:2.5;
       if(x.iso)x.iso=1; else delete x.iso;
       if(x.bw)x.bw=1; else delete x.bw;
+      if(x.c)x.c=1; else delete x.c;
+      if(x.par)x.par=1; else delete x.par;
       if(!x.e)return 'Um exercício está sem nome.';
       if(!x.m)return x.e+': falta o grupo muscular.';
       if(!Number.isFinite(x.s))return x.e+': séries devem ir de 1 a 10.';
@@ -354,7 +353,7 @@ function ask(msg,sim){const a=document.getElementById('ask');document.getElement
 const esc=s=>String(s==null?'':s).replace(/[<>&"]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c]));
 
 /* ================= BLOCO ================= */
-const bloco=w=>Math.floor((w-1)/7)+1, sem=w=>((w-1)%7)+1;
+const bloco=w=>Math.floor((w-(S.inicio||1))/7)+1, sem=w=>((w-1)%7)+1;
 function fase(w){const s=sem(w);
   if(s===7)return{t:'Deload · metade das séries, RIR 3-4',dl:1};
   if(s===1)return{t:'Rampa · isoladores com 1 série a menos',ramp:1};
@@ -382,7 +381,7 @@ const kgOf=s=>{const a=+s.kg||0,b=+s.kgD||0; return Math.max(a,b)||null;};
 const ehUni=e=>!!S.uni[norm(e)];
 const nome=(w,d,e)=>((S.swaps[key(w,d)]||{})[e])||e;
 const extras=(w,d)=>S.extras[key(w,d)]||[];
-const lista=(w,d)=>P[d].ex.concat(extras(w,d));
+const lista=(w,d)=>(P[d]?P[d].ex:[]).concat(extras(w,d));
 const exDe=i=>lista(S.week,day)[i];
 function alvoSemana(w){const A={};GRUPOS.forEach(m=>A[m]=0);
   P.forEach((p,d)=>p.ex.forEach(x=>A[x.m]=(A[x.m]||0)+nS(x,w)));return A;}
@@ -391,12 +390,14 @@ function anterior(dia,e){
     const L=getLog(w,dia); if(!L)continue;
     const a=L.sets[e]; if(a&&a.some(val))return{w,d:dia,arr:a};}
   // o mesmo exercício em outro dia ou em outro programa
-  const alvo=norm(e); let melhor=null;
+  const alvo=normH(e); let melhor=null;
   Object.entries(S.logs).forEach(([k,L])=>{const m=k.match(/^w(\d+)d(\d+)$/); if(!m)return;
     const w=+m[1],dd=+m[2]; if(w>=S.week||fase(w).dl)return;
+    const tr=S.swaps[k]||{};
     Object.entries(L.sets||{}).forEach(([nm,a])=>{
-      if(norm(nm)!==alvo||!a.some(val))return;
-      if(!melhor||w>melhor.w)melhor={w,d:dd,arr:a,outro:1,de:nm};});});
+      const feito=tr[nm]||nm;                 // se houve troca, vale o que foi feito
+      if(normH(feito)!==alvo||!a.some(val))return;
+      if(!melhor||w>melhor.w)melhor={w,d:dd,arr:a,outro:1,de:feito};});});
   return melhor;}
 function recorde(d,e,pulaK){let b=null;
   for(let w=1;w<=S.week;w++){const L=getLog(w,d);if(!L)continue;
@@ -405,8 +406,15 @@ function recorde(d,e,pulaK){let b=null;
       if(!b||kk>b.kg||(kk===b.kg&&rr>b.reps))b={kg:kk,reps:rr,w};});}
   return b;}
 function prog(x,prev,alvo){if(!prev)return null;
-  const v=prev.arr.filter(val); if(v.length<alvo)return null;
+  const v=prev.arr.filter(val);
   const ck=v.map(kgOf).filter(Boolean), kg=ck.length?Math.max(...ck):null;
+  const abaixo=v.filter(s=>repsOf(s)<x.a).length;
+  if(kg!=null && v.length>=2 && abaixo*2>=v.length){
+    const passo=x.inc||2.5; let alvoKg=Math.floor(kg*0.9/passo)*passo;
+    if(alvoKg>=kg)alvoKg=kg-passo;
+    if(alvoKg>0 && (kg-alvoKg)/kg<=0.2) return{down:1,kg,novo:+alvoKg.toFixed(1),abaixo};
+    return{up:0,kg,baixo:1,abaixo};}      // degrau grande demais: mantém e busca a faixa
+  if(v.length<alvo)return null;
   const largo=(x.b-x.a)>=6;   // faixa ampla: a 1ª série manda, as demais só precisam ficar na faixa
   const bateu = largo ? (repsOf(v[0])>=x.b && v.every(s=>repsOf(s)>=x.a))
                       : v.every(s=>repsOf(s)>=x.b);
@@ -496,6 +504,13 @@ function voltaRolagem(){ try{
   if(y>0 && Date.now()-quando < 7200000) setTimeout(()=>scrollTo(0,y),60);
 }catch(e){} }
 
+// minutos estimados: 40s por série + descanso; pares alternam, então somam as séries e usam o descanso do 2º
+function estMin(L){let t=0;
+  for(let i=0;i<L.length;i++){const x=L[i],n=nS(x,S.week);
+    if(x.par&&L[i+1]){const y=L[i+1],m=nS(y,S.week),r=Math.min(n,m);
+      t+=r*(80+y.d)+Math.max(0,n-r)*(40+x.d)+Math.max(0,m-r)*(40+y.d);i++;}
+    else t+=n*(40+x.d);}
+  return Math.max(5,Math.round((t/60+6)/5)*5);}   // +6 min de aquecimento, arredondado de 5 em 5
 function treino(){
   const L=getLog(S.week,day)||{sets:{},notes:'',rir:{}},f=fase(S.week);
   let h='';
@@ -506,7 +521,11 @@ function treino(){
   if(feitosDias>=P.length)h+=`<div class="alert i"><b>Ciclo completo.</b> As ${P.length} sessões estão registradas. Avance o ciclo para que estas cargas virem a referência do próximo.
     <button class="btn" style="margin-top:11px" onclick="proxSemana()">Avançar para o ciclo ${sem(S.week)+1>7?1:sem(S.week)+1}</button></div>`;
 
-  lista(S.week,day).forEach((x,i)=>{
+  const LS=lista(S.week,day), iC=LS.findIndex(x=>x.c);
+  LS.forEach((x,i)=>{
+    if(i===iC){const tN=estMin(LS.slice(0,iC)),tT=estMin(LS);
+      h+=`<div class="corte"><b>Dia de cansaço? Até aqui já conta.</b>
+        <span>Núcleo ≈ ${tN} min · sessão completa ≈ ${tT} min</span></div>`;}
     const n=nS(x,S.week),ex=nome(S.week,day,x.e),troc=ex!==x.e,uni=ehUni(x.e);
     const arr=L.sets[x.e]||[],feitas=arr.filter(val);
     const pronto=feitas.length>=n && !aberto.has(x.e);
@@ -519,7 +538,7 @@ function treino(){
 
     const prev=anterior(day,x.e),pr=prog(x,prev,prev?nS(x,prev.w):n),rec=recorde(day,x.e);
     const total=Math.max(n,arr.length),mud=n!==x.s;
-    h+=`<div class="ex"><div class="exh">
+    h+=`<div class="ex${x.par?' par':''}"><div class="exh">
         <div class="exn">${esc(ex)}${troc?`<small>no lugar de ${esc(x.e)}</small>`:''}${x.extra?'<small>adicionado nesta sessão</small>':''}</div>
         <div class="exm">${mud?`<s>${x.s}</s> <b>${n}</b>`:n} × ${x.a}-${x.b} reps · RIR ${f.dl?'3-4':esc(x.r)} · ${esc(x.m)}</div>
         ${rec?`<div class="rec">Recorde ${rec.kg}kg × ${rec.reps}</div>`:''}
@@ -542,7 +561,9 @@ function treino(){
         <button class="btn" onclick="salvaT(${i})">Usar este</button></div></div>`;
 
     if(prev&&prev.outro)h+=`<div class="tip">Referência de ${esc(P[prev.d]?P[prev.d].n:'outra sessão')}, ciclo ${sem(prev.w)}${norm(prev.de)===norm(x.e)&&prev.de!==x.e?' ("'+esc(prev.de)+'")':''}.</div>`;
-    if(pr&&pr.up)h+=`<div class="tip up">${pr.largo?'Chegou a '+x.b+' na 1ª série':'Fechou '+x.b+' reps em tudo'} no ciclo ${sem(prev.w)}. ${pr.bw?'Adicione carga ou suba as reps.':'Suba para <b>'+pr.kg+'kg</b>.'}</div>`;
+    if(pr&&pr.down)h+=`<div class="tip down">${pr.abaixo} de ${prev.arr.filter(val).length} séries ficaram abaixo de ${x.a} reps com ${pr.kg}kg. Baixe para <b>${pr.novo}kg</b> e faça todas dentro da faixa.</div>`;
+    else if(pr&&pr.up)h+=`<div class="tip up">${pr.largo?'Chegou a '+x.b+' na 1ª série':'Fechou '+x.b+' reps em tudo'} no ciclo ${sem(prev.w)}. ${pr.bw?'Adicione carga ou suba as reps.':'Suba para <b>'+pr.kg+'kg</b>.'}</div>`;
+    else if(pr&&pr.baixo)h+=`<div class="tip">Mantenha ${pr.kg}kg e busque fazer todas as séries com pelo menos ${x.a} reps — a próxima carga abaixo seria uma queda grande demais.</div>`;
     else if(pr)h+=`<div class="tip">Mantenha${pr.kg!=null?' '+pr.kg+'kg':''}. ${pr.largo?'A 1ª série precisa chegar a '+x.b+' (as outras, a '+x.a+').':'Falta'+(pr.falta>1?'m':'')+' '+pr.falta+' série'+(pr.falta>1?'s':'')+' chegando a '+x.b+'.'}</div>`;
     else if(x.note)h+=`<div class="tip">${esc(x.note)}</div>`;
     if(S.notas[norm(x.e)])h+=`<div class="tip pes">${esc(S.notas[norm(x.e)])}</div>`;
@@ -729,11 +750,11 @@ function mostra(tipo){
   const o=document.getElementById('out'); if(o)o.value=saida;
 }
 function compacta(o){return[o.nome||'',o.prio||[],(o.dias||[]).map(d=>[d.n,d.f||'',
-  d.ex.map(x=>[x.e,x.s,x.a,x.b,x.r||'1',x.d||90,x.m,x.inc||2.5,x.iso?1:0,x.bw?1:0,x.note||''])])];}
+  d.ex.map(x=>[x.e,x.s,x.a,x.b,x.r||'1',x.d||90,x.m,x.inc||2.5,x.iso?1:0,x.bw?1:0,x.note||'',x.c?1:0,x.par?1:0])])];}
 function expande(c){ if(!Array.isArray(c)||c.length<3)return null;
   return{nome:c[0],prio:c[1]||[],dias:(c[2]||[]).map(d=>({n:d[0],f:d[1],
     ex:(d[2]||[]).map(a=>({e:a[0],s:a[1],a:a[2],b:a[3],r:a[4],d:a[5],m:a[6],inc:a[7],
-      iso:a[8]||undefined,bw:a[9]||undefined,note:a[10]||undefined}))}))};}
+      iso:a[8]||undefined,bw:a[9]||undefined,note:a[10]||undefined,c:a[11]||undefined,par:a[12]||undefined}))}))};}
 function b64(str){return btoa(unescape(encodeURIComponent(str))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');}
 function deb64(str){const t=str.replace(/-/g,'+').replace(/_/g,'/');
   return decodeURIComponent(escape(atob(t+'==='.slice((t.length+3)%4))));}
@@ -846,9 +867,19 @@ function fechaCfg(){tab='1';document.getElementById('cfg').classList.add('hide')
     render();
     ask('Aplicar o programa "'+(doLink.nome||'sem nome')+'"?\n\n'+doLink.dias.length+' sessões. Seu histórico não é apagado.',
       ()=>{S.prog=doLink;aplicaPrograma(doLink);save();render();scrollTo(0,0);toast('Programa aplicado.');});}
-  day=Math.min(Math.max(0,+S.dia||0),P.length-1);
+  let aviso='';
+  if(S.flags.prog2&&!S.inicio&&S.week>=8)S.inicio=8;
+  if(!S.flags.prog2){ S.flags.prog2=1;
+    if(!S.prog && Object.keys(S.logs).length){
+      S.week=7*Math.ceil(S.week/7)+1; S.inicio=S.week; S.dia=0; S.ultimo=0; delete S.prog;
+      aviso='Programa novo: bloco 1, ciclo 1. Suas cargas anteriores continuam valendo.';}
+    save();}
   const noMeio=S.ultimo&&(Date.now()-S.ultimo<3*3600000);
+  if(!noMeio&&!aviso&&proxima()===-1){ S.week++; S.dia=0; save();
+    aviso='Ciclo anterior completo. Começando o ciclo '+sem(S.week)+(fase(S.week).dl?' — deload.':'.');}
+  day=Math.min(Math.max(0,+S.dia||0),P.length-1);
   if(!noMeio){const nx=proxima(); if(nx>=0)day=nx;}
   render(); retomaTimer(); voltaRolagem(); await flush();
+  if(aviso)toast(aviso);
 })();
 </script>
