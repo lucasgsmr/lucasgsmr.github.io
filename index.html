@@ -540,7 +540,7 @@ function treino(){
   const LS=lista(S.week,day);
   LS.forEach((x,i)=>{
     const n=nS(x,S.week),ex=nome(S.week,day,x.e),troc=ex!==x.e,uni=ehUni(x.e);
-    const arr=L.sets[x.e]||[],feitas=arr.filter(val);
+    const arr=L.sets[chave(S.week,day,x.e)]||[],feitas=arr.filter(val);
     const pronto=feitas.length>=n && !aberto.has(x.e);
 
     if(pronto){                                   // concluído vira uma linha
@@ -606,6 +606,9 @@ function treino(){
     <div class="frow"><button class="btn g" onclick="abreAdd()">Cancelar</button>
     <button class="btn" onclick="addExtra()">Adicionar</button></div></div>`;
 
+  orfaos(S.week,day).forEach(o=>{
+    h+=`<div class="ex done col" style="cursor:default"><div class="sum"><div class="ck">✓</div><div class="tx"><b>${esc(o.nome)}</b>
+      <span>${o.arr.map(s=>(s.kg?s.kg+'×':'')+(s.reps||s.repsD)).join(' · ')} · registrado, fora do programa atual</span></div></div></div>`;});
   h+=`<div class="card"><h2>Como foi hoje</h2>
     <p>Dois marcadores em "ruim" por dois ciclos seguidos: corte uma série por grupo.</p>`;
   [['sono','Sono'],['vontade','Vontade de treinar'],['artic','Articulações']].forEach(([k,lb])=>{
@@ -621,7 +624,7 @@ function treino(){
 function blocoVolume(){
   const f=fase(S.week),AL=alvoSemana(S.week),feito={};
   P.forEach((p,d)=>{const L=getLog(S.week,d);if(!L)return;
-    lista(S.week,d).forEach(x=>{feito[x.m]=(feito[x.m]||0)+(L.sets[x.e]||[]).filter(val).length;});});
+    lista(S.week,d).forEach(x=>{feito[x.m]=(feito[x.m]||0)+(L.sets[chave(S.week,d,x.e)]||[]).filter(val).length;});});
   let h=`<div class="card"><h2>Séries deste ciclo</h2>`;
   Object.entries(AL).sort((a,b)=>b[1]-a[1]).forEach(([m,t])=>{const c=feito[m]||0,acima=c>t;
     h+=`<div class="vr"><div class="vn">${esc(m)}</div><div class="vb">
@@ -638,11 +641,22 @@ function blocoVolume(){
     <button class="btn" onclick="proxSemana()">Avançar ciclo</button></div></div>`;
   return h;}
 
-function cel(i,k){const x=exDe(i),L=mkLog(S.week,day);
+// Encontra onde as séries deste exercício estão gravadas nesta sessão.
+// Se o exercício foi renomeado depois do registro, usa o nome antigo (ou o que foi feito via troca).
+function chave(w,d,e){const L=getLog(w,d); if(!L||!L.sets||L.sets[e])return e;
+  const doProg=new Set(lista(w,d).map(x=>x.e)), tr=S.swaps[key(w,d)]||{}, alvo=normH(e);
+  for(const k of Object.keys(L.sets)){ if(doProg.has(k))continue;
+    if(normH(tr[k]||k)===alvo||normH(k)===alvo)return k; }
+  return e;}
+// Séries desta sessão que não pertencem a nenhum exercício do programa atual (ex.: exercício removido).
+function orfaos(w,d){const L=getLog(w,d); if(!L||!L.sets)return [];
+  const usados=new Set(lista(w,d).map(x=>chave(w,d,x.e))), tr=S.swaps[key(w,d)]||{};
+  return Object.entries(L.sets).filter(([k,a])=>!usados.has(k)&&(a||[]).some(val)).map(([k,a])=>({nome:tr[k]||k,arr:a.filter(val)}));}
+function cel(i,k){const x0=exDe(i),x={e:chave(S.week,day,x0.e)},L=mkLog(S.week,day);
   if(!L.sets[x.e])L.sets[x.e]=[];
   while(L.sets[x.e].length<=k)L.sets[x.e].push({});
   return L.sets[x.e][k];}
-function leCel(i,k){const x=exDe(i),L=getLog(S.week,day);          // leitura não cria estado
+function leCel(i,k){const x={e:chave(S.week,day,exDe(i).e)},L=getLog(S.week,day);          // leitura não cria estado
   return (L&&L.sets[x.e]&&L.sets[x.e][k])||null;}
 function põe(i,k,f,v){const s=cel(i,k);s[f]=v;S.ultimo=Date.now();
   const sf=/D$/.test(f)?'D':'', lb=ehUni(exDe(i).e)?(sf||'E'):'';
@@ -654,12 +668,12 @@ function fim(i,k){const s=leCel(i,k); if(!val(s))return;
   if(kk&&rr&&(!r||kk>r.kg||(kk===r.kg&&rr>r.reps))){
     toast('Novo recorde: '+kk+'kg × '+rr+' em '+nome(S.week,day,x.e)+'.');
     if(navigator.vibrate)navigator.vibrate(60);}
-  const L=getLog(S.week,day),feitas=((L&&L.sets[x.e])||[]).filter(val).length;
+  const L=getLog(S.week,day),feitas=((L&&L.sets[chave(S.week,day,x.e)])||[]).filter(val).length;
   if(feitas>=nS(x,S.week)&&!aberto.has(x.e)) requestAnimationFrame(()=>treino());   // só redesenha quando o exercício termina
   tDe(i);}
-function limpa(i,k,sf){const x=exDe(i),L=getLog(S.week,day);
+function limpa(i,k,sf){const x0=exDe(i),x={e:chave(S.week,day,x0.e)},L=getLog(S.week,day);
   const c=L&&L.sets[x.e]&&L.sets[x.e][k]; if(!c)return;
-  if(sf===undefined||!ehUni(x.e)){L.sets[x.e][k]={};}
+  if(sf===undefined||!ehUni(x0.e)){L.sets[x.e][k]={};}
   else{delete c['kg'+sf];delete c['reps'+sf];}
   save();treino();}
 function maisSerie(i){const x=exDe(i),L=mkLog(S.week,day);
@@ -854,10 +868,11 @@ function salvaMedidas(){const o={date:hojeLocal()};let a=0;
   if(i>=0)S.body[i]=Object.assign(S.body[i],o);else S.body.push(o);
   save();ajustes();toast('Medidas salvas.');}
 function proxSemana(){const recente=S.ultimo&&(Date.now()-S.ultimo<2*3600000);
-  ask('Avançar para o ciclo '+(S.week+1)+'?\n\n'+(recente?'Você registrou séries há pouco. Se ainda está treinando, termine a sessão antes: o que for registrado depois vai para o ciclo novo.\n\n':'')+'As cargas deste ciclo viram a referência do próximo.',
+  ask('Avançar para o ciclo '+sem(S.week+1)+'?\n\n'+(recente?'Você registrou séries há pouco. Se ainda está treinando, termine a sessão antes: o que for registrado depois vai para o ciclo novo.\n\n':'')+'As cargas deste ciclo viram a referência do próximo.',
   ()=>{S.week++;aberto.clear();day=0;S.dia=0;save();flush();render();scrollTo(0,0);toast('Ciclo '+sem(S.week)+' do bloco '+bloco(S.week)+'.');});}
-function voltaSemana(){if(S.week<=1){toast('Já está no primeiro ciclo.');return;}
-  ask('Voltar para o ciclo '+(S.week-1)+'?',()=>{S.week--;aberto.clear();save();render();});}
+function voltaSemana(){if(S.week<=ini()){toast('Este já é o primeiro ciclo do programa.');return;}
+  ask('Voltar para o ciclo '+sem(S.week-1)+'?\n\nUse só se avançou por engano. Enquanto estiver lá, as cargas de referência vêm do ciclo anterior a ele.',
+    ()=>{S.week--;S.dia=0;day=0;aberto.clear();save();render();scrollTo(0,0);toast('Ciclo '+sem(S.week)+'.');});}
 
 let rolagem=0;
 function abreCfg(){rolagem=window.scrollY||0;tab='2';ajustes();
