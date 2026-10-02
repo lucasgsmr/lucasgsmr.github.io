@@ -61,9 +61,6 @@ main{padding:2px 16px 0;max-width:620px;margin:0 auto}
 .acts button.act{color:var(--sig)}
 .aquece{margin:0 0 12px;padding:11px 14px;border-radius:10px;background:var(--soft);font-size:14px;color:var(--mid)}
 .aquece b{color:var(--ink)}
-.corte{margin:4px 0 14px;padding:12px 14px;border-radius:10px;background:var(--soft);
-  border-left:3px solid var(--go)}
-.corte b{display:block;font-size:15px;color:var(--go)} .corte span{font-size:13.5px;color:var(--mid)}
 .ex.par{margin-bottom:4px;border-bottom-left-radius:4px;border-bottom-right-radius:4px}
 .tip.down{background:var(--bad-bg);color:var(--bad);font-weight:500}
 .rec{font-size:13.5px;color:var(--go);font-weight:600;margin-top:5px}
@@ -197,34 +194,32 @@ select.finp{appearance:none;-webkit-appearance:none}
 /* ================= PROGRAMA ================= */
 let P=[
 {n:"Upper A",f:"Peito e costas",ex:[
- {e:"Supino inclinado halteres 30°",s:4,a:6,b:10,r:"1",d:150,m:"Peito",inc:2.5,note:"Escápula travada. Excêntrica 2-3s. Não trave o cotovelo em cima."},
+ {e:"Supino inclinado halteres 30°",s:4,a:6,b:10,r:"1",d:150,m:"Peito",inc:2,note:"Escápula travada. Excêntrica 2-3s. Não trave o cotovelo em cima."},
  {e:"Puxada neutra na polia",s:3,a:6,b:10,r:"1",d:150,m:"Costas",inc:2.5,note:"Puxe com o cotovelo, não com a mão. Sem encolher o ombro na orelha."},
  {e:"Supino reto máquina",s:3,a:8,b:12,r:"1",d:120,m:"Peito",inc:2.5},
- {e:"Remada máquina apoiada no peito",s:3,a:8,b:12,r:"1",d:30,m:"Costas",inc:2.5,par:1,note:"Em par com a elevação lateral: alterne as séries."},
- {e:"Elevação lateral com halteres",s:5,a:12,b:20,r:"0-1",d:75,m:"Ombro lat",inc:1,iso:1,note:"Sem balanço. Cotovelo levemente à frente do corpo, subindo até a altura do ombro."},
- {e:"Crucifixo inverso",s:3,a:15,b:20,r:"0-1",d:60,m:"Ombro post",inc:1,iso:1,c:1},
- {e:"Tríceps francês ou testa",s:3,a:8,b:12,r:"0-1",d:30,m:"Tríceps",inc:2.5,iso:1,c:1,par:1,note:"Em par com a rosca: alterne as séries."},
- {e:"Rosca na polia baixa atrás do corpo",s:3,a:8,b:12,r:"0-1",d:75,m:"Bíceps",inc:1,iso:1,c:1}]},
+ {e:"Remada máquina apoiada no peito",s:3,a:8,b:12,r:"1",d:120,m:"Costas",inc:2.5,note:"Strap liberado: a pegada não deve limitar as costas."},
+ {e:"Elevação lateral com halteres",s:5,a:12,b:20,r:"0-1",d:60,m:"Ombro lat",inc:2,iso:1},
+ {e:"Crucifixo inverso",s:3,a:15,b:20,r:"0-1",d:60,m:"Ombro post",inc:1,iso:1},
+ {e:"Tríceps francês ou testa",s:3,a:8,b:12,r:"0-1",d:75,m:"Tríceps",inc:2.5,iso:1,c:1},
+ {e:"Rosca na polia baixa atrás do corpo",s:3,a:8,b:12,r:"0-1",d:75,m:"Bíceps",inc:2.5,iso:1,c:1}]},
 {n:"Lower",f:"Pernas",ex:[
- {e:"Hack squat",s:3,a:6,b:10,r:"1-2",d:30,m:"Quadríceps",inc:5,par:1,note:"Em par com a elevação lateral: faça a elevação no meio do descanso do hack."},
- {e:"Elevação lateral máquina",s:3,a:12,b:20,r:"0-1",d:150,m:"Ombro lat",inc:1,iso:1,note:"Terceiro estímulo de ombro lateral no ciclo. Leve para o ombro, sem cansar a perna."},
- {e:"Terra romeno",s:3,a:6,b:10,r:"2",d:30,m:"Posterior",inc:5,par:1,note:"Em par com a panturrilha. Quadril para trás, joelho quase fixo; pare quando a lombar quiser ceder."},
- {e:"Panturrilha sentado",s:3,a:10,b:15,r:"0-1",d:150,m:"Panturrilha",inc:2.5,iso:1,note:"Pausa de 1s embaixo, no alongamento. Sem quicar."},
- {e:"Cadeira flexora sentada",s:3,a:10,b:15,r:"0-1",d:30,m:"Posterior",inc:2.5,iso:1,par:1,note:"Em par com a extensora: alterne as séries."},
+ {e:"Hack squat",s:3,a:6,b:10,r:"1-2",d:180,m:"Quadríceps",inc:5,note:"Descanso cheio. É o exercício mais importante do dia."},
+ {e:"Terra romeno",s:3,a:6,b:10,r:"2",d:150,m:"Posterior",inc:5,note:"Quadril para trás, joelho quase fixo. Pare quando a lombar quiser ceder."},
+ {e:"Mesa flexora deitada",s:3,a:10,b:15,r:"0-1",d:75,m:"Posterior",inc:2.5,iso:1},
  {e:"Cadeira extensora",s:3,a:12,b:15,r:"0-1",d:75,m:"Quadríceps",inc:2.5,iso:1,note:"Pausa de 1s no topo."},
- {e:"Leg press amplitude total",s:2,a:10,b:15,r:"1",d:45,m:"Quadríceps",inc:5,c:1,par:1,note:"Em par com o voador: alterne as séries. Desça até o quadril quase enrolar."},
- {e:"Voador",s:2,a:12,b:15,r:"0-1",d:90,m:"Peito",inc:2.5,iso:1,c:1,note:"Terceiro estímulo de peito no ciclo. Alongamento completo, pausa curta no fechamento."},
- {e:"Hip thrust",s:2,a:8,b:12,r:"1",d:30,m:"Glúteo",inc:5,c:1,par:1,note:"Em par com o abdominal: alterne as séries."},
+ {e:"Panturrilha sentado",s:3,a:10,b:15,r:"0-1",d:60,m:"Panturrilha",inc:2.5,iso:1},
+ {e:"Elevação lateral com halteres",s:3,a:12,b:20,r:"0-1",d:60,m:"Ombro lat",inc:2,iso:1},
+ {e:"Voador",s:2,a:12,b:15,r:"0-1",d:75,m:"Peito",inc:2.5,iso:1,c:1},
  {e:"Abdominal com carga",s:3,a:10,b:15,r:"1",d:60,m:"Abdômen",inc:2.5,iso:1,c:1}]},
 {n:"Upper B",f:"Peito e largura",ex:[
  {e:"Supino inclinado máquina/Smith",s:4,a:8,b:12,r:"1",d:150,m:"Peito",inc:2.5},
  {e:"Puxada aberta pronada",s:4,a:8,b:12,r:"1",d:120,m:"Costas",inc:2.5},
- {e:"Crossover na polia média",s:3,a:12,b:15,r:"0-1",d:75,m:"Peito",inc:2.5,iso:1,note:"Polias na altura do peito. Alongamento completo atrás, mãos se encontrando à frente do esterno."},
- {e:"Remada baixa na polia",s:3,a:10,b:15,r:"1",d:30,m:"Costas",inc:2.5,par:1,note:"Em par com a elevação lateral: alterne as séries."},
- {e:"Elevação lateral na polia",s:5,a:12,b:20,r:"0-1",d:75,m:"Ombro lat",inc:1,iso:1},
- {e:"Crucifixo inverso máquina",s:3,a:15,b:20,r:"0-1",d:60,m:"Ombro post",inc:1,iso:1,c:1},
- {e:"Tríceps polia acima da cabeça",s:3,a:10,b:15,r:"0-1",d:30,m:"Tríceps",inc:2.5,iso:1,c:1,par:1,note:"Em par com a rosca: alterne as séries."},
- {e:"Rosca Scott ou polia",s:3,a:10,b:15,r:"0-1",d:75,m:"Bíceps",inc:1,iso:1,c:1}]}];
+ {e:"Remada baixa na polia",s:3,a:10,b:15,r:"1",d:120,m:"Costas",inc:2.5},
+ {e:"Voador",s:3,a:12,b:15,r:"0-1",d:90,m:"Peito",inc:2.5,iso:1,note:"Alongamento completo, pausa curta no fechamento."},
+ {e:"Elevação lateral com halteres",s:5,a:12,b:20,r:"0-1",d:60,m:"Ombro lat",inc:2,iso:1},
+ {e:"Crucifixo inverso máquina",s:3,a:15,b:20,r:"0-1",d:60,m:"Ombro post",inc:1,iso:1},
+ {e:"Tríceps polia acima da cabeça",s:3,a:10,b:15,r:"0-1",d:75,m:"Tríceps",inc:2.5,iso:1,c:1},
+ {e:"Rosca martelo",s:3,a:10,b:15,r:"0-1",d:75,m:"Bíceps",inc:2.5,iso:1,c:1,note:"Pegada neutra, cotovelo parado ao lado do corpo. Trabalha bíceps, braquial e antebraço."}]}];
 const norm=s=>String(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'')
   .replace(/[^a-z0-9]+/g,' ').trim();
 const normH=s=>norm(s).replace(/\b(com|na|no|nas|nos|de|da|do|em|e|ou)\b/g,' ').replace(/\s+/g,' ').trim();
@@ -272,6 +267,7 @@ const SUBS={
 "rosca na polia baixa atras do corpo":["Rosca inclinada no banco","Rosca direta com halteres","Rosca Scott"],
 "elevacao lateral maquina":["Elevação lateral com halteres","Elevação lateral na polia","Elevação lateral unilateral na polia"],
 "crossover na polia media":["Peck deck","Voador","Crucifixo com halteres em banco reto"],
+"mesa flexora deitada":["Cadeira flexora sentada","Flexora unilateral em pé","Nórdico assistido"],
 "voador":["Peck deck","Crossover na polia média","Crucifixo com halteres"],
 "elevacao de pernas":["Elevação de joelhos suspenso","Abdominal infra no banco","Canivete"]};
 const subDe=x=>x.sub&&x.sub.length?x.sub:(SUBS[norm(x.e)]||[]);
@@ -317,7 +313,11 @@ function aplicaPrograma(o){P=o.dias;PRIO=o.prio||[];NOME=o.nome||'Programa';
 recalcGrupos();
 
 /* ================= ESTADO ================= */
-const KEY='tracker-hipertrofia-v3';
+const KEY='tracker-hipertrofia-v3', KERR='tracker-erros';
+function anotaErro(msg){ try{ const a=JSON.parse(localStorage.getItem(KERR)||'[]');
+  a.push({t:new Date().toLocaleString('pt-BR'),m:String(msg).slice(0,300)}); localStorage.setItem(KERR,JSON.stringify(a.slice(-10))); }catch(e){} }
+window.addEventListener('error',e=>anotaErro((e.message||'erro')+' @'+(e.lineno||'?')));
+window.addEventListener('unhandledrejection',e=>anotaErro('promessa: '+((e.reason&&e.reason.message)||e.reason)));
 let S={week:1,dia:0,rest:null,ultimo:0,logs:{},body:[],readiness:{},swaps:{},extras:{},flags:{},notas:{},uni:{}};
 let day=0,tab='1',tSave=null,pend=false,vivo=true,saida='';
 const aberto=new Set();   // exercícios concluídos que o usuário reabriu (só em memória)
@@ -345,7 +345,7 @@ async function flush(){
 ['pointerdown','touchstart','keydown'].forEach(ev=>
   document.addEventListener(ev,somPronto,{once:true,passive:true}));
 document.addEventListener('visibilitychange',()=>{
-  if(document.hidden){guardaRolagem();flush();}
+  if(document.hidden){guardaRolagem();flush();clearInterval(rT);rT=null;}
   else{ retomaTimer(); if(rFim>Date.now())travaTela(true); }});
 window.addEventListener('pagehide',()=>{guardaRolagem();flush();});
 function toast(m,bad){const t=document.getElementById('toast');t.textContent=m;t.className='on'+(bad?' bad':'');
@@ -378,8 +378,15 @@ const key=(w,d)=>'w'+w+'d'+d;
 const hojeLocal=()=>{const d=new Date();
   return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');};
 const getLog=(w,d)=>S.logs[key(w,d)];
+// cada sessão guarda o próprio nome; registros antigos usam o nome do programa da época
+const LEGADO=['Push A','Pull A','Lower A','Push B','Pull B','Lower B'];
+function nomeSessao(w,d){const L=getLog(w,d);
+  if(L&&L.n)return L.n;
+  if(w<ini())return LEGADO[d]||('Sessão '+(d+1));
+  return P[d]?P[d].n:'Sessão '+(d+1);}
+function rotuloCiclo(w){return w<ini()?'PROGRAMA ANTERIOR · SEMANA '+w:'BLOCO '+bloco(w)+' · CICLO '+sem(w);}
 function mkLog(w,d){const k=key(w,d);
-  if(!S.logs[k])S.logs[k]={sets:{},notes:'',rir:{},date:hojeLocal()};
+  if(!S.logs[k])S.logs[k]={sets:{},notes:'',rir:{},date:hojeLocal(),n:(P[d]?P[d].n:undefined)};
   if(!S.logs[k].rir)S.logs[k].rir={};
   return S.logs[k];}
 const cheio=v=>v!==''&&v!=null;
@@ -405,7 +412,7 @@ function anterior(dia,e){
     Object.entries(L.sets||{}).forEach(([nm,a])=>{
       const feito=tr[nm]||nm;                 // se houve troca, vale o que foi feito
       if(normH(feito)!==alvo||!a.some(val))return;
-      if(!melhor||w>melhor.w)melhor={w,d:dd,arr:a,outro:1,de:feito};});});
+      if(!melhor||w>melhor.w||(w===melhor.w&&dd===dia&&melhor.d!==dia))melhor={w,d:dd,arr:a,outro:dd!==dia?1:0,de:feito};});});
   return melhor;}
 function recorde(d,e,pulaK){let b=null;
   for(let w=1;w<=S.week;w++){const L=getLog(w,d);if(!L)continue;
@@ -446,11 +453,12 @@ function bipe(){ if(!AC)return;
       o.connect(g);g.connect(AC.destination);
       o.start(t0+t);o.stop(t0+t+0.25);});
   }catch(e){} }
-let rFim=0,rLbl='',avisou=0,wl=null;
+let rFim=0,rLbl='',avisou=0,wl=null,wlPend=false;
 async function travaTela(on){ try{
-  if(on){ if('wakeLock' in navigator && !wl){wl=await navigator.wakeLock.request('screen');
-    wl.addEventListener('release',()=>{wl=null;});} }
-  else if(wl){ await wl.release(); wl=null; } }catch(e){} }
+  if(on){ if(!('wakeLock' in navigator)||wl||wlPend||document.hidden)return;
+    wlPend=true; wl=await navigator.wakeLock.request('screen'); wlPend=false;
+    wl.addEventListener('release',()=>{wl=null;}); }
+  else if(wl){ const w=wl; wl=null; await w.release(); } }catch(e){wlPend=false;} }
 function desc(sec,lbl){ somPronto(); clearTimeout(tAuto); tAuto=null;
   rLbl=lbl||'Descanso'; rFim=Date.now()+sec*1000; avisou=0;
   S.rest={fim:rFim,lbl:rLbl}; save(); rodaTimer(); travaTela(true); }
@@ -458,7 +466,7 @@ function rodaTimer(){
   const el=document.getElementById('rest'); if(!el)return;
   document.getElementById('rl').textContent=rLbl;
   el.classList.add('on'); el.classList.remove('fim');
-  clearInterval(rT); pinta(); rT=setInterval(pinta,250); }
+  clearInterval(rT); pinta(); rT=setInterval(pinta,500); }
 function pinta(){
   const el=document.getElementById('rest'); if(!el)return;
   const ms=rFim-Date.now(), seg=Math.max(0,Math.ceil(ms/1000));
@@ -471,7 +479,7 @@ function pinta(){
     tAuto=setTimeout(para,10000); } }
 function mais(n){ clearTimeout(tAuto); tAuto=null; rFim+=n*1000; avisou=0; S.rest={fim:rFim,lbl:rLbl}; save();
   const el=document.getElementById('rest'); if(el)el.classList.remove('fim');
-  if(!rT)rT=setInterval(pinta,250); pinta(); }
+  if(!rT)rT=setInterval(pinta,500); pinta(); }
 function para(){ clearInterval(rT); clearTimeout(tAuto); rT=null; tAuto=null; rFim=0; S.rest=null; save(); travaTela(false);
   const el=document.getElementById('rest'); if(el)el.classList.remove('on'); }
 function retomaTimer(){
@@ -482,7 +490,12 @@ function retomaTimer(){
   rFim=S.rest.fim; rLbl=S.rest.lbl||'Descanso'; avisou=falta<=0?1:0;
   if(falta<=0)tAuto=setTimeout(para,10000);
   rodaTimer(); if(falta>0)travaTela(true); }
-function tDe(i){const x=exDe(i);desc(x.d,nome(S.week,day,x.e).slice(0,26));}
+function tDe(i){const x=exDe(i),L=lista(S.week,day),y=L[i+1];
+  if(x.par&&y){ toast('Agora: '+nome(S.week,day,y.e)+' — sem descanso entre os dois.'); return; }
+  desc(x.d,nome(S.week,day,x.e).slice(0,26));}
+const curto=n=>{let w=n.toLowerCase().split(' ').slice(0,2);
+  while(w.length>1&&/^(com|na|no|de|da|do|ou|e)$/.test(w[w.length-1]))w.pop(); return w.join(' ');};
+const mmss=s=>Math.floor(s/60)+':'+String(s%60).padStart(2,'0');
 
 /* ================= TREINO ================= */
 function render(){topo();abas();treino();if(tab==='2')ajustes();}
@@ -512,13 +525,6 @@ function voltaRolagem(){ try{
   if(y>0 && Date.now()-quando < 7200000) setTimeout(()=>scrollTo(0,y),60);
 }catch(e){} }
 
-// minutos estimados: 40s por série + descanso; pares alternam, então somam as séries e usam o descanso do 2º
-function estMin(L){let t=0;
-  for(let i=0;i<L.length;i++){const x=L[i],n=nS(x,S.week);
-    if(x.par&&L[i+1]){const y=L[i+1],m=nS(y,S.week),r=Math.min(n,m);
-      t+=r*(80+y.d)+Math.max(0,n-r)*(40+x.d)+Math.max(0,m-r)*(40+y.d);i++;}
-    else t+=n*(40+x.d);}
-  return Math.max(5,Math.round((t/60+6)/5)*5);}   // +6 min de aquecimento, arredondado de 5 em 5
 function treino(){
   const L=getLog(S.week,day)||{sets:{},notes:'',rir:{}},f=fase(S.week);
   let h='';
@@ -527,14 +533,12 @@ function treino(){
   if(f.ramp)h+='<div class="alert i"><b>Rampa de volume.</b> Isoladores com séries a menos de propósito — o número original aparece riscado. Volume cheio a partir do ciclo 2.</div>';
   const feitosDias=P.filter((_,d)=>{const Q=getLog(S.week,d);
     return Q&&Object.values(Q.sets||{}).some(a=>a.some(val));}).length;
-  if(feitosDias>=P.length)h+=`<div class="alert i"><b>Ciclo completo.</b> As ${P.length} sessões estão registradas. Avance o ciclo para que estas cargas virem a referência do próximo.
+  const treinandoAgora=S.ultimo&&(Date.now()-S.ultimo<2*3600000);
+  if(feitosDias>=P.length&&!treinandoAgora)h+=`<div class="alert i"><b>Ciclo completo.</b> As ${P.length} sessões estão registradas. Avance o ciclo para que estas cargas virem a referência do próximo.
     <button class="btn" style="margin-top:11px" onclick="proxSemana()">Avançar para o ciclo ${sem(S.week+1)}</button></div>`;
 
-  const LS=lista(S.week,day), iC=LS.findIndex(x=>x.c);
+  const LS=lista(S.week,day);
   LS.forEach((x,i)=>{
-    if(i===iC){const tN=estMin(LS.slice(0,iC)),tT=estMin(LS);
-      h+=`<div class="corte"><b>Dia de cansaço? Até aqui já conta.</b>
-        <span>Núcleo ≈ ${tN} min · sessão completa ≈ ${tT} min</span></div>`;}
     const n=nS(x,S.week),ex=nome(S.week,day,x.e),troc=ex!==x.e,uni=ehUni(x.e);
     const arr=L.sets[x.e]||[],feitas=arr.filter(val);
     const pronto=feitas.length>=n && !aberto.has(x.e);
@@ -545,22 +549,22 @@ function treino(){
         <span>${feitas.map(s=>(s.kg?s.kg+'×':'')+s.reps).join(' · ')}</span></div></div></div>`;
       return;}
 
-    const prev=anterior(day,x.e),pr=prog(x,prev,prev?nS(x,prev.w):n),rec=recorde(day,x.e);
+    const prev=anterior(day,x.e);
+    const feitoAntes=prev?(prev.de||((S.swaps[key(prev.w,prev.d)]||{})[x.e])||x.e):x.e;
+    const halter=/halter/i.test(ex)||/halter/i.test(feitoAntes);
+    const xi=halter?Object.assign({},x,{inc:2}):x;          // halteres sobem de 2 em 2kg
+    const pr=prog(xi,prev,prev?nS(x,prev.w):n),rec=recorde(day,x.e);
     const total=Math.max(n,arr.length),mud=n!==x.s;
     h+=`<div class="ex${x.par?' par':''}"><div class="exh">
         <div class="exn">${esc(ex)}${troc?`<small>no lugar de ${esc(x.e)}</small>`:''}${x.extra?'<small>adicionado nesta sessão</small>':''}</div>
         <div class="exm">${mud?`<s>${x.s}</s> <b>${n}</b>`:n} × ${x.a}-${x.b} reps · RIR ${f.dl?'3-4':esc(x.r)} · ${esc(x.m)}</div>
         ${rec?`<div class="rec">Recorde ${rec.kg}kg × ${rec.reps}</div>`:''}
         <div class="acts">
-          <button onclick="tDe(${i})">descanso ${Math.floor(x.d/60)}:${String(x.d%60).padStart(2,'0')}</button>
+          <button onclick="tDe(${i})">${x.par&&LS[i+1]?'alterna com '+esc(curto(nome(S.week,day,LS[i+1].e))):(i>0&&LS[i-1].par?'descanso do par '+mmss(x.d):'descanso '+mmss(x.d))}</button>
           <button onclick="abreT(${i})">trocar</button>
-          <button onclick="abreN(${i})">nota</button>
-        <button class="${uni?'act':''}" onclick="viraUni(${i})">${uni?'unilateral ✓':'unilateral'}</button>
           ${x.extra?`<button class="rm" onclick="rmExtra(${i})">remover</button>`:''}
         </div></div>
-      <div class="tip pnl hide" id="nt${i}">
-        <textarea class="finp" id="nti${i}" rows="2" placeholder="Sua observação para este exercício — vale em todos os ciclos.">${esc(S.notas[norm(x.e)]||'')}</textarea>
-        <button class="btn" onclick="salvaN(${i})">Salvar nota</button></div>
+
       <div class="tip pnl hide" id="sw${i}">
         ${subDe(x).length?`<div class="subs">${subDe(x).map(v=>
           `<button onclick="usaSub(${i},${JSON.stringify(v).replace(/"/g,'&quot;')})">
@@ -569,9 +573,9 @@ function treino(){
         <div class="frow"><button class="btn g" onclick="resetT(${i})">Original</button>
         <button class="btn" onclick="salvaT(${i})">Usar este</button></div></div>`;
 
-    if(prev&&prev.outro)h+=`<div class="tip">Referência de ${esc(P[prev.d]?P[prev.d].n:'outra sessão')}, ciclo ${sem(prev.w)}${norm(prev.de)===norm(x.e)&&prev.de!==x.e?' ("'+esc(prev.de)+'")':''}.</div>`;
+    if(prev&&prev.outro)h+=`<div class="tip">Referência de ${esc(nomeSessao(prev.w,prev.d))}, ${prev.w<ini()?'programa anterior':'ciclo '+sem(prev.w)}${norm(prev.de)===norm(x.e)&&prev.de!==x.e?' ("'+esc(prev.de)+'")':''}.</div>`;
     if(pr&&pr.down)h+=`<div class="tip down">${pr.abaixo} de ${prev.arr.filter(val).length} séries ficaram abaixo de ${x.a} reps com ${pr.kg}kg. Baixe para <b>${pr.novo}kg</b> e faça todas dentro da faixa.</div>`;
-    else if(pr&&pr.up)h+=`<div class="tip up">${pr.largo?'Chegou a '+x.b+' na 1ª série':'Fechou '+x.b+' reps em tudo'} no ciclo ${sem(prev.w)}. ${pr.bw?'Adicione carga ou suba as reps.':'Suba para <b>'+pr.kg+'kg</b>.'}</div>`;
+    else if(pr&&pr.up)h+=`<div class="tip up">${pr.largo?'Chegou a '+x.b+' na 1ª série':'Fechou '+x.b+' reps em tudo'} no ciclo ${sem(prev.w)}. ${pr.bw?'Adicione carga ou suba as reps.':'Suba para <b>'+pr.kg+'kg</b>'+(halter?'.':' ou o peso mais próximo disponível no aparelho.')}</div>`;
     else if(pr&&pr.baixo)h+=`<div class="tip">Mantenha ${pr.kg}kg e busque fazer todas as séries com pelo menos ${x.a} reps — a próxima carga abaixo seria uma queda grande demais.</div>`;
     else if(pr)h+=`<div class="tip">Mantenha${pr.kg!=null?' '+pr.kg+'kg':''}. ${pr.largo?'A 1ª série precisa chegar a '+x.b+' (as outras, a '+x.a+').':'Falta'+(pr.falta>1?'m':'')+' '+pr.falta+' série'+(pr.falta>1?'s':'')+' chegando a '+x.b+'.'}</div>`;
     else if(x.note)h+=`<div class="tip">${esc(x.note)}</div>`;
@@ -610,7 +614,7 @@ function treino(){
       <button class="${v==3?'on':''}" onclick="rd('${k}',3)">bom</button>
       <button class="${v==2?'on':''}" onclick="rd('${k}',2)">ok</button>
       <button class="${v==1?'on bad':''}" onclick="rd('${k}',1)">ruim</button></div>`;});
-  h+=`<textarea class="note" placeholder="O que travou, o que subiu, diferença entre os lados." oninput="nota(this.value)">${esc(L.notes)}</textarea></div>`;
+  h+=`</div>`;
   h+=blocoVolume();
   document.getElementById('v1').innerHTML=h;}
 
@@ -645,15 +649,13 @@ function põe(i,k,f,v){const s=cel(i,k);s[f]=v;S.ultimo=Date.now();
   const r=document.getElementById('r'+i+'_'+k+lb);
   if(r)r.classList.toggle('ok',cheio(s['reps'+sf]));
   save();abas();}
-function viraUni(i){const e=exDe(i).e,k=norm(e);
-  if(S.uni[k])delete S.uni[k]; else S.uni[k]=1;
-  save();treino();toast(S.uni[k]?'Registro por lado ligado: cada série vira duas linhas, E e D.':'Registro por lado desligado.');}
 function fim(i,k){const s=leCel(i,k); if(!val(s))return;
   const x=exDe(i),r=recorde(day,x.e,k),kk=kgOf(s),rr=repsOf(s);
   if(kk&&rr&&(!r||kk>r.kg||(kk===r.kg&&rr>r.reps))){
     toast('Novo recorde: '+kk+'kg × '+rr+' em '+nome(S.week,day,x.e)+'.');
     if(navigator.vibrate)navigator.vibrate(60);}
-  treino();                                  // colapsa o concluído e sobe o próximo
+  const L=getLog(S.week,day),feitas=((L&&L.sets[x.e])||[]).filter(val).length;
+  if(feitas>=nS(x,S.week)&&!aberto.has(x.e)) requestAnimationFrame(()=>treino());   // só redesenha quando o exercício termina
   tDe(i);}
 function limpa(i,k,sf){const x=exDe(i),L=getLog(S.week,day);
   const c=L&&L.sets[x.e]&&L.sets[x.e][k]; if(!c)return;
@@ -663,12 +665,6 @@ function limpa(i,k,sf){const x=exDe(i),L=getLog(S.week,day);
 function maisSerie(i){const x=exDe(i),L=mkLog(S.week,day);
   if(!L.sets[x.e])L.sets[x.e]=[];L.sets[x.e].push({});aberto.add(x.e);save();treino();}
 function reabre(i){aberto.add(exDe(i).e);treino();}
-function abreN(i){const el=document.getElementById('nt'+i),abrir=el.classList.contains('hide');
-  document.querySelectorAll('.pnl').forEach(s=>s.classList.add('hide'));
-  if(abrir){el.classList.remove('hide');document.getElementById('nti'+i).focus();}}
-function salvaN(i){const x=exDe(i),v=document.getElementById('nti'+i).value.trim();
-  if(v)S.notas[norm(x.e)]=v; else delete S.notas[norm(x.e)];
-  save();treino();toast(v?'Nota salva.':'Nota removida.');}
 function abreT(i){const el=document.getElementById('sw'+i),abrir=el.classList.contains('hide');
   document.querySelectorAll('.pnl').forEach(s=>s.classList.add('hide'));
   if(abrir){el.classList.remove('hide');document.getElementById('swi'+i).focus();}}
@@ -697,7 +693,6 @@ function rmExtra(i){const x=exDe(i),k=key(S.week,day);
     save();render();toast('Removido.');});}
 function rd(k,v){const id=key(S.week,day);mkLog(S.week,day);
   S.readiness[id]=S.readiness[id]||{};S.readiness[id][k]=v;save();treino();}
-function nota(v){mkLog(S.week,day).notes=v;save();}
 
 /* ================= PROGRESSO ================= */
 function ajustes(){
@@ -735,17 +730,23 @@ function ajustes(){
       <div style="height:9px"></div>
       <button class="btn g" onclick="importaPrograma()">Aplicar</button></div></div>`;
 
+  let errs=[];try{errs=JSON.parse(localStorage.getItem(KERR)||'[]');}catch(e){}
+  if(errs.length)h+=`<div class="card"><h2>Diagnóstico</h2><p>Erros registrados pelo app. Copie e me mande se ele travar.</p>
+    <textarea class="box" id="errbox" readonly>${esc(errs.map(x=>x.t+' — '+x.m).join('\n'))}</textarea>
+    <div style="height:9px"></div><button class="btn g" onclick="limpaErros()">Limpar</button></div>`;
   h+=`<div class="card"><button class="btn dan" onclick="apagaTudo()">Apagar todos os dados</button></div>`;
   document.getElementById('v2').innerHTML=h;}
+function limpaErros(){try{localStorage.removeItem(KERR);}catch(e){} ajustes();}
 function revela(id){const e=document.getElementById(id);e.classList.toggle('hide');
   if(id==='cxBkp'&&!e.classList.contains('hide'))mostra('backup');}
 function mostra(tipo){
   if(tipo==='backup')saida=JSON.stringify({v:6,semana:S.week,logs:S.logs,corpo:S.body,recuperacao:S.readiness,trocas:S.swaps,extras:S.extras,notas:S.notas,uni:S.uni});
   else{const L=[];
-    Object.entries(S.logs).sort().forEach(([k,lg])=>{const m=k.match(/^w(\d+)d(\d+)$/);if(!m)return;
+    Object.entries(S.logs).sort(([a,A],[b,B])=>{const wa=+(a.match(/^w(\d+)/)||[0,0])[1],wb=+(b.match(/^w(\d+)/)||[0,0])[1];
+      return wa-wb||String(A.date||'').localeCompare(String(B.date||''))||a.localeCompare(b);}).forEach(([k,lg])=>{const m=k.match(/^w(\d+)d(\d+)$/);if(!m)return;
       const w=+m[1],d=+m[2],ss=Object.entries(lg.sets||{}).filter(([,a])=>a.some(val));
       if(!ss.length)return;
-      L.push('CICLO '+sem(w)+' · '+(P[d]?P[d].n:'Sessão '+(d+1))+(lg.date?' · '+lg.date.split('-').reverse().join('/'):''));
+      L.push(rotuloCiclo(w)+' · '+nomeSessao(w,d)+(lg.date?' · '+lg.date.split('-').reverse().join('/'):''));
       ss.forEach(([e,a])=>L.push('  '+nome(w,d,e)+' — '+a.filter(val).map(s=>
         cheio(s.repsD)?((s.kg||s.kgD?(s.kg||s.kgD)+'×':'')+(s.reps||'–')+'/'+s.repsD+' (E/D)')
                       :((s.kg?s.kg+'×':'')+s.reps)).join(', ')));
@@ -852,7 +853,8 @@ function salvaMedidas(){const o={date:hojeLocal()};let a=0;
   const i=S.body.findIndex(b=>b.date===o.date);
   if(i>=0)S.body[i]=Object.assign(S.body[i],o);else S.body.push(o);
   save();ajustes();toast('Medidas salvas.');}
-function proxSemana(){ask('Avançar para o ciclo '+(S.week+1)+'?\n\nAs cargas deste ciclo viram a referência do próximo.',
+function proxSemana(){const recente=S.ultimo&&(Date.now()-S.ultimo<2*3600000);
+  ask('Avançar para o ciclo '+(S.week+1)+'?\n\n'+(recente?'Você registrou séries há pouco. Se ainda está treinando, termine a sessão antes: o que for registrado depois vai para o ciclo novo.\n\n':'')+'As cargas deste ciclo viram a referência do próximo.',
   ()=>{S.week++;aberto.clear();day=0;S.dia=0;save();flush();render();scrollTo(0,0);toast('Ciclo '+sem(S.week)+' do bloco '+bloco(S.week)+'.');});}
 function voltaSemana(){if(S.week<=1){toast('Já está no primeiro ciclo.');return;}
   ask('Voltar para o ciclo '+(S.week-1)+'?',()=>{S.week--;aberto.clear();save();render();});}
