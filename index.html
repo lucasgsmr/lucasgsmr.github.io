@@ -1,14 +1,22 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="theme-color" content="#F6F4F0">
+<meta name="format-detection" content="telephone=no">
+<title>Treino</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23171A1F'/%3E%3Cpath d='M14 26v12M20 21v22M44 21v22M50 26v12M20 32h24' stroke='%23F6F4F0' stroke-width='5' stroke-linecap='round'/%3E%3C/svg%3E">
 <style>
 :root{
   --bg:#F6F4F0; --card:#FFF; --soft:#EFECE6; --edge:#DEDAD2;
-  --ink:#171A1F; --mid:#5C6470; --dim:#8B929C;
+  --ink:#171A1F; --mid:#525B68; --dim:#6E7581;
   --sig:#B4530A; --sig-bg:#FDF3E7; --go:#15803D; --go-bg:#EDF7F0; --bad:#B91C1C; --bad-bg:#FDF0EF;
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 body{margin:0;background:var(--bg);color:var(--ink);
   font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',sans-serif;
-  font-size:17px;line-height:1.5;padding-bottom:40px;-webkit-text-size-adjust:100%}
+  font-size:17px;line-height:1.5;padding-bottom:112px;-webkit-text-size-adjust:100%}
 button{font-family:inherit;color:inherit;border:0;background:none;cursor:pointer;font-size:inherit}
 input,textarea,select{font-family:inherit;color:inherit;background:none;border:0;outline:none;font-size:inherit}
 input[type=number]{-moz-appearance:textfield}
@@ -68,6 +76,8 @@ main{padding:2px 16px 0;max-width:620px;margin:0 auto}
 .foot{justify-content:flex-end}
 .tip.up{background:var(--sig-bg);color:var(--sig);font-weight:500}
 .tip b{font-weight:700}
+.tip .ref{display:block;font-size:13px;margin-top:3px;opacity:.85}
+.tip .ref:first-child{margin-top:0;font-size:14px}
 
 /* concluído: vira uma linha */
 .col{cursor:pointer}
@@ -90,7 +100,8 @@ tr.ok{background:var(--go-bg)}
 .in input:focus{background:var(--soft);box-shadow:inset 0 0 0 2px var(--sig)}
 .in input::placeholder{color:var(--dim);font-weight:500;font-size:19px}
 .xx{width:38px}
-.xx button{width:30px;height:30px;border-radius:8px;color:var(--dim);font-size:19px;line-height:1}
+.xx button{width:30px;height:30px;border-radius:8px;color:var(--dim);font-size:19px;line-height:1;visibility:hidden}
+tr.tem .xx button,tr.ok .xx button{visibility:visible}
 tr.ok .xx button{color:var(--bad)}
 .foot{display:flex;align-items:center;gap:11px;padding:11px 16px;border-top:1px solid var(--edge)}
 .foot span{font-size:14px;color:var(--mid);font-weight:500}
@@ -146,14 +157,18 @@ select.finp{appearance:none;-webkit-appearance:none}
 
 #rest{position:fixed;left:14px;right:14px;bottom:18px;z-index:60;background:var(--ink);color:var(--bg);
   border-radius:12px;padding:13px 17px;display:none;align-items:center;justify-content:space-between;
-  box-shadow:0 10px 30px rgba(0,0,0,.22);max-width:592px;margin:0 auto}
+  border:1px solid rgba(255,255,255,.12);max-width:592px;margin:0 auto}
 #rest.on{display:flex} #rest.fim{background:var(--go)}
 #rest .t{font-size:32px;font-weight:800;line-height:1;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
 #rest .l{font-size:12.5px;font-weight:600;opacity:.72}
 #rest button{font-weight:700;font-size:14px;padding:9px 14px;background:rgba(255,255,255,.16);border-radius:8px}
 #toast{position:fixed;left:14px;right:14px;bottom:18px;z-index:75;background:var(--ink);color:var(--bg);
-  border-radius:12px;padding:13px 16px;font-size:15px;display:none;max-width:592px;margin:0 auto;font-weight:500}
-#toast.on{display:block} #toast.bad{background:var(--bad);color:#fff}
+  border-radius:12px;padding:13px 16px;font-size:15px;display:none;max-width:592px;margin:0 auto;font-weight:500;
+  align-items:center;gap:12px}
+#toast.on{display:flex} #toast.bad{background:var(--bad);color:#fff}
+#toast span{flex:1}
+#toast button{flex:0 0 auto;font-weight:700;font-size:15px;color:#FBD9B0;padding:4px 2px}
+#rest.on ~ #toast{bottom:104px}
 #ask{position:fixed;inset:0;z-index:90;background:rgba(20,24,32,.6);display:none;align-items:flex-end;justify-content:center;padding:16px}
 #ask.on{display:flex}
 #ask .b{background:var(--card);border-radius:14px;padding:20px;width:100%;max-width:460px}
@@ -161,7 +176,14 @@ select.finp{appearance:none;-webkit-appearance:none}
 #ask .r{display:flex;gap:10px}
 #ask .r button{flex:1;padding:14px;border-radius:10px;font-size:16px;font-weight:700;border:1px solid var(--edge);color:var(--mid)}
 #ask .r button.p{background:var(--ink);color:var(--bg);border-color:var(--ink)}
-.ger{font-size:21px;color:var(--mid);line-height:1;padding:2px 4px}
+.ger{font-size:21px;color:var(--mid);line-height:1;padding:2px 4px;position:relative}
+.ger.lembra::after{content:'';position:absolute;top:-1px;right:-2px;width:9px;height:9px;border-radius:50%;
+  background:var(--sig);border:2px solid var(--bg)}
+.lembrete{font-size:14.5px;margin:0 0 13px;padding:10px 12px;border-radius:8px;background:var(--sig-bg);color:var(--sig);font-weight:500}
+.ok-bkp{font-size:14.5px;margin:0 0 13px;color:var(--mid)}
+.socorro{background:var(--card);border:1px solid var(--bad);border-radius:12px;padding:16px;margin:16px 0}
+.socorro h2{font-size:18px;margin:0 0 6px;color:var(--bad)}
+.socorro p{font-size:14.5px;color:var(--mid);margin:0 0 12px}
 #cfg{position:fixed;inset:0;z-index:80;background:var(--bg);overflow-y:auto;padding:0 16px 40px}
 .cfgtop{position:sticky;top:0;background:var(--bg);display:flex;align-items:center;justify-content:space-between;
   padding:16px 0 12px;border-bottom:1px solid var(--edge);margin-bottom:14px}
@@ -172,13 +194,14 @@ select.finp{appearance:none;-webkit-appearance:none}
 .lnk{display:block;width:100%;padding:11px 0 2px;color:var(--mid);font-size:14px;font-weight:600;text-decoration:underline}
 #cfg .box{min-height:120px}
 </style>
-
+</head>
+<body>
 <div id="warn" class="hide" style="background:#B91C1C;color:#fff;padding:11px 16px;font-size:14.5px"></div>
 <header>
   <div class="top"><div class="crumb" id="crumb"></div>
     <div style="display:flex;align-items:center;gap:13px">
       <div class="sv" id="sv"><i></i><span>—</span></div>
-      <button class="ger" onclick="abreCfg()" aria-label="ajustes">⚙</button></div></div>
+      <button class="ger" id="ger" onclick="abreCfg()" aria-label="Ajustes e backup">⚙</button></div></div>
   <h1 id="dn"></h1><div class="focus" id="df"></div><div class="tag" id="tg"></div>
 </header>
 <div class="days" id="days"></div>
@@ -186,7 +209,7 @@ select.finp{appearance:none;-webkit-appearance:none}
 <div id="cfg" class="hide"><div class="cfgtop"><b>Ajustes</b><button onclick="fechaCfg()">Fechar</button></div><div id="v2"></div></div>
 <div id="rest"><div><div class="l" id="rl">Descanso</div><div class="t" id="rt">2:00</div></div>
   <div style="display:flex;gap:8px"><button onclick="mais(30)">+30s</button><button onclick="para()">Pular</button></div></div>
-<div id="toast"></div>
+<div id="toast" role="status"><span id="tm"></span><button id="tb" class="hide"></button></div>
 <div id="ask"><div class="b"><p id="am"></p><div class="r"><button id="an">Cancelar</button><button class="p" id="ay">Confirmar</button></div></div></div>
 
 
@@ -194,10 +217,10 @@ select.finp{appearance:none;-webkit-appearance:none}
 /* ================= PROGRAMA ================= */
 let P=[
 {n:"Upper A",f:"Peito e costas",ex:[
- {e:"Supino inclinado halteres 30°",s:4,a:6,b:10,r:"1",d:150,m:"Peito",inc:2,note:"Escápula travada. Excêntrica 2-3s. Não trave o cotovelo em cima."},
+ {e:"Supino inclinado máquina",s:4,a:6,b:10,r:"1",d:150,m:"Peito",inc:2.5,note:"Escápula travada. Excêntrica 2-3s. Banco no 1º furo acima do reto, se ajustável."},
  {e:"Puxada neutra na polia",s:3,a:6,b:10,r:"1",d:150,m:"Costas",inc:2.5,note:"Puxe com o cotovelo, não com a mão. Sem encolher o ombro na orelha."},
  {e:"Supino reto máquina",s:3,a:8,b:12,r:"1",d:120,m:"Peito",inc:2.5},
- {e:"Remada máquina apoiada no peito",s:3,a:8,b:12,r:"1",d:120,m:"Costas",inc:2.5,note:"Strap liberado: a pegada não deve limitar as costas."},
+ {e:"Remada hammer",s:3,a:8,b:12,r:"1",d:120,m:"Costas",inc:2.5,note:"Strap liberado: a pegada não deve limitar as costas."},
  {e:"Elevação lateral com halteres",s:5,a:12,b:20,r:"0-1",d:60,m:"Ombro lat",inc:2,iso:1},
  {e:"Crucifixo inverso",s:3,a:15,b:20,r:"0-1",d:60,m:"Ombro post",inc:1,iso:1},
  {e:"Tríceps francês ou testa",s:3,a:8,b:12,r:"0-1",d:75,m:"Tríceps",inc:2.5,iso:1,c:1},
@@ -213,16 +236,22 @@ let P=[
  {e:"Abdominal com carga",s:3,a:10,b:15,r:"1",d:60,m:"Abdômen",inc:2.5,iso:1,c:1}]},
 {n:"Upper B",f:"Peito e largura",ex:[
  {e:"Supino inclinado máquina/Smith",s:4,a:8,b:12,r:"1",d:150,m:"Peito",inc:2.5},
- {e:"Puxada aberta pronada",s:4,a:8,b:12,r:"1",d:120,m:"Costas",inc:2.5},
- {e:"Remada baixa na polia",s:3,a:10,b:15,r:"1",d:120,m:"Costas",inc:2.5},
+ {e:"Puxada máquina",s:4,a:8,b:12,r:"1",d:120,m:"Costas",inc:2.5},
+ {e:"Remada máquina apoiada no peito",s:3,a:10,b:15,r:"1",d:120,m:"Costas",inc:2.5,note:"Strap liberado: a pegada não deve limitar as costas."},
  {e:"Voador",s:3,a:12,b:15,r:"0-1",d:90,m:"Peito",inc:2.5,iso:1,note:"Alongamento completo, pausa curta no fechamento."},
  {e:"Elevação lateral com halteres",s:5,a:12,b:20,r:"0-1",d:60,m:"Ombro lat",inc:2,iso:1},
  {e:"Crucifixo inverso máquina",s:3,a:15,b:20,r:"0-1",d:60,m:"Ombro post",inc:1,iso:1},
  {e:"Tríceps polia acima da cabeça",s:3,a:10,b:15,r:"0-1",d:75,m:"Tríceps",inc:2.5,iso:1,c:1},
- {e:"Rosca martelo",s:3,a:10,b:15,r:"0-1",d:75,m:"Bíceps",inc:2.5,iso:1,c:1,note:"Pegada neutra, cotovelo parado ao lado do corpo. Trabalha bíceps, braquial e antebraço."}]}];
+ {e:"Rosca martelo na polia com corda",s:3,a:10,b:15,r:"0-1",d:75,m:"Bíceps",inc:2.5,iso:1,c:1,note:"Pegada neutra na corda, cotovelo parado ao lado do corpo. Trabalha bíceps, braquial e antebraço."}]}];
 const norm=s=>String(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'')
   .replace(/[^a-z0-9]+/g,' ').trim();
-const normH=s=>norm(s).replace(/\b(com|na|no|nas|nos|de|da|do|em|e|ou)\b/g,' ').replace(/\s+/g,' ').trim();
+// nome "histórico": ignora preposições, para "Elevação lateral halteres" = "Elevação lateral com halteres".
+// Guardado em cache: é chamado milhares de vezes ao montar a tela.
+const _nh=new Map();
+const normH=s=>{s=String(s||'');let v=_nh.get(s);
+  if(v===undefined){v=norm(s).replace(/\b(com|na|no|nas|nos|de|da|do|em|e|ou)\b/g,' ').replace(/\s+/g,' ').trim();
+    if(_nh.size>4000)_nh.clear(); _nh.set(s,v);}
+  return v;};
 const SUBS={
 "crucifixo polia baixa media":["Peck deck","Crossover na polia média","Crucifixo halteres em banco inclinado"],
 "supino inclinado halteres 30":["Supino inclinado com barra 30°","Supino inclinado no Smith","Supino inclinado máquina"],
@@ -268,10 +297,14 @@ const SUBS={
 "elevacao lateral maquina":["Elevação lateral com halteres","Elevação lateral na polia","Elevação lateral unilateral na polia"],
 "crossover na polia media":["Peck deck","Voador","Crucifixo com halteres em banco reto"],
 "mesa flexora deitada":["Cadeira flexora sentada","Flexora unilateral em pé","Nórdico assistido"],
+"supino inclinado maquina":["Supino inclinado halteres 30°","Supino inclinado no Smith","Supino inclinado com barra"],
+"puxada maquina":["Puxada aberta pronada","Barra fixa pronada","Pulldown unilateral"],
+"rosca martelo na polia com corda":["Rosca martelo","Rosca neutra em banco inclinado","Rosca inversa"],
+"remada hammer":["Remada máquina apoiada no peito","Remada baixa na polia","Remada serrote com halter"],
 "voador":["Peck deck","Crossover na polia média","Crucifixo com halteres"],
 "elevacao de pernas":["Elevação de joelhos suspenso","Abdominal infra no banco","Canivete"]};
 const subDe=x=>x.sub&&x.sub.length?x.sub:(SUBS[norm(x.e)]||[]);
-let GRUPOS=[],PRIO=["Peito","Ombro lat","Costas"],NOME="Upper/Lower em rotação · núcleo + complementar";
+let GRUPOS=[],PRIO=["Peito","Ombro lat","Costas"],NOME="Upper/Lower em rotação";
 function recalcGrupos(){GRUPOS=[...new Set(P.flatMap(p=>p.ex.map(x=>x.m)))];}
 function programaAtual(){return{nome:NOME,prio:PRIO,dias:P};}
 const limpaTxt=(v,max)=>String(v==null?'':v).replace(/[<>"`]/g,'').replace(/\s+/g,' ').trim().slice(0,max);
@@ -298,6 +331,7 @@ function validaPrograma(o){
       x.inc=Number.isFinite(numOk(x.inc,0,50))?+x.inc:2.5;
       if(x.iso)x.iso=1; else delete x.iso;
       if(x.bw)x.bw=1; else delete x.bw;
+      if(Array.isArray(x.alias))x.alias=x.alias.map(v=>limpaTxt(v,60)).filter(Boolean); else delete x.alias;
       if(x.c)x.c=1; else delete x.c;
       if(x.par)x.par=1; else delete x.par;
       if(!x.e)return 'Um exercício está sem nome.';
@@ -313,14 +347,45 @@ function aplicaPrograma(o){P=o.dias;PRIO=o.prio||[];NOME=o.nome||'Programa';
 recalcGrupos();
 
 /* ================= ESTADO ================= */
-const KEY='tracker-hipertrofia-v3', KERR='tracker-erros';
+const KEY='tracker-hipertrofia-v3', KERR='tracker-erros', KCOP='tracker-copia', KVIVO='tracker-vivo', ROL='tracker-rolagem';
 function anotaErro(msg){ try{ const a=JSON.parse(localStorage.getItem(KERR)||'[]');
   a.push({t:new Date().toLocaleString('pt-BR'),m:String(msg).slice(0,300)}); localStorage.setItem(KERR,JSON.stringify(a.slice(-10))); }catch(e){} }
 window.addEventListener('error',e=>anotaErro((e.message||'erro')+' @'+(e.lineno||'?')));
 window.addEventListener('unhandledrejection',e=>anotaErro('promessa: '+((e.reason&&e.reason.message)||e.reason)));
-let S={week:1,dia:0,rest:null,ultimo:0,logs:{},body:[],readiness:{},swaps:{},extras:{},flags:{},notas:{},uni:{}};
+const novoEstado=()=>({week:1,dia:0,rest:null,ultimo:0,logs:{},body:[],readiness:{},swaps:{},extras:{},flags:{},notas:{},uni:{}});
+// Completa e corrige um estado vindo do armazenamento, de outra aba ou de um backup:
+// nenhum campo faltando ou com tipo errado chega ao resto do app.
+function normaliza(o){
+  const T=Object.assign(novoEstado(),(o&&typeof o==='object'&&!Array.isArray(o))?o:{});
+  ['logs','readiness','swaps','extras','flags','notas','uni'].forEach(k=>{if(!T[k]||typeof T[k]!=='object'||Array.isArray(T[k]))T[k]={};});
+  if(!Array.isArray(T.body))T.body=[];
+  T.body=T.body.filter(b=>b&&typeof b==='object');
+  T.week=Math.max(1,Math.floor(+T.week)||1);
+  if(T.inicio!=null){T.inicio=Math.floor(+T.inicio);if(!(T.inicio>=1))delete T.inicio;}
+  T.dia=Math.max(0,Math.floor(+T.dia)||0);
+  T.ultimo=+T.ultimo||0;
+  if(!T.rest||typeof T.rest!=='object'||!(+T.rest.fim))T.rest=null;
+  Object.keys(T.logs).forEach(k=>{const L=T.logs[k];
+    if(!L||typeof L!=='object'||Array.isArray(L)){delete T.logs[k];return;}
+    if(!L.sets||typeof L.sets!=='object'||Array.isArray(L.sets))L.sets={};
+    Object.keys(L.sets).forEach(e=>{const a=L.sets[e];
+      L.sets[e]=Array.isArray(a)?a.map(v=>v&&typeof v==='object'?v:{}):[];});});
+  // exercícios avulsos: só campos conhecidos, números como números (vêm de backups e vão para a tela)
+  Object.keys(T.extras).forEach(k=>{const arr=Array.isArray(T.extras[k])?T.extras[k]:[];
+    const ent=(v,a,b,pad)=>{v=Math.round(+v);return v>=a&&v<=b?v:pad;};
+    T.extras[k]=arr.filter(x=>x&&typeof x==='object'&&x.e).map(x=>{const a=ent(x.a,1,50,8),b=ent(x.b,1,50,12);
+      return{e:limpaTxt(x.e,60)||'Exercício',s:ent(x.s,1,10,3),a:Math.min(a,b),b:Math.max(a,b),r:limpaTxt(x.r,5)||'0-1',
+        d:ent(x.d,10,600,90),m:limpaTxt(x.m,24)||'Outro',inc:+x.inc>0&&+x.inc<=50?+x.inc:2.5,fixo:1,extra:1};});});
+  T.progs=(Array.isArray(T.progs)?T.progs:[]).filter(x=>x&&+x.i>=1&&+x.nb>=2).map(x=>({i:Math.floor(+x.i),nb:Math.floor(+x.nb)}));
+  if(!T.progs.length)delete T.progs;
+  Object.keys(T.swaps).forEach(k=>{if(!T.swaps[k]||typeof T.swaps[k]!=='object')T.swaps[k]={};});
+  {const n2={};Object.entries(T.notas).forEach(([k,v])=>n2[norm(k)]=v);T.notas=n2;}
+  delete T.cfg;
+  return T;}
+let S=novoEstado();
 let day=0,tab='1',tSave=null,pend=false,vivo=true,saida='';
-const aberto=new Set();   // exercícios concluídos que o usuário reabriu (só em memória)
+let ultimoTexto='';        // o que este aparelho leu ou gravou por último: serve para notar gravações de outra aba
+const aberto=new Set();    // exercícios concluídos que o usuário reabriu (só em memória)
 
 const store={
   async get(k){
@@ -334,37 +399,140 @@ const store={
 function save(){pend=true;document.getElementById('sv').lastChild.textContent='salvando…';
   clearTimeout(tSave);tSave=setTimeout(flush,450);}
 async function flush(){
+  clearTimeout(tSave); tSave=null;
   if(!pend)return;
-  const ok=await store.set(KEY,JSON.stringify(S)); pend=false; vivo=ok;
+  pend=false;
+  // Se outra aba deste app gravou depois da nossa última leitura, parte do que ela gravou
+  // e aplica por cima só o que esta aba mudou (nada do que a outra fez é desfeito).
+  let juntou=false;
+  try{const atual=localStorage.getItem(KEY);
+    if(atual&&atual!==ultimoTexto){S=tresVias(baseDe(),S,normaliza(JSON.parse(atual)));juntou=true;}}catch(e){}
+  const txt=JSON.stringify(S);
+  let ok=await store.set(KEY,txt);
+  if(!ok){abreEspaco();ok=await store.set(KEY,txt);}
+  if(ok)ultimoTexto=txt; else pend=true;
+  vivo=ok;
   const el=document.getElementById('sv'),w=document.getElementById('warn');
   if(ok){el.className='sv';el.lastChild.textContent='salvo '+new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
     w.classList.add('hide');}
   else{el.className='sv warn';el.lastChild.textContent='NÃO SALVO';
-    w.textContent='Este navegador não guarda os dados. Vá em Progresso → Backup e copie tudo antes de fechar.';
-    w.classList.remove('hide');}}
-['pointerdown','touchstart','keydown'].forEach(ev=>
-  document.addEventListener(ev,somPronto,{once:true,passive:true}));
+    w.textContent='Este navegador não está guardando os dados. Toque em ⚙ → Baixar backup antes de fechar o app.';
+    w.classList.remove('hide');}
+  lembraBackup();
+  if(juntou){const a=document.activeElement; if(!a||a.tagName!=='INPUT')render();}}
+// Sem espaço: a cópia automática é só uma duplicata, pode sair para o treino ser gravado.
+function abreEspaco(){try{localStorage.removeItem(KCOP);localStorage.removeItem(KERR);}catch(e){}}
+
+/* ---- Duas abas abertas ao mesmo tempo (ex.: atalho na tela inicial + link no navegador) ----
+   Cada aba guarda o estado na memória. Sem isto, a aba esquecida em segundo plano podia gravar
+   uma versão antiga por cima do treino registrado na outra. */
+const contaS=L=>Object.values((L&&L.sets)||{}).reduce((a,arr)=>a+(Array.isArray(arr)?arr.filter(val).length:0),0);
+const igual=(a,b)=>JSON.stringify(a)===JSON.stringify(b);
+function baseDe(){try{return normaliza(JSON.parse(ultimoTexto));}catch(e){return normaliza(null);}}
+// Junta três versões: base (o que esta aba leu ou gravou por último), meu (esta aba) e deles (o que está gravado agora).
+// O que esta aba mudou desde a base vence; todo o resto vem do que está gravado — inclusive o que a outra aba apagou.
+function tresVias(base,meu,deles){const R=deles;
+  ['week','dia','inicio','rest','ultimo','bkp','prog','progs'].forEach(x=>{
+    if(!igual(meu[x],base[x])){if(meu[x]===undefined)delete R[x];else R[x]=meu[x];}});
+  ['readiness','swaps','extras','notas','uni','flags'].forEach(m=>{
+    new Set([...Object.keys(base[m]),...Object.keys(meu[m])]).forEach(k=>{
+      if(!igual(meu[m][k],base[m][k])){if(meu[m][k]===undefined)delete R[m][k];else R[m][k]=meu[m][k];}});});
+  // treinos: por sessão; se as duas abas mexeram na mesma sessão, por exercício
+  new Set([...Object.keys(base.logs),...Object.keys(meu.logs)]).forEach(k=>{const b=base.logs[k],m=meu.logs[k],d=R.logs[k];
+    if(igual(m,b))return;                       // esta aba não mexeu: fica o que está gravado
+    if(m===undefined){delete R.logs[k];return;}  // esta aba apagou
+    if(!d||igual(d,b)){R.logs[k]=m;return;}      // só esta aba mexeu
+    const L=Object.assign({},d,{sets:Object.assign({},d.sets)});
+    new Set([...Object.keys((b&&b.sets)||{}),...Object.keys(m.sets)]).forEach(e=>{const be=b&&b.sets?b.sets[e]:undefined,me=m.sets[e];
+      if(!igual(me,be)){if(me===undefined)delete L.sets[e];else L.sets[e]=me;}});
+    R.logs[k]=L;});
+  // medidas: por data
+  const porData=a=>{const o={};(a||[]).forEach(x=>{if(x&&x.date)o[x.date]=x;});return o;};
+  const bb=porData(base.body),mb=porData(meu.body),db=porData(R.body);
+  new Set([...Object.keys(bb),...Object.keys(mb)]).forEach(dt=>{if(!igual(mb[dt],bb[dt])){if(mb[dt]===undefined)delete db[dt];else db[dt]=mb[dt];}});
+  R.body=Object.values(db).sort((a,b)=>String(a.date).localeCompare(String(b.date)));
+  return R;}
+// Junta um backup O em D sem apagar nada de D: sessões que faltam entram; uma sessão com mais séries substitui
+// a mesma sessão com menos. Treinos diferentes no mesmo lugar (datas diferentes) nunca se substituem.
+function mescla(D,O){let novas=0,atualizadas=0,conflitos=0;
+  Object.entries(O.logs||{}).forEach(([k,L])=>{
+    if(!/^w\d+d\d+$/.test(k)||!L||!L.sets)return; const c=contaS(L); if(!c)return;
+    const A=D.logs[k],ca=contaS(A);
+    if(!A||!ca){D.logs[k]=L;novas++;return;}
+    if(A.date&&L.date&&A.date!==L.date){conflitos++;return;}
+    if(c>ca){D.logs[k]=L;atualizadas++;}});
+  (O.body||[]).forEach(b=>{if(b&&b.date&&!D.body.some(x=>x.date===b.date))D.body.push(b);});
+  D.body.sort((a,b)=>String(a.date).localeCompare(String(b.date)));
+  Object.entries(O.readiness||{}).forEach(([k,v])=>{if(!D.readiness[k])D.readiness[k]=v;});
+  Object.entries(O.swaps||{}).forEach(([k,v])=>{D.swaps[k]=Object.assign({},v,D.swaps[k]||{});});
+  Object.entries(O.extras||{}).forEach(([k,arr])=>{D.extras[k]=D.extras[k]||[];
+    (arr||[]).forEach(x=>{if(x&&x.e&&!D.extras[k].some(y=>norm(y.e)===norm(x.e)))D.extras[k].push(x);});});
+  Object.entries(O.notas||{}).forEach(([k,v])=>{if(!D.notas[norm(k)])D.notas[norm(k)]=v;});
+  Object.entries(O.uni||{}).forEach(([k,v])=>{if(v)D.uni[norm(k)]=1;});
+  return{novas,atualizadas,conflitos};}
+// Adota o que outra aba gravou; se esta tem algo ainda não gravado, junta os dois (três vias) e grava.
+function sincroniza(txt){
+  if(!txt||txt===ultimoTexto)return;
+  let o;try{o=normaliza(JSON.parse(txt));}catch(e){return;}
+  S=pend?tresVias(baseDe(),S,o):o;
+  ultimoTexto=txt;
+  if(S.prog&&!validaPrograma(S.prog))aplicaPrograma(S.prog);
+  if(day>=P.length)day=0;
+  escondeTimer();
+  if(!document.hidden)retomaTimer(true);           // em segundo plano, o cronômetro volta quando a aba aparecer
+  render(); lembraBackup();
+  if(pend)flush();}
+window.addEventListener('storage',e=>{if(e.key===KEY)sincroniza(e.newValue);});
+
 document.addEventListener('visibilitychange',()=>{
-  if(document.hidden){guardaRolagem();flush();clearInterval(rT);rT=null;}
-  else{ retomaTimer(); if(rFim>Date.now())travaTela(true); }});
-window.addEventListener('pagehide',()=>{guardaRolagem();flush();});
-function toast(m,bad){const t=document.getElementById('toast');t.textContent=m;t.className='on'+(bad?' bad':'');
-  setTimeout(()=>t.className='',4500);}
-function ask(msg,sim){const a=document.getElementById('ask');document.getElementById('am').textContent=msg;
-  a.classList.add('on');document.getElementById('ay').onclick=()=>{a.classList.remove('on');sim();};
-  document.getElementById('an').onclick=()=>a.classList.remove('on');}
+  if(document.hidden){guardaRolagem();flush();clearInterval(rT);rT=null;marcaVivo(false);}
+  else{ marcaVivo(true,1); try{const t=localStorage.getItem(KEY);sincroniza(t);if(t)copiaDoDia(t);}catch(e){}
+    retomaTimer(); if(rFim>Date.now())travaTela(true); }});
+window.addEventListener('pagehide',()=>{guardaRolagem();flush();marcaVivo(false);});
+// Marca que o app está aberto. Se ao abrir de novo a marca ainda estiver "aberto", ele fechou sem aviso.
+let ultMarca=0;
+function marcaVivo(aberto,forca){ const agora=Date.now();
+  if(aberto&&(document.hidden||(!forca&&agora-ultMarca<4000)))return;   // aba em segundo plano não conta como "aberta"
+  ultMarca=agora;
+  try{ const m=performance&&performance.memory?Math.round(performance.memory.usedJSHeapSize/1048576):null;
+    localStorage.setItem(KVIVO,JSON.stringify({aberto,t:agora,timer:rFim>agora,mem:m,n:document.getElementsByTagName('*').length,
+      up:Math.round(performance.now()/60000)})); }catch(e){} }
+function confereFechamento(){ try{ const v=JSON.parse(localStorage.getItem(KVIVO)||'null');
+  if(v&&v.aberto) anotaErro('Fechou sem aviso'+(v.timer?' com o cronômetro rodando':'')+
+    ' · último sinal '+new Date(v.t).toLocaleTimeString('pt-BR')+(v.up!=null?' · aberto havia '+v.up+' min':'')+
+    (v.mem!=null?' · memória '+v.mem+'MB':'')+' · '+v.n+' elementos · '+
+    (navigator.userAgent.match(/Android [\d.]+|iPhone OS [\d_]+|iPad; CPU OS [\d_]+/)||[''])[0]+' '+
+    (navigator.userAgent.match(/SamsungBrowser\/[\d.]+|Chrome\/[\d]+|Version\/[\d.]+ Mobile/)||[''])[0]);
+}catch(e){} }
+let tToast=null;
+function toast(m,bad,acao){const t=document.getElementById('toast'),b=document.getElementById('tb');
+  document.getElementById('tm').textContent=m; t.className='on'+(bad?' bad':'');
+  if(acao){b.textContent=acao.txt;b.classList.remove('hide');
+    b.onclick=()=>{clearTimeout(tToast);t.className='';acao.fn();};}
+  else{b.classList.add('hide');b.onclick=null;}
+  clearTimeout(tToast);tToast=setTimeout(()=>{t.className='';},acao?7000:4500);}
+function ask(msg,sim,nao,rotulo){const a=document.getElementById('ask'),y=document.getElementById('ay');
+  document.getElementById('am').textContent=msg; y.textContent=rotulo||'Confirmar';
+  a.classList.add('on');
+  y.onclick=()=>{a.classList.remove('on');sim();};
+  document.getElementById('an').onclick=()=>{a.classList.remove('on');if(nao)nao();};}
 const esc=s=>String(s==null?'':s).replace(/[<>&"]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c]));
 
 /* ================= BLOCO ================= */
 // Blocos de NB ciclos a partir do início do programa atual. Semanas anteriores seguem o esquema antigo (7).
 const NB=10, ini=()=>S.inicio||1;
-const bloco=w=>w<ini()?Math.floor((w-1)/7)+1:Math.floor((w-ini())/NB)+1;
-const sem=w=>w<ini()?((w-1)%7)+1:((w-ini())%NB)+1;
-function fase(w){const s=sem(w);
-  if(w<ini()){                                   // programa antigo: só importa saber o que foi deload
+// Cada semana pertence a um período de programa: o atual (desde S.inicio), um anterior guardado em S.progs
+// ({i: semana de início, nb: ciclos por bloco}) ou, antes de todos, o esquema antigo de 7.
+function periodoDe(w){ if(w>=ini())return{i:ini(),nb:NB,atual:1};
+  let p=null; (S.progs||[]).forEach(x=>{if(x.i<=w&&x.i<ini()&&(!p||x.i>p.i))p=x;});
+  return p?{i:p.i,nb:p.nb}:{i:1,nb:7,legado:1};}
+const bloco=w=>{const p=periodoDe(w);return Math.floor((w-p.i)/p.nb)+1;};
+const sem=w=>{const p=periodoDe(w);return ((w-p.i)%p.nb)+1;};
+function fase(w){const p=periodoDe(w),s=((w-p.i)%p.nb)+1;
+  if(p.legado){                                  // programa antigo: só importa saber o que foi deload
     if(s===7)return{t:'Deload',dl:1}; if(s===1)return{t:'Rampa',ramp:1}; if(s===2)return{t:'Rampa',ramp:2};
     return{t:'Volume cheio'};}
-  if(s===NB)return{t:'Deload · metade das séries, RIR 3-4',dl:1};
+  if(s===p.nb)return{t:'Deload · metade das séries, RIR 3-4',dl:1};
   if(s===1)return{t:'Rampa · isoladores com 1 série a menos',ramp:1};
   if(s<=5)return{t:'Volume cheio · RIR 1-2'};
   return{t:'Intensificação · RIR 0-1 nos isoladores'};}
@@ -380,11 +548,12 @@ const hojeLocal=()=>{const d=new Date();
 const getLog=(w,d)=>S.logs[key(w,d)];
 // cada sessão guarda o próprio nome; registros antigos usam o nome do programa da época
 const LEGADO=['Push A','Pull A','Lower A','Push B','Pull B','Lower B'];
-function nomeSessao(w,d){const L=getLog(w,d);
+function nomeSessao(w,d){const L=getLog(w,d),p=periodoDe(w);
   if(L&&L.n)return L.n;
-  if(w<ini())return LEGADO[d]||('Sessão '+(d+1));
-  return P[d]?P[d].n:'Sessão '+(d+1);}
-function rotuloCiclo(w){return w<ini()?'PROGRAMA ANTERIOR · SEMANA '+w:'BLOCO '+bloco(w)+' · CICLO '+sem(w);}
+  if(p.legado)return LEGADO[d]||('Sessão '+(d+1));
+  return p.atual&&P[d]?P[d].n:'Sessão '+(d+1);}
+function rotuloCiclo(w){const p=periodoDe(w);
+  return p.legado?'PROGRAMA ANTERIOR · SEMANA '+w:(p.atual?'':'PROGRAMA ANTERIOR · ')+'BLOCO '+bloco(w)+' · CICLO '+sem(w);}
 function mkLog(w,d){const k=key(w,d);
   if(!S.logs[k])S.logs[k]={sets:{},notes:'',rir:{},date:hojeLocal(),n:(P[d]?P[d].n:undefined)};
   if(!S.logs[k].rir)S.logs[k].rir={};
@@ -400,26 +569,47 @@ const lista=(w,d)=>(P[d]?P[d].ex:[]).concat(extras(w,d));
 const exDe=i=>lista(S.week,day)[i];
 function alvoSemana(w){const A={};GRUPOS.forEach(m=>A[m]=0);
   P.forEach((p,d)=>p.ex.forEach(x=>A[x.m]=(A[x.m]||0)+nS(x,w)));return A;}
+function apelidos(e){const def=P.flatMap(p=>p.ex).find(x=>x.e===e);
+  return new Set([normH(e)].concat(def&&def.alias?def.alias.map(normH):[]));}
+// O que foi (ou está sendo) feito no lugar de e na sessão (w,d): a troca, se houve; senão o próprio e.
+function feito(w,d,e){const tr=S.swaps[key(w,d)]||{}; if(tr[e])return tr[e];
+  const k=chave(w,d,e); return (k!==e&&tr[k])||e;}
+// Nomes que contam como "o mesmo exercício" para referência e recorde: o nome do programa e os antigos,
+// ou, se hoje houve troca, só o exercício que entrou no lugar.
+function alvosDe(w,d,e){const f=feito(w,d,e); return f!==e?new Set([normH(f)]):apelidos(e);}
 function anterior(dia,e){
+  const alvos=alvosDe(S.week,dia,e);
+  // 1º: a mesma sessão nos ciclos anteriores — desde que lá tenha sido feito este exercício, e não uma troca
   for(let w=S.week-1;w>=1;w--){ if(fase(w).dl)continue;
-    const L=getLog(w,dia); if(!L)continue;
-    const a=L.sets[e]; if(a&&a.some(val))return{w,d:dia,arr:a};}
-  // o mesmo exercício em outro dia ou em outro programa
-  const alvo=normH(e); let melhor=null;
-  Object.entries(S.logs).forEach(([k,L])=>{const m=k.match(/^w(\d+)d(\d+)$/); if(!m)return;
-    const w=+m[1],dd=+m[2]; if(w>=S.week||fase(w).dl)return;
+    const L=getLog(w,dia); if(!L||!L.sets)continue;
+    const k=chave(w,dia,e),a=L.sets[k]; if(!Array.isArray(a)||!a.some(val))continue;
+    const fez=(S.swaps[key(w,dia)]||{})[k]||k;
+    if(alvos.has(normH(fez)))return{w,d:dia,arr:a,de:fez};}
+  // 2º: o mesmo exercício em outra sessão ou no programa anterior (o registro mais recente)
+  let melhor=null;
+  for(const [k,L] of Object.entries(S.logs)){const m=k.match(/^w(\d+)d(\d+)$/); if(!m||!L||!L.sets)continue;
+    const w=+m[1],dd=+m[2]; if(w>=S.week||fase(w).dl)continue;
     const tr=S.swaps[k]||{};
-    Object.entries(L.sets||{}).forEach(([nm,a])=>{
-      const feito=tr[nm]||nm;                 // se houve troca, vale o que foi feito
-      if(normH(feito)!==alvo||!a.some(val))return;
-      if(!melhor||w>melhor.w||(w===melhor.w&&dd===dia&&melhor.d!==dia))melhor={w,d:dd,arr:a,outro:dd!==dia?1:0,de:feito};});});
+    for(const [nm,a] of Object.entries(L.sets)){
+      const fez=tr[nm]||nm;                 // se houve troca, vale o que foi feito
+      if(!Array.isArray(a)||!alvos.has(normH(fez))||!a.some(val))continue;
+      if(!melhor||w>melhor.w||(w===melhor.w&&dd===dia&&melhor.d!==dia))melhor={w,d:dd,arr:a,outro:dd!==dia?1:0,de:fez};}}
   return melhor;}
-function recorde(d,e,pulaK){let b=null;
-  for(let w=1;w<=S.week;w++){const L=getLog(w,d);if(!L)continue;
-    (L.sets[e]||[]).forEach((sv,k)=>{ if(w===S.week&&k===pulaK)return;
-      if(!val(sv))return; const kk=kgOf(sv),rr=repsOf(sv); if(!kk||!rr)return;
-      if(!b||kk>b.kg||(kk===b.kg&&rr>b.reps))b={kg:kk,reps:rr,w};});}
+// Melhor série do exercício no programa atual, em qualquer sessão (nomes antigos e trocas incluídos).
+// pula = {k,nm,i}: a série que acabou de ser digitada, para comparar com o que existia antes dela.
+function recorde(alvos,pula){let b=null;
+  for(const [k,L] of Object.entries(S.logs)){ if(!L||!L.sets)continue;
+    const g=k.match(/^w(\d+)d/); if(!g||+g[1]<ini())continue;
+    const tr=S.swaps[k]||{};
+    for(const [nm,a] of Object.entries(L.sets)){
+      if(!Array.isArray(a)||!alvos.has(normH(tr[nm]||nm)))continue;
+      for(let i=0;i<a.length;i++){ const sv=a[i];
+        if(pula&&k===pula.k&&nm===pula.nm&&i===pula.i)continue;
+        if(!val(sv))continue; const kg=kgOf(sv),rr=repsOf(sv); if(!kg||!rr)continue;
+        if(!b||kg>b.kg||(kg===b.kg&&rr>b.reps))b={kg,reps:rr};}}}
   return b;}
+// "no ciclo 3", "no ciclo 9 do bloco 1", "no programa anterior"
+const quando=w=>w<ini()?'no programa anterior':'no ciclo '+sem(w)+(bloco(w)!==bloco(S.week)?' do bloco '+bloco(w):'');
 function prog(x,prev,alvo){if(!prev)return null;
   const v=prev.arr.filter(val);
   const ck=v.map(kgOf).filter(Boolean), kg=ck.length?Math.max(...ck):null;
@@ -439,10 +629,12 @@ function prog(x,prev,alvo){if(!prev)return null;
   return{up:0,kg,falta,largo};}
 
 /* ================= TIMER ================= */
-let rT=null,tAuto=null,AC=null;
-function somPronto(){ try{ AC=AC||new (window.AudioContext||window.webkitAudioContext)();
-  if(AC.state==='suspended')AC.resume(); }catch(e){} }
-function bipe(){ if(!AC)return;
+let rT=null,tAuto=null;
+// O canal de áudio só existe durante o bipe (~1s). Antes ele ficava aberto o treino inteiro,
+// disputando a saída de som com o app de música.
+function bipe(){ const C=window.AudioContext||window.webkitAudioContext; if(!C)return;
+  let AC; try{ AC=new C(); if(AC.state==='suspended')AC.resume(); }catch(e){return;}
+  setTimeout(()=>{try{AC.close();}catch(e){}},1500);
   try{ const t0=AC.currentTime;
     [0,0.26,0.52].forEach((t,i)=>{
       const o=AC.createOscillator(),g=AC.createGain();
@@ -453,24 +645,32 @@ function bipe(){ if(!AC)return;
       o.connect(g);g.connect(AC.destination);
       o.start(t0+t);o.stop(t0+t+0.25);});
   }catch(e){} }
-let rFim=0,rLbl='',avisou=0,wl=null,wlPend=false;
-async function travaTela(on){ try{
+let rFim=0,rLbl='',avisou=0,wl=null,wlPend=false,wlQuer=false;
+async function travaTela(on){ wlQuer=on; try{
   if(on){ if(!('wakeLock' in navigator)||wl||wlPend||document.hidden)return;
-    wlPend=true; wl=await navigator.wakeLock.request('screen'); wlPend=false;
-    wl.addEventListener('release',()=>{wl=null;}); }
+    wlPend=true; const w=await navigator.wakeLock.request('screen'); wlPend=false;
+    if(!wlQuer){try{await w.release();}catch(e){} return;}      // o descanso acabou enquanto o pedido estava pendente
+    wl=w; w.addEventListener('release',()=>{if(wl===w)wl=null;}); }
   else if(wl){ const w=wl; wl=null; await w.release(); } }catch(e){wlPend=false;} }
-function desc(sec,lbl){ somPronto(); clearTimeout(tAuto); tAuto=null;
+// Esconde a barra do descanso e para o relógio, sem mexer no que está gravado.
+function escondeTimer(){clearInterval(rT);clearTimeout(tAuto);rT=null;tAuto=null;rFim=0;
+  const el=document.getElementById('rest');if(el)el.classList.remove('on','fim');
+  travaTela(false);}
+function desc(sec,lbl){ clearTimeout(tAuto); tAuto=null;
   rLbl=lbl||'Descanso'; rFim=Date.now()+sec*1000; avisou=0;
-  S.rest={fim:rFim,lbl:rLbl}; save(); rodaTimer(); travaTela(true); }
+  S.rest={fim:rFim,lbl:rLbl}; save(); rodaTimer(); travaTela(true); marcaVivo(true,1); }
 function rodaTimer(){
   const el=document.getElementById('rest'); if(!el)return;
   document.getElementById('rl').textContent=rLbl;
   el.classList.add('on'); el.classList.remove('fim');
-  clearInterval(rT); pinta(); rT=setInterval(pinta,500); }
+  clearInterval(rT); pinta(); rT=setInterval(pinta,1000); }
+let ultimoTxt='';
 function pinta(){
   const el=document.getElementById('rest'); if(!el)return;
   const ms=rFim-Date.now(), seg=Math.max(0,Math.ceil(ms/1000));
-  document.getElementById('rt').textContent=Math.floor(seg/60)+':'+String(seg%60).padStart(2,'0');
+  const txt=Math.floor(seg/60)+':'+String(seg%60).padStart(2,'0');
+  if(txt!==ultimoTxt){ultimoTxt=txt;document.getElementById('rt').textContent=txt;}
+  marcaVivo(true);
   if(ms>0)return;
   clearInterval(rT); rT=null; el.classList.add('fim');
   document.getElementById('rl').textContent='Pode ir';
@@ -479,13 +679,13 @@ function pinta(){
     tAuto=setTimeout(para,10000); } }
 function mais(n){ clearTimeout(tAuto); tAuto=null; rFim+=n*1000; avisou=0; S.rest={fim:rFim,lbl:rLbl}; save();
   const el=document.getElementById('rest'); if(el)el.classList.remove('fim');
-  if(!rT)rT=setInterval(pinta,500); pinta(); }
-function para(){ clearInterval(rT); clearTimeout(tAuto); rT=null; tAuto=null; rFim=0; S.rest=null; save(); travaTela(false);
-  const el=document.getElementById('rest'); if(el)el.classList.remove('on'); }
-function retomaTimer(){
+  if(!rT)rT=setInterval(pinta,1000); pinta(); }
+function para(){ escondeTimer(); S.rest=null; save(); if(!document.hidden)marcaVivo(true,1); }
+// semGravar: usado ao adotar o que outra aba gravou (não gera uma gravação de volta).
+function retomaTimer(semGravar){
   if(!S.rest||!S.rest.fim)return;
   const falta=S.rest.fim-Date.now();
-  if(falta<-6000){ S.rest=null; save(); return; }
+  if(falta<-6000){ escondeTimer(); S.rest=null; if(!semGravar)save(); return; }   // acabou faz tempo: some a barra
   clearTimeout(tAuto); tAuto=null;
   rFim=S.rest.fim; rLbl=S.rest.lbl||'Descanso'; avisou=falta<=0?1:0;
   if(falta<=0)tAuto=setTimeout(para,10000);
@@ -498,7 +698,16 @@ const curto=n=>{let w=n.toLowerCase().split(' ').slice(0,2);
 const mmss=s=>Math.floor(s/60)+':'+String(s%60).padStart(2,'0');
 
 /* ================= TREINO ================= */
-function render(){topo();abas();treino();if(tab==='2')ajustes();}
+function render(){
+  try{topo();abas();treino();if(tab==='2')ajustes();}
+  catch(e){anotaErro('tela: '+(e&&e.message)); socorro(e);}}
+// Se algo der errado ao montar a tela, os dados não somem: mostra o erro e um jeito de copiá-los.
+function socorro(e){ const v=document.getElementById('v1'); if(!v)return;
+  v.innerHTML=`<div class="socorro"><h2>O app encontrou um erro</h2>
+    <p>Seus treinos continuam guardados neste aparelho. Toque abaixo para copiar todos os dados e guarde o texto: ele é um backup completo.</p>
+    <p>Erro: ${esc((e&&e.message)||e)}</p>
+    <button class="btn" onclick="copiaTexto(dadosBrutos(),'Dados copiados. Guarde esse texto.')">Copiar todos os dados</button></div>`;}
+function dadosBrutos(){try{return localStorage.getItem(KEY)||JSON.stringify(S);}catch(e){return JSON.stringify(S);}}
 function topo(){const f=fase(S.week);
   document.getElementById('crumb').textContent='Bloco '+bloco(S.week)+' · Ciclo '+sem(S.week)+' de '+NB;
   document.getElementById('dn').textContent=P[day].n;
@@ -506,7 +715,7 @@ function topo(){const f=fase(S.week);
   const t=document.getElementById('tg');
   if(f.dl||f.ramp){t.textContent=f.t;t.className='tag'+(f.dl?' dl':'');}
   else t.className='tag hide';}
-const feitoDia=(w,d)=>{const L=getLog(w,d);return !!(L&&Object.values(L.sets||{}).some(a=>a.some(val)));};
+const feitoDia=(w,d)=>{const L=getLog(w,d);return !!(L&&Object.values(L.sets||{}).some(a=>Array.isArray(a)&&a.some(val)));};
 function proxima(){for(let d=0;d<P.length;d++)if(!feitoDia(S.week,d))return d;return -1;}
 function abas(){const c=document.getElementById('days');c.innerHTML='';const nx=proxima();
   P.forEach((p,i)=>{const fez=feitoDia(S.week,i);
@@ -514,48 +723,57 @@ function abas(){const c=document.getElementById('days');c.innerHTML='';const nx=
     b.className='day'+(i===day?' on':'')+(fez?' done':'')+(i===nx?' next':'');
     b.innerHTML=esc(p.n)+(i===nx&&i!==day?'<small>próximo</small>':'');
     b.onclick=()=>vaiDia(i);c.appendChild(b);});}
-function vaiDia(i){day=i;S.dia=i;aberto.clear();save();render();scrollTo(0,0);}
-const ROL='tracker-rolagem';
+// Só olhar outra sessão não muda S.dia: ao reabrir no meio do treino, o app volta para onde a última série foi digitada.
+function vaiDia(i){day=i;aberto.clear();novas.clear();render();scrollTo(0,0);}
 function guardaRolagem(){ try{
   const y=document.body.classList.contains('trava')?rolagem:(window.scrollY||0);
   localStorage.setItem(ROL,y+'|'+Date.now());}catch(e){} }
+// Volta ao ponto da tela em que estava (só chamado quando o app reabre no meio da mesma sessão).
 function voltaRolagem(){ try{
   const p=String(localStorage.getItem(ROL)||'').split('|');
   const y=+p[0]||0, quando=+p[1]||0;
   if(y>0 && Date.now()-quando < 7200000) setTimeout(()=>scrollTo(0,y),60);
 }catch(e){} }
+// "120×7", "7" (sem carga), "20×12/10" (esquerdo/direito, registros antigos)
+function fmtSerie(s){ if(!s)return '';
+  if(cheio(s.repsD)){const k1=cheio(s.kg)?s.kg:'',k2=cheio(s.kgD)?s.kgD:'';
+    const kg=k1!==''&&k2!==''&&String(k1)!==String(k2)?k1+'/'+k2:(k1!==''?k1:k2);
+    return (kg!==''?kg+'×':'')+(cheio(s.reps)?s.reps:'–')+'/'+s.repsD;}
+  return (cheio(s.kg)?s.kg+'×':'')+(cheio(s.reps)?s.reps:'');}
+// Última semana do programa (antes de w) que não foi deload: de onde a referência "deveria" vir.
+function semanaRef(w){for(let v=w-1;v>=1;v--)if(!fase(v).dl)return v;return 0;}
 
 function treino(){
-  const L=getLog(S.week,day)||{sets:{},notes:'',rir:{}},f=fase(S.week);
+  const L=getLog(S.week,day)||{sets:{}},f=fase(S.week);
+  const comecou=Object.values(L.sets||{}).some(a=>Array.isArray(a)&&a.some(val));
   let h='';
   if(f.dl)h+='<div class="alert"><b>Ciclo de deload.</b> Mesmas cargas, metade das séries, longe da falha.</div>';
-  h+='<div class="aquece"><b>Antes do 1º exercício:</b> 2 a 3 séries de aquecimento subindo a carga (≈50%, 70% e 85% da carga de trabalho), poucas reps, sem cansar. Não registre. A 1ª série valendo já deve ser pesada.</div>';
+  if(!comecou)h+='<div class="aquece"><b>Antes do 1º exercício:</b> 2 a 3 séries de aquecimento subindo a carga (≈50%, 70% e 85% da carga de trabalho), poucas reps, sem cansar. Não registre. A 1ª série valendo já deve ser pesada.</div>';
   if(f.ramp)h+='<div class="alert i"><b>Rampa de volume.</b> Isoladores com séries a menos de propósito — o número original aparece riscado. Volume cheio a partir do ciclo 2.</div>';
-  const feitosDias=P.filter((_,d)=>{const Q=getLog(S.week,d);
-    return Q&&Object.values(Q.sets||{}).some(a=>a.some(val));}).length;
+  const feitosDias=P.filter((_,d)=>feitoDia(S.week,d)).length;
   const treinandoAgora=S.ultimo&&(Date.now()-S.ultimo<2*3600000);
   if(feitosDias>=P.length&&!treinandoAgora)h+=`<div class="alert i"><b>Ciclo completo.</b> As ${P.length} sessões estão registradas. Avance o ciclo para que estas cargas virem a referência do próximo.
     <button class="btn" style="margin-top:11px" onclick="proxSemana()">Avançar para o ciclo ${sem(S.week+1)}</button></div>`;
 
-  const LS=lista(S.week,day);
+  const LS=lista(S.week,day), wRef=semanaRef(S.week);
   LS.forEach((x,i)=>{
     const n=nS(x,S.week),ex=nome(S.week,day,x.e),troc=ex!==x.e,uni=ehUni(x.e);
     const arr=L.sets[chave(S.week,day,x.e)]||[],feitas=arr.filter(val);
     const pronto=feitas.length>=n && !aberto.has(x.e);
 
     if(pronto){                                   // concluído vira uma linha
-      h+=`<div class="ex done col" onclick="reabre(${i})"><div class="sum">
+      h+=`<div class="ex done col" id="ex${i}" onclick="reabre(${i})"><div class="sum">
         <div class="ck">✓</div><div class="tx"><b>${esc(ex)}</b>
-        <span>${feitas.map(s=>(s.kg?s.kg+'×':'')+s.reps).join(' · ')}</span></div></div></div>`;
+        <span>${esc(feitas.map(fmtSerie).join(' · '))}</span></div></div></div>`;
       return;}
 
     const prev=anterior(day,x.e);
-    const feitoAntes=prev?(prev.de||((S.swaps[key(prev.w,prev.d)]||{})[x.e])||x.e):x.e;
+    const feitoAntes=prev?(prev.de||x.e):x.e;
     const halter=/halter/i.test(ex)||/halter/i.test(feitoAntes);
     const xi=halter?Object.assign({},x,{inc:2}):x;          // halteres sobem de 2 em 2kg
-    const pr=prog(xi,prev,prev?nS(x,prev.w):n),rec=recorde(day,x.e);
+    const pr=prog(xi,prev,prev?nS(x,prev.w):n),rec=recorde(alvosDe(S.week,day,x.e));
     const total=Math.max(n,arr.length),mud=n!==x.s;
-    h+=`<div class="ex${x.par?' par':''}"><div class="exh">
+    h+=`<div class="ex${x.par?' par':''}" id="ex${i}"><div class="exh">
         <div class="exn">${esc(ex)}${troc?`<small>no lugar de ${esc(x.e)}</small>`:''}${x.extra?'<small>adicionado nesta sessão</small>':''}</div>
         <div class="exm">${mud?`<s>${x.s}</s> <b>${n}</b>`:n} × ${x.a}-${x.b} reps · RIR ${f.dl?'3-4':esc(x.r)} · ${esc(x.m)}</div>
         ${rec?`<div class="rec">Recorde ${rec.kg}kg × ${rec.reps}</div>`:''}
@@ -563,53 +781,63 @@ function treino(){
           <button onclick="tDe(${i})">${x.par&&LS[i+1]?'alterna com '+esc(curto(nome(S.week,day,LS[i+1].e))):(i>0&&LS[i-1].par?'descanso do par '+mmss(x.d):'descanso '+mmss(x.d))}</button>
           <button onclick="abreT(${i})">trocar</button>
           ${x.extra?`<button class="rm" onclick="rmExtra(${i})">remover</button>`:''}
+          ${aberto.has(x.e)&&feitas.length>=n?`<button onclick="recolhe(${i})">recolher</button>`:''}
         </div></div>
 
       <div class="tip pnl hide" id="sw${i}">
         ${subDe(x).length?`<div class="subs">${subDe(x).map(v=>
           `<button onclick="usaSub(${i},${JSON.stringify(v).replace(/"/g,'&quot;')})">
             <b>${esc(v)}</b><span>${n} × ${x.a}-${x.b} reps</span></button>`).join('')}</div>`:''}
-        <input class="finp" id="swi${i}" value="${troc?esc(ex):''}" placeholder="Outro exercício…">
+        <input class="finp" id="swi${i}" value="${troc?esc(ex):''}" placeholder="Outro exercício…" autocomplete="off">
         <div class="frow"><button class="btn g" onclick="resetT(${i})">Original</button>
         <button class="btn" onclick="salvaT(${i})">Usar este</button></div></div>`;
 
-    if(prev&&prev.outro)h+=`<div class="tip">Referência de ${esc(nomeSessao(prev.w,prev.d))}, ${prev.w<ini()?'programa anterior':'ciclo '+sem(prev.w)}${norm(prev.de)===norm(x.e)&&prev.de!==x.e?' ("'+esc(prev.de)+'")':''}.</div>`;
-    if(pr&&pr.down)h+=`<div class="tip down">${pr.abaixo} de ${prev.arr.filter(val).length} séries ficaram abaixo de ${x.a} reps com ${pr.kg}kg. Baixe para <b>${pr.novo}kg</b> e faça todas dentro da faixa.</div>`;
-    else if(pr&&pr.up)h+=`<div class="tip up">${pr.largo?'Chegou a '+x.b+' na 1ª série':'Fechou '+x.b+' reps em tudo'} no ciclo ${sem(prev.w)}. ${pr.bw?'Adicione carga ou suba as reps.':'Suba para <b>'+pr.kg+'kg</b>'+(halter?'.':' ou o peso mais próximo disponível no aparelho.')}</div>`;
-    else if(pr&&pr.baixo)h+=`<div class="tip">Mantenha ${pr.kg}kg e busque fazer todas as séries com pelo menos ${x.a} reps — a próxima carga abaixo seria uma queda grande demais.</div>`;
-    else if(pr)h+=`<div class="tip">Mantenha${pr.kg!=null?' '+pr.kg+'kg':''}. ${pr.largo?'A 1ª série precisa chegar a '+x.b+' (as outras, a '+x.a+').':'Falta'+(pr.falta>1?'m':'')+' '+pr.falta+' série'+(pr.falta>1?'s':'')+' chegando a '+x.b+'.'}</div>`;
-    else if(x.note)h+=`<div class="tip">${esc(x.note)}</div>`;
+    // de onde vem a referência, quando não é desta sessão no ciclo anterior
+    const ref=prev&&(prev.outro||prev.w<wRef)?`<span class="ref">Referência: ${esc(nomeSessao(prev.w,prev.d))} ${quando(prev.w)}${normH(prev.de)!==normH(ex)?' ('+esc(prev.de)+')':''}.</span>`:'';
+    const kgRef=prev?Math.max(0,...prev.arr.filter(val).map(kgOf).filter(Boolean)):0;
+    if(f.dl)h+=`<div class="tip">Deload: ${kgRef?'mantenha '+kgRef+'kg, ':''}faça só as séries indicadas e pare com 3-4 repetições sobrando.${ref}</div>`;
+    else if(pr&&pr.down)h+=`<div class="tip down">${pr.abaixo} de ${prev.arr.filter(val).length} séries ficaram abaixo de ${x.a} reps com ${pr.kg}kg. Baixe para <b>${pr.novo}kg</b> e faça todas dentro da faixa.${ref}</div>`;
+    else if(pr&&pr.up)h+=`<div class="tip up">${pr.largo?'Chegou a '+x.b+' na 1ª série':'Fechou '+x.b+' reps em tudo'} ${quando(prev.w)}. ${pr.bw?'Adicione carga ou suba as reps.':'Suba para <b>'+pr.kg+'kg</b>'+(halter?'.':' ou o peso mais próximo disponível no aparelho.')}${ref}</div>`;
+    else if(pr&&pr.baixo)h+=`<div class="tip">Mantenha ${pr.kg}kg e busque fazer todas as séries com pelo menos ${x.a} reps — a próxima carga abaixo seria uma queda grande demais.${ref}</div>`;
+    else if(pr)h+=`<div class="tip">Mantenha${pr.kg!=null?' '+pr.kg+'kg':''}. ${pr.largo?'A 1ª série precisa chegar a '+x.b+' (as outras, a '+x.a+').':'Falta'+(pr.falta>1?'m':'')+' '+pr.falta+' série'+(pr.falta>1?'s':'')+' chegando a '+x.b+'.'}${ref}</div>`;
+    else if(x.note||ref)h+=`<div class="tip">${x.note?esc(x.note):''}${ref}</div>`;
     if(S.notas[norm(x.e)])h+=`<div class="tip pes">${esc(S.notas[norm(x.e)])}</div>`;
 
+    // carga em cinza no campo: a da série anterior de hoje; senão, a da referência. Se só as reps forem digitadas, vale ela.
+    const refKg=k=>{ if(!prev)return ''; const o=prev.arr[k]; if(o&&cheio(o.kg))return String(o.kg);
+      for(let j=Math.min(k,prev.arr.length)-1;j>=0;j--){const q=prev.arr[j];if(q&&cheio(q.kg))return String(q.kg);} return '';};
     h+=`<table><tr><th class="l">SÉRIE</th><th>ANTERIOR</th><th>KG</th><th>REPS</th><th></th></tr>`;
     const lados = uni ? [['','E'],['D','D']] : [['','']];
+    let hoje='';
     for(let k=0;k<total;k++){
       const c=arr[k]||{},o=prev&&prev.arr[k];
       lados.forEach(([sf,lb])=>{
-        const ok=cheio(c['reps'+sf]);
+        const ok=cheio(c['reps'+sf]),tem=ok||cheio(c['kg'+sf]);
         const oKg=o&&o['kg'+sf], oRp=o&&o['reps'+sf];
-        h+=`<tr class="${ok?'ok':''}" id="r${i}_${k}${lb}">
+        const ref=uni?(cheio(oKg)?String(oKg):''):refKg(k), ph=uni?ref:(hoje||ref);
+        h+=`<tr class="${ok?'ok':''}${tem?' tem':''}" id="r${i}_${k}${lb}">
         <td class="sn">${k+1}${lb?`<i>${lb}</i>`:''}</td>
-        <td class="pv">${cheio(oRp)?(oKg?`<b>${esc(oKg)}</b>kg×<b>${esc(oRp)}</b>`:`<b>${esc(oRp)}</b> reps`):'—'}</td>
-        <td class="in"><input type="number" inputmode="decimal" step="0.5" placeholder="${oKg?esc(oKg):'kg'}" value="${esc(c['kg'+sf])}" oninput="põe(${i},${k},'kg${sf}',this.value)"></td>
-        <td class="in"><input type="number" inputmode="numeric" placeholder="${x.a}-${x.b}" value="${esc(c['reps'+sf])}" oninput="põe(${i},${k},'reps${sf}',this.value)" onchange="fim(${i},${k})"></td>
-        <td class="xx"><button onclick="limpa(${i},${k},'${sf}')" aria-label="limpar">×</button></td></tr>`;});}
+        <td class="pv">${cheio(oRp)?(cheio(oKg)?`<b>${esc(oKg)}</b>kg×<b>${esc(oRp)}</b>`:`<b>${esc(oRp)}</b> reps`):'—'}</td>
+        <td class="in"><input type="text" inputmode="decimal" autocomplete="off" enterkeyhint="next" aria-label="Série ${k+1}${lb?' '+lb:''}, carga em kg" placeholder="${ph?esc(ph):'kg'}" data-ph="${esc(ref)}" value="${esc(c['kg'+sf])}" onfocus="selTudo(this)" oninput="põe(${i},${k},'kg${sf}',this)"></td>
+        <td class="in"><input type="text" inputmode="numeric" pattern="[0-9]*" autocomplete="off" enterkeyhint="next" aria-label="Série ${k+1}${lb?' '+lb:''}, repetições" placeholder="${x.a}-${x.b}" value="${esc(c['reps'+sf])}" onfocus="selTudo(this)" oninput="põe(${i},${k},'reps${sf}',this)" onchange="fim(${i},${k})"></td>
+        <td class="xx"><button onclick="limpa(${i},${k},'${sf}')" aria-label="Apagar série ${k+1}">×</button></td></tr>`;});
+      if(!uni&&cheio(c.kg))hoje=String(c.kg);}
     h+=`</table><div class="foot"><button class="add" onclick="maisSerie(${i})">+ série</button></div></div>`;});
 
   h+=`<button class="linkadd" onclick="abreAdd()">+ adicionar exercício</button>
     <div class="card hide" id="addbox">
-    <input class="finp" id="nxN" placeholder="Nome do exercício">
-    <div class="frow"><input class="finp" id="nxS" type="number" inputmode="numeric" placeholder="séries">
-      <input class="finp" id="nxA" type="number" inputmode="numeric" placeholder="rep mín">
-      <input class="finp" id="nxB" type="number" inputmode="numeric" placeholder="rep máx"></div>
+    <input class="finp" id="nxN" placeholder="Nome do exercício" autocomplete="off">
+    <div class="frow"><input class="finp" id="nxS" type="text" inputmode="numeric" pattern="[0-9]*" placeholder="séries">
+      <input class="finp" id="nxA" type="text" inputmode="numeric" pattern="[0-9]*" placeholder="rep mín">
+      <input class="finp" id="nxB" type="text" inputmode="numeric" pattern="[0-9]*" placeholder="rep máx"></div>
     <select class="finp" id="nxM">${GRUPOS.map(m=>`<option>${esc(m)}</option>`).join('')}</select>
     <div class="frow"><button class="btn g" onclick="abreAdd()">Cancelar</button>
     <button class="btn" onclick="addExtra()">Adicionar</button></div></div>`;
 
   orfaos(S.week,day).forEach(o=>{
     h+=`<div class="ex done col" style="cursor:default"><div class="sum"><div class="ck">✓</div><div class="tx"><b>${esc(o.nome)}</b>
-      <span>${o.arr.map(s=>(s.kg?s.kg+'×':'')+(s.reps||s.repsD)).join(' · ')} · registrado, fora do programa atual</span></div></div></div>`;});
-  h+=`<div class="card"><h2>Como foi hoje</h2>
+      <span>${esc(o.arr.map(fmtSerie).join(' · '))} · registrado, fora do programa atual</span></div></div></div>`;});
+  h+=`<div class="card" id="cfh"><h2>Como foi hoje</h2>
     <p>Dois marcadores em "ruim" por dois ciclos seguidos: corte uma série por grupo.</p>`;
   [['sono','Sono'],['vontade','Vontade de treinar'],['artic','Articulações']].forEach(([k,lb])=>{
     const v=(S.readiness[key(S.week,day)]||{})[k];
@@ -622,80 +850,137 @@ function treino(){
   document.getElementById('v1').innerHTML=h;}
 
 function blocoVolume(){
-  const f=fase(S.week),AL=alvoSemana(S.week),feito={};
+  const AL=alvoSemana(S.week),feito={};
   P.forEach((p,d)=>{const L=getLog(S.week,d);if(!L)return;
     lista(S.week,d).forEach(x=>{feito[x.m]=(feito[x.m]||0)+(L.sets[chave(S.week,d,x.e)]||[]).filter(val).length;});});
   let h=`<div class="card"><h2>Séries deste ciclo</h2>`;
   Object.entries(AL).sort((a,b)=>b[1]-a[1]).forEach(([m,t])=>{const c=feito[m]||0,acima=c>t;
     h+=`<div class="vr"><div class="vn">${esc(m)}</div><div class="vb">
-      <div class="vf ${acima?'over':(c>=t?'full':(PRIO.includes(m)?'pri':''))}" style="width:${t?Math.min(100,c/t*100):0}%"></div></div>
+      <div class="vf ${acima?'over':(c>=t?'full':'')}" style="width:${t?Math.min(100,c/t*100):0}%"></div></div>
       <div class="vv ${acima?'over':''}"><b>${c}</b>/${t}</div></div>`;});
   const ex=Object.entries(AL).filter(([m,t])=>(feito[m]||0)>t);
   if(ex.length)h+=`<div class="alert i" style="margin:13px 0 0"><b>Acima do planejado:</b> ${ex.map(([m,t])=>esc(m)+' '+feito[m]+' de '+t).join(', ')}.</div>`;
-  const fl=[];
-  for(let w=Math.max(1,S.week-1);w<=S.week;w++)P.forEach((p,d)=>{const r=S.readiness[key(w,d)];if(!r)return;
-    if(Object.values(r).filter(v=>v===1).length>=2)fl.push(esc(p.n)+' (ciclo '+sem(w)+')');});
-  if(fl.length>=2)h+=`<div class="alert" style="margin:13px 0 0"><b>Sinal de excesso de volume.</b> ${fl.join(', ')}. Corte uma série por grupo.</div>`;
+  // sessões com dois marcadores em "ruim", no ciclo atual e no anterior (dois ciclos seguidos)
+  const ruins=w=>P.map((p,d)=>({p,r:S.readiness[key(w,d)]})).filter(o=>o.r&&Object.values(o.r).filter(v=>v===1).length>=2).map(o=>esc(o.p.n)+' (ciclo '+sem(w)+')');
+  const fa=ruins(S.week),fb=S.week>1?ruins(S.week-1):[],fl=fb.concat(fa);
+  if(fa.length&&fb.length)h+=`<div class="alert" style="margin:13px 0 0"><b>Sinal de excesso de volume.</b> ${fl.join(', ')}. Corte uma série por grupo.</div>`;
   h+=`<div style="height:13px"></div>
-    <div class="frow"><button class="btn g" onclick="voltaSemana()">Voltar</button>
-    <button class="btn" onclick="proxSemana()">Avançar ciclo</button></div></div>`;
+    <div class="frow"><button class="btn g" onclick="voltaSemana()">Voltar ciclo</button>
+    <button class="btn g" onclick="proxSemana()">Avançar ciclo</button></div></div>`;
   return h;}
 
 // Encontra onde as séries deste exercício estão gravadas nesta sessão.
 // Se o exercício foi renomeado depois do registro, usa o nome antigo (ou o que foi feito via troca).
 function chave(w,d,e){const L=getLog(w,d); if(!L||!L.sets||L.sets[e])return e;
-  const doProg=new Set(lista(w,d).map(x=>x.e)), tr=S.swaps[key(w,d)]||{}, alvo=normH(e);
+  const doProg=new Set(lista(w,d).map(x=>x.e)), tr=S.swaps[key(w,d)]||{}, alvos=apelidos(e);
   for(const k of Object.keys(L.sets)){ if(doProg.has(k))continue;
-    if(normH(tr[k]||k)===alvo||normH(k)===alvo)return k; }
+    if(alvos.has(normH(tr[k]||k))||alvos.has(normH(k)))return k; }
   return e;}
 // Séries desta sessão que não pertencem a nenhum exercício do programa atual (ex.: exercício removido).
 function orfaos(w,d){const L=getLog(w,d); if(!L||!L.sets)return [];
   const usados=new Set(lista(w,d).map(x=>chave(w,d,x.e))), tr=S.swaps[key(w,d)]||{};
-  return Object.entries(L.sets).filter(([k,a])=>!usados.has(k)&&(a||[]).some(val)).map(([k,a])=>({nome:tr[k]||k,arr:a.filter(val)}));}
-function cel(i,k){const x0=exDe(i),x={e:chave(S.week,day,x0.e)},L=mkLog(S.week,day);
-  if(!L.sets[x.e])L.sets[x.e]=[];
-  while(L.sets[x.e].length<=k)L.sets[x.e].push({});
-  return L.sets[x.e][k];}
-function leCel(i,k){const x={e:chave(S.week,day,exDe(i).e)},L=getLog(S.week,day);          // leitura não cria estado
-  return (L&&L.sets[x.e]&&L.sets[x.e][k])||null;}
-function põe(i,k,f,v){const s=cel(i,k);s[f]=v;S.ultimo=Date.now();
+  return Object.entries(L.sets).filter(([k,a])=>!usados.has(k)&&Array.isArray(a)&&a.some(val)).map(([k,a])=>({nome:tr[k]||k,arr:a.filter(val)}));}
+function cel(i,k){const ck=chave(S.week,day,exDe(i).e),L=mkLog(S.week,day);
+  if(!L.sets[ck])L.sets[ck]=[];
+  while(L.sets[ck].length<=k)L.sets[ck].push({});
+  return L.sets[ck][k];}
+function leCel(i,k){const ck=chave(S.week,day,exDe(i).e),L=getLog(S.week,day);          // leitura não cria estado
+  return (L&&L.sets[ck]&&L.sets[ck][k])||null;}
+// Tocar num campo já preenchido seleciona o número: digitar substitui em vez de emendar.
+function selTudo(el){if(el.value)setTimeout(()=>{try{el.select();}catch(e){}},0);}
+const novas=new Set();   // séries que acabaram de ser preenchidas: só elas disparam o descanso (corrigir uma antiga não)
+// Aceita vírgula ou ponto na carga; só números nas repetições.
+function limpaNum(v,dec){v=String(v==null?'':v).trim();
+  if(!dec)return v.replace(/\D/g,'').slice(0,3);
+  v=v.replace(/,/g,'.').replace(/[^0-9.]/g,''); const p=v.indexOf('.');
+  if(p>=0)v=v.slice(0,p+1)+v.slice(p+1).replace(/\./g,'');
+  return v.slice(0,6);}
+function põe(i,k,f,el){
+  const v=limpaNum(el&&typeof el==='object'?el.value:el,/^kg/.test(f));
+  const antes=feitoDia(S.week,day);
+  const s=cel(i,k),era=val(s); s[f]=v; S.ultimo=Date.now(); S.dia=day;
+  const id=i+'_'+k;
+  if(!era&&val(s))novas.add(id); else if(!val(s))novas.delete(id);
   const sf=/D$/.test(f)?'D':'', lb=ehUni(exDe(i).e)?(sf||'E'):'';
   const r=document.getElementById('r'+i+'_'+k+lb);
-  if(r)r.classList.toggle('ok',cheio(s['reps'+sf]));
-  save();abas();}
-function fim(i,k){const s=leCel(i,k); if(!val(s))return;
-  const x=exDe(i),r=recorde(day,x.e,k),kk=kgOf(s),rr=repsOf(s);
-  if(kk&&rr&&(!r||kk>r.kg||(kk===r.kg&&rr>r.reps))){
+  if(r){r.classList.toggle('ok',cheio(s['reps'+sf]));r.classList.toggle('tem',cheio(s['reps'+sf])||cheio(s['kg'+sf]));}
+  if(f==='kg'&&!lb)atualizaDicas(i);
+  save(); if(feitoDia(S.week,day)!==antes)abas();}
+// Atualiza a carga em cinza das séries ainda vazias: a última digitada hoje; senão, a da referência.
+function atualizaDicas(i){
+  const L=getLog(S.week,day),arr=(L&&L.sets[chave(S.week,day,exDe(i).e)])||[];
+  let ult='';
+  for(let j=0;;j++){const r=document.getElementById('r'+i+'_'+j); if(!r)break;
+    const inp=r.querySelector('td.in input'),c=arr[j];
+    if(inp&&!cheio(c&&c.kg))inp.placeholder=ult||inp.dataset.ph||'kg';
+    if(c&&cheio(c.kg))ult=String(c.kg);}}
+// Séries que o exercício pede hoje: as do programa, ou mais se o usuário acrescentou linhas ("+ série").
+function alvoEx(x,arr){return aberto.has(x.e)?Math.max(nS(x,S.week),arr.length):nS(x,S.week);}
+function sessaoCompleta(){const L=getLog(S.week,day); if(!L)return false;
+  return lista(S.week,day).every(x=>{const a=L.sets[chave(S.week,day,x.e)]||[];return a.filter(val).length>=alvoEx(x,a);});}
+// Espera o foco chegar ao próximo campo antes de concluir a série (ver o preenchimento da carga abaixo).
+function fim(i,k){setTimeout(()=>fimAgora(i,k),0);}
+function fimAgora(i,k){const s=leCel(i,k); if(!val(s))return;
+  const x=exDe(i),ck=chave(S.week,day,x.e),id=i+'_'+k,nova=novas.has(id); novas.delete(id);
+  // Só digitou as reps: vale a carga que aparecia em cinza (a da série anterior de hoje ou a da referência).
+  // Se o toque foi justamente no campo de carga desta série, não preenche: ele vai digitar.
+  if(nova&&!ehUni(x.e)&&!cheio(s.kg)){
+    const r=document.getElementById('r'+i+'_'+k),inp=r&&r.querySelector('td.in input'),ph=inp?inp.placeholder:'';
+    if(inp&&document.activeElement!==inp&&/^\d+(\.\d+)?$/.test(ph)){s.kg=ph;inp.value=ph;r.classList.add('tem');atualizaDicas(i);}}
+  const kk=kgOf(s),rr=repsOf(s),rec=recorde(alvosDe(S.week,day,x.e),{k:key(S.week,day),nm:ck,i:k});
+  if(rec&&kk&&rr&&(kk>rec.kg||(kk===rec.kg&&rr>rec.reps))){
     toast('Novo recorde: '+kk+'kg × '+rr+' em '+nome(S.week,day,x.e)+'.');
     if(navigator.vibrate)navigator.vibrate(60);}
-  const L=getLog(S.week,day),feitas=((L&&L.sets[chave(S.week,day,x.e)])||[]).filter(val).length;
-  if(feitas>=nS(x,S.week)&&!aberto.has(x.e)) requestAnimationFrame(()=>treino());   // só redesenha quando o exercício termina
-  tDe(i);}
-function limpa(i,k,sf){const x0=exDe(i),x={e:chave(S.week,day,x0.e)},L=getLog(S.week,day);
-  const c=L&&L.sets[x.e]&&L.sets[x.e][k]; if(!c)return;
-  if(sf===undefined||!ehUni(x0.e)){L.sets[x.e][k]={};}
+  save();
+  const L=getLog(S.week,day),arr=(L&&L.sets[ck])||[],feitas=arr.filter(val).length;
+  const terminou=feitas>=nS(x,S.week)&&!aberto.has(x.e);           // recolhe o exercício
+  const acabou=feitas>=alvoEx(x,arr)&&sessaoCompleta();             // última série do dia: sem descanso
+  if(nova){ if(acabou){ if(rFim)para(); toast('Sessão completa. Marque abaixo como foi o treino.'); }
+            else tDe(i); }
+  if(terminou)requestAnimationFrame(()=>{treino();setTimeout(()=>vaiParaProximo(i,acabou),60);});   // só redesenha quando o exercício termina
+  flush();}
+// Depois de concluir um exercício, leva a tela até o próximo que falta (ou ao fim da sessão).
+function vaiParaProximo(i,acabou){ let alvo=null;
+  if(!acabou){const n=lista(S.week,day).length;
+    for(let d=1;d<=n;d++){const el=document.getElementById('ex'+((i+d)%n)); if(el&&!el.classList.contains('col')){alvo=el;break;}}}
+  if(!alvo)alvo=document.getElementById('cfh');
+  if(!alvo)return;
+  const hh=(document.querySelector('header')||{}).offsetHeight||0;
+  window.scrollTo({top:Math.max(0,alvo.getBoundingClientRect().top+window.scrollY-hh-10),behavior:'smooth'});}
+function limpa(i,k,sf){const x0=exDe(i),ck=chave(S.week,day,x0.e),L=getLog(S.week,day),w=S.week,d=day;
+  const c=L&&L.sets[ck]&&L.sets[ck][k]; if(!c||(!cheio(c.kg)&&!cheio(c.reps)&&!cheio(c.kgD)&&!cheio(c.repsD)))return;
+  const antes=JSON.parse(JSON.stringify(c));
+  if(!ehUni(x0.e)){L.sets[ck][k]={};}
   else{delete c['kg'+sf];delete c['reps'+sf];}
-  save();treino();}
-function maisSerie(i){const x=exDe(i),L=mkLog(S.week,day);
-  if(!L.sets[x.e])L.sets[x.e]=[];L.sets[x.e].push({});aberto.add(x.e);save();treino();}
+  novas.delete(i+'_'+k); save(); render();
+  toast('Série '+(k+1)+' apagada.',0,{txt:'Desfazer',fn:()=>{
+    const L2=S.logs[key(w,d)]; if(!L2)return; L2.sets[ck]=L2.sets[ck]||[];
+    while(L2.sets[ck].length<=k)L2.sets[ck].push({});
+    L2.sets[ck][k]=antes; save(); render(); toast('Série '+(k+1)+' de volta.');}});}
+function maisSerie(i){const x=exDe(i),L=mkLog(S.week,day),ck=chave(S.week,day,x.e);
+  if(!L.sets[ck])L.sets[ck]=[];
+  while(L.sets[ck].length<nS(x,S.week))L.sets[ck].push({});      // as linhas que já aparecem na tela
+  L.sets[ck].push({}); aberto.add(x.e); save(); treino();}
 function reabre(i){aberto.add(exDe(i).e);treino();}
+function recolhe(i){aberto.delete(exDe(i).e);treino();}
+// Abre as substituições sem focar o campo de texto: o teclado cobriria as sugestões.
 function abreT(i){const el=document.getElementById('sw'+i),abrir=el.classList.contains('hide');
   document.querySelectorAll('.pnl').forEach(s=>s.classList.add('hide'));
-  if(abrir){el.classList.remove('hide');document.getElementById('swi'+i).focus();}}
+  if(abrir)el.classList.remove('hide');}
 function usaSub(i,v){const x=exDe(i),k=key(S.week,day);
   S.swaps[k]=S.swaps[k]||{};S.swaps[k][x.e]=v;save();treino();toast('Trocado por '+v+'.');}
-function salvaT(i){const x=exDe(i),k=key(S.week,day),v=document.getElementById('swi'+i).value.trim();
-  S.swaps[k]=S.swaps[k]||{};if(v)S.swaps[k][x.e]=v;else delete S.swaps[k][x.e];
-  save();treino();toast(v?'Trocado por '+v+'.':'De volta ao original.');}
+function salvaT(i){const x=exDe(i),k=key(S.week,day),v=limpaTxt(document.getElementById('swi'+i).value,60);
+  S.swaps[k]=S.swaps[k]||{};if(v&&v!==x.e)S.swaps[k][x.e]=v;else delete S.swaps[k][x.e];
+  save();treino();toast(v&&v!==x.e?'Trocado por '+v+'.':'De volta ao original.');}
 function resetT(i){const x=exDe(i),k=key(S.week,day);
   if(S.swaps[k])delete S.swaps[k][x.e];save();treino();toast('De volta ao original.');}
 function abreAdd(){const e=document.getElementById('addbox');
   e.classList.toggle('hide'); if(!e.classList.contains('hide'))document.getElementById('nxN').focus();}
-function addExtra(){const nm=document.getElementById('nxN').value.trim();
+function addExtra(){const nm=limpaTxt(document.getElementById('nxN').value,60);
   if(!nm){toast('Dê um nome ao exercício.',1);return;}
-  if(lista(S.week,day).some(x=>x.e.toLowerCase()===nm.toLowerCase())){toast('Já está na sessão.',1);return;}
-  const s=Math.max(1,Math.min(8,+document.getElementById('nxS').value||3));
-  let a=+document.getElementById('nxA').value||8,b=+document.getElementById('nxB').value||12;
+  if(lista(S.week,day).some(x=>norm(x.e)===norm(nm))){toast('Já está na sessão.',1);return;}
+  const s=Math.max(1,Math.min(8,+limpaNum(document.getElementById('nxS').value)||3));
+  let a=+limpaNum(document.getElementById('nxA').value)||8,b=+limpaNum(document.getElementById('nxB').value)||12;
   if(b<a){const t=a;a=b;b=t;}
   const k=key(S.week,day);S.extras[k]=S.extras[k]||[];
   S.extras[k].push({e:nm,s,a,b,r:'0-1',d:90,m:document.getElementById('nxM').value,inc:2.5,fixo:1,extra:1});
@@ -704,35 +989,64 @@ function rmExtra(i){const x=exDe(i),k=key(S.week,day);
   ask('Remover "'+x.e+'" desta sessão?\n\nAs séries registradas nele saem junto.',()=>{
     S.extras[k]=(S.extras[k]||[]).filter(y=>y.e!==x.e);
     const L=getLog(S.week,day);if(L&&L.sets[x.e])delete L.sets[x.e];
-    save();render();toast('Removido.');});}
+    save();render();toast('Removido.');},null,'Remover');}
 function rd(k,v){const id=key(S.week,day);mkLog(S.week,day);
   S.readiness[id]=S.readiness[id]||{};S.readiness[id][k]=v;save();treino();}
 
-/* ================= PROGRESSO ================= */
+/* ================= AJUSTES ================= */
+const nSess=T=>Object.values((T&&T.logs)||{}).filter(L=>contaS(L)>0).length;
+const dataBR=t=>{const d=new Date(t);return String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0');};
+const diasDesde=t=>Math.floor((Date.now()-t)/864e5);
+// Backup "atrasado": 3+ sessões e nenhum backup, ou o último tem 10+ dias e houve treino depois dele.
+function backupAtrasado(){ if(nSess(S)<3)return false; if(!S.bkp)return true;
+  if(diasDesde(S.bkp)<10)return false;
+  return Object.values(S.logs).some(L=>contaS(L)>0&&L.date&&new Date(L.date+'T23:59:59').getTime()>S.bkp);}
+function lembraBackup(){const g=document.getElementById('ger'); if(g)g.classList.toggle('lembra',backupAtrasado());}
+// Cópia automática feita na 1ª abertura de cada dia. Só aparece nos Ajustes se tiver treinos que não estão aqui.
+function copiaUtil(){try{const c=JSON.parse(localStorage.getItem(KCOP)||'null'); if(!c||!c.v)return null;
+  const o=normaliza(JSON.parse(c.v)); let n=0;
+  Object.entries(o.logs).forEach(([k,L])=>{const q=contaS(L); if(q&&q>contaS(S.logs[k]))n++;});
+  return n?{d:c.d,n,o}:null;}catch(e){return null;}}
+function copiaDoDia(raw){try{const hj=hojeLocal(),c=JSON.parse(localStorage.getItem(KCOP)||'null');
+  if(c&&c.d===hj)return;
+  if(c&&c.v&&nSess(normaliza(JSON.parse(raw)))<nSess(normaliza(JSON.parse(c.v))))return;  // nunca troca por uma versão com menos treinos
+  localStorage.setItem(KCOP,JSON.stringify({d:hj,v:raw}));}catch(e){}}
 function ajustes(){
-  const last=S.body[S.body.length-1]||{},first=S.body[0];
-  let h=`<div class="card"><h2>Medidas</h2><div class="grid">`;
-  [['peso','Peso (kg)'],['ombro','Ombro (cm)'],['peito','Peito (cm)'],['cintura','Cintura (cm)'],['braco','Braço (cm)']]
-    .forEach(([k,lb])=>h+=`<div class="fld"><label>${lb}</label><input type="number" inputmode="decimal" step="0.1" id="m_${k}" placeholder="${last[k]||'—'}"></div>`);
-  h+=`</div><button class="btn g" onclick="salvaMedidas()">Salvar medidas de hoje</button>`;
-  if(first&&S.body.length>1){h+='<div style="height:10px"></div>';
-    [['peso','Peso'],['ombro','Ombro'],['peito','Peito'],['cintura','Cintura'],['braco','Braço']].forEach(([k,lb])=>{
-      if(first[k]&&last[k]){const d=+(last[k]-first[k]).toFixed(1),bom=k==='cintura'?d<0:d>0;
-        h+=`<div class="row"><span>${lb}</span><b class="${d===0?'':(bom?'up':'dn')}">${d>0?'+':''}${d}</b></div>`;}});}
-  h+='</div>';
-
-  h+=`<div class="card"><h2>Backup</h2>
-    <p>Seus treinos ficam salvos neste endereço e sobrevivem às atualizações. O backup serve para trocar de celular ou imprevisto.</p>
-    <div class="frow"><button class="btn g" onclick="baixaBackup()">Baixar</button>
+  const last=S.body[S.body.length-1]||{},first=S.body[0],ns=nSess(S);
+  let h=`<div class="card"><h2>Backup</h2>`;
+  if(S.bkp){const dd=diasDesde(S.bkp);
+    h+=backupAtrasado()?`<p class="lembrete">Último backup em ${dataBR(S.bkp)}, há ${dd} dias. Baixe um novo: é ele que recupera os treinos se o celular for trocado ou o navegador for limpo.</p>`
+                       :`<p class="ok-bkp">Último backup: ${dataBR(S.bkp)}${dd===0?' (hoje)':dd===1?' (ontem)':' (há '+dd+' dias)'}.</p>`;}
+  else if(ns)h+=`<p class="lembrete">Nenhum backup baixado ainda. Os treinos ficam salvos neste aparelho, mas se o celular for trocado, formatado ou o navegador for limpo, só o arquivo de backup traz tudo de volta.</p>`;
+  else h+=`<p>Os treinos ficam salvos neste aparelho e sobrevivem às atualizações do app. O backup serve para trocar de celular ou para um imprevisto.</p>`;
+  h+=`<div class="frow"><button class="btn${backupAtrasado()?'':' g'}" onclick="baixaBackup()">Baixar backup</button>
       <button class="btn g" onclick="document.getElementById('arq').click()">Abrir arquivo</button></div>
     <input type="file" id="arq" accept=".json,.txt,application/json,text/plain" class="hide" onchange="leArquivo(this)">
     <button class="lnk" onclick="revela('cxBkp')">ou copiar e colar como texto</button>
     <div class="hide" id="cxBkp">
       <textarea class="box" id="out" placeholder="Cole aqui um backup e toque em Restaurar."></textarea>
       <div class="frow" style="margin-top:9px">
-        <button class="btn g" onclick="mostra('resumo')">Ver resumo</button>
+        <button class="btn g" onclick="mostra('resumo')">Resumo</button>
         <button class="btn g" onclick="copia()">Copiar</button>
-        <button class="btn g" onclick="restaura()">Restaurar</button></div></div></div>`;
+        <button class="btn g" onclick="restaura()">Restaurar</button></div></div>`;
+  const cp=copiaUtil();
+  if(cp)h+=`<button class="lnk" onclick="recuperaCopia()">recuperar a cópia automática de ${esc(cp.d.split('-').reverse().slice(0,2).join('/'))} (${cp.n} ${cp.n>1?'sessões que não estão':'sessão que não está'} aqui)</button>`;
+  h+=`</div>`;
+
+  let estragado=null;try{estragado=localStorage.getItem(KEST);}catch(e){}
+  if(estragado)h+=`<div class="card"><h2>Dados danificados</h2><p>Ao abrir, os dados salvos estavam ilegíveis. Guardei uma cópia deles: copie e me mande para recuperar o que der.</p>
+    <div class="frow"><button class="btn g" onclick="copiaTexto(localStorage.getItem(KEST)||'')">Copiar</button>
+    <button class="btn g" onclick="descartaEstragado()">Descartar</button></div></div>`;
+
+  h+=`<div class="card"><h2>Medidas</h2>${last.date?`<p>Em cinza, as últimas (${esc(String(last.date).split('-').reverse().slice(0,2).join('/'))}). Preencha só o que medir hoje.</p>`:''}<div class="grid">`;
+  [['peso','Peso (kg)'],['ombro','Ombro (cm)'],['peito','Peito (cm)'],['cintura','Cintura (cm)'],['braco','Braço (cm)']]
+    .forEach(([k,lb])=>h+=`<div class="fld"><label for="m_${k}">${lb}</label><input type="text" inputmode="decimal" autocomplete="off" id="m_${k}" placeholder="${esc(last[k]||'—')}"></div>`);
+  h+=`</div><button class="btn g" onclick="salvaMedidas()">Salvar medidas de hoje</button>`;
+  if(first&&S.body.length>1){h+=`<div style="height:10px"></div><p style="margin:0 0 4px">Desde ${esc(String(first.date||'').split('-').reverse().join('/'))}:</p>`;
+    [['peso','Peso'],['ombro','Ombro'],['peito','Peito'],['cintura','Cintura'],['braco','Braço']].forEach(([k,lb])=>{
+      if(first[k]&&last[k]){const d=+(last[k]-first[k]).toFixed(1),bom=k==='cintura'?d<0:d>0;
+        h+=`<div class="row"><span>${lb}</span><b class="${d===0?'':(bom?'up':'dn')}">${d>0?'+':''}${d}</b></div>`;}});}
+  h+='</div>';
 
   h+=`<div class="card"><h2>Programa</h2>
     <p>${esc(NOME)} · ${P.length} sessões.</p>
@@ -745,64 +1059,94 @@ function ajustes(){
       <button class="btn g" onclick="importaPrograma()">Aplicar</button></div></div>`;
 
   let errs=[];try{errs=JSON.parse(localStorage.getItem(KERR)||'[]');}catch(e){}
-  if(errs.length)h+=`<div class="card"><h2>Diagnóstico</h2><p>Erros registrados pelo app. Copie e me mande se ele travar.</p>
+  if(errs.length)h+=`<div class="card"><h2>Diagnóstico</h2><p>O que o app registrou de erros e fechamentos inesperados. Se ele travar ou fechar, copie e me mande.</p>
     <textarea class="box" id="errbox" readonly>${esc(errs.map(x=>x.t+' — '+x.m).join('\n'))}</textarea>
-    <div style="height:9px"></div><button class="btn g" onclick="limpaErros()">Limpar</button></div>`;
+    <div class="frow" style="margin-top:9px"><button class="btn g" onclick="copiaTexto(textoDiag())">Copiar</button>
+    <button class="btn g" onclick="limpaErros()">Limpar</button></div></div>`;
   h+=`<div class="card"><button class="btn dan" onclick="apagaTudo()">Apagar todos os dados</button></div>`;
   document.getElementById('v2').innerHTML=h;}
+function textoDiag(){let errs=[];try{errs=JSON.parse(localStorage.getItem(KERR)||'[]');}catch(e){}
+  return errs.map(x=>x.t+' — '+x.m).join('\n')+'\n'+navigator.userAgent;}
 function limpaErros(){try{localStorage.removeItem(KERR);}catch(e){} ajustes();}
+const KEST='tracker-danificado';
+function descartaEstragado(){ask('Descartar a cópia dos dados danificados?',()=>{try{localStorage.removeItem(KEST);}catch(e){} ajustes();},null,'Descartar');}
 function revela(id){const e=document.getElementById(id);e.classList.toggle('hide');
   if(id==='cxBkp'&&!e.classList.contains('hide'))mostra('backup');}
-function mostra(tipo){
-  if(tipo==='backup')saida=JSON.stringify({v:6,semana:S.week,logs:S.logs,corpo:S.body,recuperacao:S.readiness,trocas:S.swaps,extras:S.extras,notas:S.notas,uni:S.uni});
-  else{const L=[];
-    Object.entries(S.logs).sort(([a,A],[b,B])=>{const wa=+(a.match(/^w(\d+)/)||[0,0])[1],wb=+(b.match(/^w(\d+)/)||[0,0])[1];
-      return wa-wb||String(A.date||'').localeCompare(String(B.date||''))||a.localeCompare(b);}).forEach(([k,lg])=>{const m=k.match(/^w(\d+)d(\d+)$/);if(!m)return;
-      const w=+m[1],d=+m[2],ss=Object.entries(lg.sets||{}).filter(([,a])=>a.some(val));
-      if(!ss.length)return;
-      L.push(rotuloCiclo(w)+' · '+nomeSessao(w,d)+(lg.date?' · '+lg.date.split('-').reverse().join('/'):''));
-      ss.forEach(([e,a])=>L.push('  '+nome(w,d,e)+' — '+a.filter(val).map(s=>
-        cheio(s.repsD)?((s.kg||s.kgD?(s.kg||s.kgD)+'×':'')+(s.reps||'–')+'/'+s.repsD+' (E/D)')
-                      :((s.kg?s.kg+'×':'')+s.reps)).join(', ')));
-      const r=S.readiness[k];
-      if(r)L.push('  sono/vontade/articulações: '+[r.sono,r.vontade,r.artic].map(v=>v===3?'bom':v===2?'ok':v===1?'ruim':'—').join(' · '));
-      if(lg.notes)L.push('  nota: '+lg.notes);
-      L.push('');});
-    if(S.body.length){L.push('MEDIDAS');
-      S.body.forEach(b=>L.push('  '+b.date+': '+['peso','ombro','peito','cintura','braco'].filter(k=>b[k]).map(k=>k+' '+b[k]).join(' · ')));}
-    saida=L.join('\n')||'Nada registrado ainda.';}
-  const o=document.getElementById('out'); if(o)o.value=saida;
-}
+// Conteúdo do backup. inicio/prog/flags/dia permitem que um celular novo continue exatamente de onde parou.
+function textoBackup(){return JSON.stringify({v:7,criado:new Date().toISOString(),semana:S.week,inicio:S.inicio,dia:S.dia,
+  logs:S.logs,corpo:S.body,recuperacao:S.readiness,trocas:S.swaps,extras:S.extras,notas:S.notas,uni:S.uni,flags:S.flags,prog:S.prog,progs:S.progs,bkp:Date.now()});}
+function resumo(){const L=[];
+  Object.entries(S.logs).sort(([a,A],[b,B])=>{const wa=+(a.match(/^w(\d+)/)||[0,0])[1],wb=+(b.match(/^w(\d+)/)||[0,0])[1];
+    return wa-wb||String(A.date||'').localeCompare(String(B.date||''))||a.localeCompare(b);}).forEach(([k,lg])=>{const m=k.match(/^w(\d+)d(\d+)$/);if(!m)return;
+    const w=+m[1],d=+m[2],ss=Object.entries(lg.sets||{}).filter(([,a])=>Array.isArray(a)&&a.some(val));
+    if(!ss.length)return;
+    L.push(rotuloCiclo(w)+' · '+nomeSessao(w,d)+(lg.date?' · '+lg.date.split('-').reverse().join('/'):''));
+    ss.forEach(([e,a])=>{const f=a.filter(val);
+      L.push('  '+nome(w,d,e)+' — '+f.map(fmtSerie).join(', ')+(f.some(s=>cheio(s.repsD))?' (E/D)':''));});
+    const r=S.readiness[k];
+    if(r)L.push('  sono/vontade/articulações: '+[r.sono,r.vontade,r.artic].map(v=>v===3?'bom':v===2?'ok':v===1?'ruim':'—').join(' · '));
+    if(lg.notes)L.push('  nota: '+lg.notes);
+    L.push('');});
+  if(S.body.length){L.push('MEDIDAS');
+    S.body.forEach(b=>L.push('  '+b.date+': '+['peso','ombro','peito','cintura','braco'].filter(k=>b[k]).map(k=>k+' '+b[k]).join(' · ')));}
+  return L.join('\n')||'Nada registrado ainda.';}
+function mostra(tipo){saida=tipo==='backup'?textoBackup():resumo();
+  const o=document.getElementById('out'); if(o)o.value=saida;}
 function compacta(o){return[o.nome||'',o.prio||[],(o.dias||[]).map(d=>[d.n,d.f||'',
-  d.ex.map(x=>[x.e,x.s,x.a,x.b,x.r||'1',x.d||90,x.m,x.inc||2.5,x.iso?1:0,x.bw?1:0,x.note||'',x.c?1:0,x.par?1:0])])];}
+  d.ex.map(x=>[x.e,x.s,x.a,x.b,x.r||'1',x.d||90,x.m,x.inc||2.5,x.iso?1:0,x.bw?1:0,x.note||'',x.c?1:0,x.par?1:0,x.alias||0,x.sub||0])])];}
 function expande(c){ if(!Array.isArray(c)||c.length<3)return null;
   return{nome:c[0],prio:c[1]||[],dias:(c[2]||[]).map(d=>({n:d[0],f:d[1],
     ex:(d[2]||[]).map(a=>({e:a[0],s:a[1],a:a[2],b:a[3],r:a[4],d:a[5],m:a[6],inc:a[7],
-      iso:a[8]||undefined,bw:a[9]||undefined,note:a[10]||undefined,c:a[11]||undefined,par:a[12]||undefined}))}))};}
+      iso:a[8]||undefined,bw:a[9]||undefined,note:a[10]||undefined,c:a[11]||undefined,par:a[12]||undefined,
+      alias:Array.isArray(a[13])?a[13]:undefined,sub:Array.isArray(a[14])?a[14]:undefined}))}))};}
 function b64(str){return btoa(unescape(encodeURIComponent(str))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');}
 function deb64(str){const t=str.replace(/-/g,'+').replace(/_/g,'/');
   return decodeURIComponent(escape(atob(t+'==='.slice((t.length+3)%4))));}
+// Copia texto para a área de transferência (API moderna; se não houver, o método antigo).
+function copiaTexto(txt,msg){
+  const erro=()=>toast('Não consegui copiar. Selecione o texto e copie pelo teclado.',1);
+  const velho=()=>{const t=document.createElement('textarea');t.value=txt;t.setAttribute('readonly','');
+    t.style.cssText='position:fixed;top:0;left:0;width:1px;height:1px;opacity:0';document.body.appendChild(t);
+    t.select();try{t.setSelectionRange(0,txt.length);}catch(e){}
+    let ok=false;try{ok=document.execCommand('copy');}catch(e){} t.remove(); ok?toast(msg||'Copiado.'):erro();};
+  try{ if(navigator.clipboard&&navigator.clipboard.writeText&&window.isSecureContext){
+      navigator.clipboard.writeText(txt).then(()=>toast(msg||'Copiado.'),velho); return;} }catch(e){}
+  velho();}
 function geraLink(){
   const cod=b64(JSON.stringify(compacta(programaAtual())));
   const base=location.href.split('#')[0];
   const publico=/^https?:\/\//.test(base);
   const url=(publico?base:'')+'#p='+cod;
-  const t=document.getElementById('pbox'); t.value=url;
-  t.focus();t.select();t.setSelectionRange(0,999999);
-  let cop=false;try{cop=document.execCommand('copy');}catch(e){}
-  if(publico)toast((cop?'Link copiado':'Link no campo — copie pelo teclado')+' · '+(url.length/1024).toFixed(1)+' KB');
-  else toast('Este arquivo não está numa URL pública, então copiei só o trecho #p=… Cole no fim do endereço onde o app estiver hospedado.',1);}
+  const t=document.getElementById('pbox'); t.value=url; document.getElementById('cxProg').classList.remove('hide');
+  if(publico)copiaTexto(url,'Link copiado · '+(url.length/1024).toFixed(1)+' KB');
+  else toast('Este arquivo não está numa URL pública, então o link tem só o trecho #p=… Cole no fim do endereço onde o app estiver hospedado.',1);}
 function leLinkDaURL(){
   const m=(location.hash||'').match(/[#&]p=([^&]+)/); if(!m)return null;
   try{const o=expande(JSON.parse(deb64(m[1]))); return validaPrograma(o)?null:o;}catch(e){return null;}}
+// Tira o #p=… do endereço: recarregar a página ou abrir o atalho não pergunta de novo.
+function limpaHash(){try{if(/[#&]p=/.test(location.hash))history.replaceState(null,'',location.pathname+location.search);}catch(e){}}
+// Aplica um programa novo começando um bloco novo, num ciclo ainda vazio:
+// assim as sessões do programa novo não "herdam" registros do antigo.
+function iniciaPrograma(o){
+  let ult=0,usou=false;
+  Object.entries(S.logs).forEach(([k,L])=>{const g=k.match(/^w(\d+)d(\d+)$/); if(!g||!contaS(L))return;
+    const w=+g[1],d=+g[2]; ult=Math.max(ult,w);
+    if(w>=ini()){usou=true; if(!L.n&&P[d])L.n=P[d].n;}});        // as sessões guardam o nome do programa que sai
+  if(usou){S.progs=(S.progs||[]).filter(x=>x.i<ini()).concat([{i:ini(),nb:NB}]);}
+  S.prog=o; aplicaPrograma(o);
+  S.week=Math.max(S.week,ult+1); S.inicio=S.week; S.dia=0; day=0; S.flags.prog2=1;
+  aberto.clear(); novas.clear(); if(rFim)para();
+  save(); flush(); render(); scrollTo(0,0);
+  toast('Programa "'+(o.nome||'novo')+'" aplicado. Bloco 1, ciclo 1.');}
 function apagaTudo(){
-  ask('Apagar todo o histórico deste aparelho?\n\nTreinos, medidas e notas somem e não há como desfazer. Copie o Backup antes se quiser guardar.',
-    ()=>{S={week:1,logs:{},body:[],readiness:{},swaps:{},extras:{},flags:{},notas:{},prog:S.prog};
-      day=0;S.dia=0;aberto.clear();saida='';save();render();scrollTo(0,0);toast('Dados apagados. O programa foi mantido.');});}
-function copiaPrograma(){const t=document.getElementById('pbox');
-  t.value=JSON.stringify(programaAtual());t.focus();t.select();t.setSelectionRange(0,999999);
-  let ok=false;try{ok=document.execCommand('copy');}catch(e){}
-  toast(ok?'Programa copiado.':'Programa no campo — copie pelo teclado.');}
+  ask('Apagar todo o histórico deste aparelho?\n\nTreinos, medidas e trocas somem e não há como desfazer. Baixe o backup antes se quiser guardar.',
+    ()=>{ if(rFim)para(); const prog=S.prog; S=novoEstado(); S.flags={prog2:1}; S.inicio=1; if(prog)S.prog=prog;
+      try{localStorage.removeItem(KCOP);localStorage.removeItem(ROL);}catch(e){}
+      day=0;aberto.clear();novas.clear();saida='';save();flush();render();scrollTo(0,0);
+      toast('Dados apagados. O programa foi mantido.');},null,'Apagar tudo');}
+function copiaPrograma(){const txt=JSON.stringify(programaAtual());
+  document.getElementById('pbox').value=txt; document.getElementById('cxProg').classList.remove('hide');
+  copiaTexto(txt,'Programa copiado.');}
 function importaPrograma(){const v=document.getElementById('pbox').value.trim();
   if(!v){toast('Cole um programa no campo acima.',1);return;}
   let o=null;
@@ -811,8 +1155,8 @@ function importaPrograma(){const v=document.getElementById('pbox').value.trim();
   if(!o){try{o=JSON.parse(v);}catch(e){toast('Isso não é um programa nem um link válido.',1);return;}}
   const erro=validaPrograma(o);
   if(erro){toast(erro,1);return;}
-  ask('Aplicar "'+(o.nome||'programa sem nome')+'"?\n\nSeu histórico continua salvo, mas ele foi registrado com os exercícios do programa anterior.',
-    ()=>{S.prog=o;aplicaPrograma(o);save();render();scrollTo(0,0);toast('Programa aplicado.');});}
+  ask('Aplicar "'+(o.nome||'programa sem nome')+'"?\n\n'+o.dias.length+' sessões. Ele começa no ciclo 1 de um bloco novo; o histórico continua salvo e as cargas de exercícios com o mesmo nome continuam valendo.',
+    ()=>iniciaPrograma(o),null,'Aplicar');}
 function baixaBackup(){
   mostra('backup');
   const d=hojeLocal();
@@ -822,57 +1166,103 @@ function baixaBackup(){
     a.href=URL.createObjectURL(b); a.download='treino-'+d+'.json';
     document.body.appendChild(a); a.click(); a.remove();
     setTimeout(()=>URL.revokeObjectURL(a.href),4000);
-    toast('Backup salvo como treino-'+d+'.json');
-  }catch(e){toast('Download bloqueado — use Copiar e guarde o texto.',1);}}
+    S.bkp=Date.now(); save(); lembraBackup(); if(tab==='2')ajustes();
+    toast('Backup salvo como treino-'+d+'.json (pasta Downloads).');
+  }catch(e){toast('Download bloqueado. Use "copiar e colar como texto" e guarde o texto.',1);}}
 function leArquivo(inp){
   const f=inp.files&&inp.files[0]; if(!f)return;
   const r=new FileReader();
   r.onload=()=>{document.getElementById('out').value=String(r.result||'').trim(); restaura(); inp.value='';};
   r.onerror=()=>{toast('Não consegui ler o arquivo.',1); inp.value='';};
   r.readAsText(f);}
+// Backup (formato do arquivo) ou dados copiados do app (formato interno) → formato interno.
+function deBackup(o){
+  return normaliza({week:o.semana||o.week,logs:o.logs,body:o.corpo||o.body,readiness:o.recuperacao||o.readiness,
+    swaps:o.trocas||o.swaps,extras:o.extras,notas:o.notas,uni:o.uni,inicio:o.inicio,prog:o.prog,progs:o.progs,flags:o.flags,dia:o.dia,bkp:o.bkp});}
+// Início do programa atual em backups antigos (que não o guardavam): a 1ª semana com uma sessão do programa atual —
+// pelo nome da sessão ou, em registros antigos sem nome, por pelo menos 60% dos exercícios em comum.
+function inferirInicio(){let m=0;
+  Object.entries(S.logs).forEach(([k,L])=>{const g=k.match(/^w(\d+)d(\d+)$/); if(!g||!contaS(L))return;
+    const w=+g[1],d=+g[2]; if(!P[d]||(m&&w>=m))return;
+    let ok;
+    if(L.n)ok=L.n===P[d].n;
+    else{const doDia=new Set(P[d].ex.map(x=>normH(x.e)));
+      const feitos=Object.entries(L.sets).filter(([,a])=>Array.isArray(a)&&a.some(val)).map(([e])=>normH(nome(w,d,e)));
+      ok=feitos.length>0&&feitos.filter(n=>doDia.has(n)).length/feitos.length>=0.6;}
+    if(ok)m=w;});
+  return m;}
+// Datas (AAAA-MM-DD) das sessões com séries, em ordem.
+const datasDe=T=>Object.values(T.logs).filter(L=>contaS(L)>0).map(L=>String(L.date||'')).filter(Boolean).sort();
+// Este aparelho começou do zero depois do backup (ex.: celular novo em que já treinou antes de restaurar):
+// as sessões dele passam a vir logo depois das do backup, em vez de cair por cima das semanas antigas.
+function reposiciona(T){
+  const itens=Object.keys(S.logs).map(k=>{const g=k.match(/^w(\d+)d(\d+)$/);return g&&{k,w:+g[1],d:+g[2]};}).filter(Boolean).sort((a,b)=>a.w-b.w||a.d-b.d);
+  if(!itens.length)return 0;
+  const w0=itens[0].w, novo={logs:{},readiness:{},swaps:{},extras:{}};
+  const ocupado=(w,d)=>contaS(T.logs[key(w,d)])>0||!!novo.logs[key(w,d)];
+  let desl=Math.max(0,T.week-w0),maxW=T.week;
+  itens.forEach(x=>{let w=x.w+desl; while(ocupado(w,x.d)){w++;desl++;}
+    const k2=key(w,x.d); novo.logs[k2]=S.logs[x.k];
+    ['readiness','swaps','extras'].forEach(m=>{if(S[m][x.k]){novo[m][k2]=S[m][x.k];delete S[m][x.k];}});
+    maxW=Math.max(maxW,w);});
+  S.logs=novo.logs; ['readiness','swaps','extras'].forEach(m=>Object.assign(S[m],novo[m]));
+  S.week=Math.max(maxW,S.week-w0+T.week); S.ultimo=0;
+  return itens.length;}
+function restauraEstado(T){
+  const nDev=nSess(S),dT=datasDe(T),dS=datasDe(S);
+  const continua=nDev>0&&dT.length>0&&dS.length===nDev&&dS[0]>dT[dT.length-1];
+  if(continua)reposiciona(T);
+  const vazio=nDev===0||continua;
+  const r=mescla(S,T); let pulou=0;
+  if(vazio){                         // continua exatamente de onde o backup parou: programa, início do bloco, histórico de programas
+    if(!S.prog&&T.prog&&!validaPrograma(T.prog)){S.prog=T.prog;aplicaPrograma(T.prog);}
+    S.flags=Object.assign({},T.flags,S.flags,{prog2:1});
+    if(T.progs&&!S.progs)S.progs=T.progs;
+    const i0=T.inicio||inferirInicio(); if(i0)S.inicio=i0;}
+  if(T.bkp)S.bkp=Math.max(S.bkp||0,T.bkp);
+  if(T.week>S.week){pulou=T.week;S.week=T.week;}
+  return Object.assign(r,{pulou,continua});}
+// Correção pontual do histórico: no Upper A de 08/10/2026 a remada foi feita na hammer (80kg), mas ficou
+// registrada com o nome do aparelho anterior (100kg). Marca como troca para os dois aparelhos não se misturarem.
+function corrigeHistorico(){let mudou=false;const r='Remada máquina apoiada no peito';
+  Object.entries(S.logs).forEach(([k,L])=>{
+    if(L.date==='2026-10-08'&&Array.isArray(L.sets[r])&&L.sets[r].some(val)&&!(S.swaps[k]||{})[r]){
+      S.swaps[k]=S.swaps[k]||{};S.swaps[k][r]='Remada hammer';mudou=true;}});
+  return mudou;}
+function aplicaRestauracao(T){
+  const r=restauraEstado(T); corrigeHistorico();
+  if(!r.novas&&!r.atualizadas&&!r.pulou&&!r.continua){
+    toast(r.conflitos?r.conflitos+' sessão(ões) do backup não entraram: neste aparelho, o mesmo ciclo já tem outro treino.':'Nada novo nesse backup — tudo já estava aqui.',!!r.conflitos);return;}
+  aberto.clear(); novas.clear();
+  {const nx=proxima(); day=nx>=0?nx:Math.min(day,P.length-1); S.dia=day;}
+  save(); flush(); render();
+  toast(r.novas+' sessão(ões) restaurada(s)'+(r.atualizadas?' e '+r.atualizadas+' completada(s)':'')+
+    (r.continua?', com os treinos deste aparelho em seguida':'')+' · ciclo '+sem(S.week)+' do bloco '+bloco(S.week)+'.'+
+    (r.conflitos?' '+r.conflitos+' não entrou(aram): o mesmo ciclo já tem outro treino aqui.':''),!!r.conflitos);}
 function restaura(){
   const v=document.getElementById('out').value.trim();
   if(!v){toast('Cole um backup no campo acima.',1);return;}
   let o;try{o=JSON.parse(v);}catch(e){toast('Isso não é um backup válido.',1);return;}
-  if(!o||typeof o!=='object'||Array.isArray(o)||!o.logs){toast('Esse backup não tem treinos dentro.',1);return;}
-  const conta=L=>Object.values((L&&L.sets)||{}).reduce((a,arr)=>a+(arr||[]).filter(val).length,0);
-  let novas=0,atualizadas=0;
-  Object.entries(o.logs).forEach(([k,L])=>{
-    if(!/^w\d+d\d+$/.test(k)||!L||!L.sets||!conta(L))return;
-    if(!S.logs[k]){S.logs[k]=L;novas++;}
-    else if(conta(L)>conta(S.logs[k])){S.logs[k]=L;atualizadas++;}});
-  (o.corpo||[]).forEach(b=>{if(b&&b.date&&!S.body.some(x=>x.date===b.date))S.body.push(b);});
-  Object.entries(o.recuperacao||{}).forEach(([k,v2])=>{if(!S.readiness[k])S.readiness[k]=v2;});
-  Object.entries(o.trocas||{}).forEach(([k,v2])=>S.swaps[k]=Object.assign({},v2,S.swaps[k]||{}));
-  Object.entries(o.extras||{}).forEach(([k,arr])=>{S.extras[k]=S.extras[k]||[];
-    (arr||[]).forEach(x=>{if(x&&x.e&&!S.extras[k].some(y=>norm(y.e)===norm(x.e)))S.extras[k].push(x);});});
-  Object.entries(o.notas||{}).forEach(([k,v2])=>{if(!S.notas[norm(k)])S.notas[norm(k)]=v2;});
-  Object.entries(o.uni||{}).forEach(([k,v2])=>{if(v2)S.uni[norm(k)]=1;});
-  let pulou=0;
-  if(o.semana&&o.semana>S.week){pulou=o.semana;S.week=o.semana;day=0;aberto.clear();}
-  if(!novas&&!atualizadas&&!pulou){toast('Nada novo nesse backup — tudo já estava aqui.');return;}
-  save();render();
-  toast(novas+' sessão(ões) restaurada(s)'+(atualizadas?' e '+atualizadas+' completada(s)':'')
-    +(pulou?' · agora no ciclo '+sem(pulou)+' do bloco '+bloco(pulou):'')+'.');}
-function copia(){const t=document.getElementById('out');
-  t.removeAttribute('readonly');t.focus();t.select();t.setSelectionRange(0,999999);
-  let ok=false;try{ok=document.execCommand('copy');}catch(e){}
-  t.setAttribute('readonly','');
-  if(ok)toast('Copiado.');
-  else if(navigator.clipboard)navigator.clipboard.writeText(t.value).then(()=>toast('Copiado.'),()=>toast('Selecionado — copie pelo teclado.',1));
-  else toast('Selecionado — copie pelo teclado.',1);}
+  if(!o||typeof o!=='object'||Array.isArray(o)||!o.logs||typeof o.logs!=='object'){toast('Esse backup não tem treinos dentro.',1);return;}
+  aplicaRestauracao(deBackup(o));}
+function recuperaCopia(){const c=copiaUtil(); if(!c)return;
+  ask('Recuperar a cópia automática de '+c.d.split('-').reverse().slice(0,2).join('/')+'?\n\nEntram só as sessões que faltam aqui; nada do que está no app é apagado.',
+    ()=>aplicaRestauracao(c.o),null,'Recuperar');}
+function copia(){const t=document.getElementById('out'); if(!t||!t.value){toast('Nada para copiar.',1);return;}
+  if(t.value===saida&&saida.startsWith('{"v":7')){S.bkp=Date.now();save();lembraBackup();}
+  copiaTexto(t.value);}
 function salvaMedidas(){const o={date:hojeLocal()};let a=0;
-  ['peso','ombro','peito','cintura','braco'].forEach(k=>{const v=document.getElementById('m_'+k).value;if(v){o[k]=+v;a=1;}});
+  ['peso','ombro','peito','cintura','braco'].forEach(k=>{const v=+limpaNum(document.getElementById('m_'+k).value,1);if(v>0){o[k]=v;a=1;}});
   if(!a){toast('Preencha ao menos um campo.',1);return;}
   const i=S.body.findIndex(b=>b.date===o.date);
   if(i>=0)S.body[i]=Object.assign(S.body[i],o);else S.body.push(o);
   save();ajustes();toast('Medidas salvas.');}
 function proxSemana(){const recente=S.ultimo&&(Date.now()-S.ultimo<2*3600000);
   ask('Avançar para o ciclo '+sem(S.week+1)+'?\n\n'+(recente?'Você registrou séries há pouco. Se ainda está treinando, termine a sessão antes: o que for registrado depois vai para o ciclo novo.\n\n':'')+'As cargas deste ciclo viram a referência do próximo.',
-  ()=>{S.week++;aberto.clear();day=0;S.dia=0;save();flush();render();scrollTo(0,0);toast('Ciclo '+sem(S.week)+' do bloco '+bloco(S.week)+'.');});}
+  ()=>{S.week++;aberto.clear();novas.clear();day=0;S.dia=0;save();flush();render();scrollTo(0,0);toast('Ciclo '+sem(S.week)+' do bloco '+bloco(S.week)+'.');},null,'Avançar');}
 function voltaSemana(){if(S.week<=ini()){toast('Este já é o primeiro ciclo do programa.');return;}
   ask('Voltar para o ciclo '+sem(S.week-1)+'?\n\nUse só se avançou por engano. Enquanto estiver lá, as cargas de referência vêm do ciclo anterior a ele.',
-    ()=>{S.week--;S.dia=0;day=0;aberto.clear();save();render();scrollTo(0,0);toast('Ciclo '+sem(S.week)+'.');});}
+    ()=>{S.week--;S.dia=0;day=0;aberto.clear();novas.clear();save();render();scrollTo(0,0);toast('Ciclo '+sem(S.week)+'.');},null,'Voltar');}
 
 let rolagem=0;
 function abreCfg(){rolagem=window.scrollY||0;tab='2';ajustes();
@@ -880,32 +1270,50 @@ function abreCfg(){rolagem=window.scrollY||0;tab='2';ajustes();
   document.body.classList.add('trava');scrollTo(0,0);}
 function fechaCfg(){tab='1';document.getElementById('cfg').classList.add('hide');
   document.body.classList.remove('trava');treino();scrollTo(0,rolagem);}
+// Pede ao navegador para não apagar os dados quando o celular fica sem espaço (Chrome e Safari decidem sozinhos, sem perguntar).
+function pedePersistencia(){try{ if(/Firefox/.test(navigator.userAgent))return;
+  if(navigator.storage&&navigator.storage.persisted)navigator.storage.persisted().then(p=>{if(!p&&navigator.storage.persist)navigator.storage.persist();}).catch(()=>{});}catch(e){}}
 
 (async function(){
+ try{
+  confereFechamento(); marcaVivo(true,1);
   const raw=await store.get(KEY);
-  if(raw){try{S=Object.assign(S,JSON.parse(raw));}catch(e){}}
-  ['logs','readiness','swaps','extras','flags','notas','uni'].forEach(k=>S[k]=S[k]||{});
-  S.body=S.body||[]; S.week=S.week||1; delete S.cfg;
-  {const n2={};Object.entries(S.notas||{}).forEach(([k,v])=>n2[norm(k)]=v);S.notas=n2;}
+  ultimoTexto=raw||'';
+  let estragado=false;
+  if(raw){try{S=normaliza(JSON.parse(raw));}catch(e){estragado=true;}}
+  if(estragado){try{localStorage.setItem(KEST,raw);}catch(e){} anotaErro('dados ilegíveis ao abrir ('+raw.length+' caracteres) — cópia guardada');}
+  else if(raw)copiaDoDia(raw);
   if(S.prog&&!validaPrograma(S.prog))aplicaPrograma(S.prog);
-  const doLink=leLinkDaURL();
-  if(doLink&&JSON.stringify(doLink)!==JSON.stringify(S.prog||null)){
-    render();
-    ask('Aplicar o programa "'+(doLink.nome||'sem nome')+'"?\n\n'+doLink.dias.length+' sessões. Seu histórico não é apagado.',
-      ()=>{S.prog=doLink;aplicaPrograma(doLink);save();render();scrollTo(0,0);toast('Programa aplicado.');});}
   let aviso='';
-  if(S.flags.prog2&&!S.inicio&&S.week>=8)S.inicio=8;
+  if(!raw||estragado){S.flags.prog2=1;S.inicio=1;}                 // aparelho novo: programa atual desde o ciclo 1
+  if(S.flags.prog2&&!S.inicio){S.inicio=inferirInicio()||1;save();}
+  if(corrigeHistorico())save();
   if(!S.flags.prog2){ S.flags.prog2=1;
     if(!S.prog && Object.keys(S.logs).length){
       S.week=7*Math.ceil(S.week/7)+1; S.inicio=S.week; S.dia=0; S.ultimo=0; delete S.prog;
       aviso='Programa novo: bloco 1, ciclo 1. Suas cargas anteriores continuam valendo.';}
     save();}
+  // sessões do programa atual sem nome (versões antigas) recebem o nome: continuam certas se o programa mudar
+  Object.entries(S.logs).forEach(([k,L])=>{const g=k.match(/^w(\d+)d(\d+)$/);
+    if(g&&+g[1]>=ini()&&!L.n&&P[+g[2]]&&contaS(L)>0){L.n=P[+g[2]].n;pend=true;}});
   const noMeio=S.ultimo&&(Date.now()-S.ultimo<3*3600000);
   if(!noMeio&&!aviso&&proxima()===-1){ S.week++; S.dia=0; save();
     aviso='Ciclo anterior completo. Começando o ciclo '+sem(S.week)+(fase(S.week).dl?' — deload.':'.');}
   day=Math.min(Math.max(0,+S.dia||0),P.length-1);
-  if(!noMeio){const nx=proxima(); if(nx>=0)day=nx;}
-  render(); retomaTimer(); voltaRolagem(); await flush();
-  if(aviso)toast(aviso);
+  // reabre na sessão em andamento; se ela já terminou (ou passou o tempo), na próxima da fila
+  const emAndamento=noMeio&&!sessaoCompleta();
+  if(!emAndamento){const nx=proxima(); if(nx>=0)day=nx;}
+  if(S.dia!==day){S.dia=day;save();}
+  render(); retomaTimer(); if(emAndamento)voltaRolagem(); await flush(); lembraBackup();
+  if(estragado)toast('Os dados salvos estavam ilegíveis. Guardei uma cópia deles em ⚙.',1);
+  else if(aviso)toast(aviso);
+  const doLink=leLinkDaURL(); limpaHash();
+  if(doLink&&JSON.stringify(doLink)!==JSON.stringify(S.prog||null))
+    ask('Aplicar o programa "'+(doLink.nome||'sem nome')+'"?\n\n'+doLink.dias.length+' sessões. Ele começa no ciclo 1 de um bloco novo; seu histórico não é apagado.',
+      ()=>iniciaPrograma(doLink),null,'Aplicar');
+  pedePersistencia();
+ }catch(e){anotaErro('início: '+(e&&e.message)); socorro(e);}
 })();
 </script>
+</body>
+</html>
