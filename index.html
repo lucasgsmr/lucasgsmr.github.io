@@ -157,7 +157,8 @@ select.finp{appearance:none;-webkit-appearance:none}
 
 #rest{position:fixed;left:14px;right:14px;bottom:18px;z-index:60;background:var(--ink);color:var(--bg);
   border-radius:12px;padding:13px 17px;display:none;align-items:center;justify-content:space-between;
-  border:1px solid rgba(255,255,255,.12);max-width:592px;margin:0 auto}
+  border:1px solid rgba(255,255,255,.12);max-width:592px;margin:0 auto;
+  transform:translateZ(0);will-change:transform;contain:layout paint style}
 #rest.on{display:flex} #rest.fim{background:var(--go)}
 #rest .t{font-size:32px;font-weight:800;line-height:1;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
 #rest .l{font-size:12.5px;font-weight:600;opacity:.72}
@@ -396,7 +397,7 @@ const store={
     if(window.storage&&window.storage.set){try{await window.storage.set(k,v);ok=true;}catch(e){}}
     try{localStorage.setItem(k,v);ok=true;}catch(e){}
     return ok;}};
-function save(){pend=true;document.getElementById('sv').lastChild.textContent='salvando…';
+function save(){pend=true;const sv=document.getElementById('sv').lastChild;if(sv.textContent!=='salvando…')sv.textContent='salvando…';
   clearTimeout(tSave);tSave=setTimeout(flush,450);}
 async function flush(){
   clearTimeout(tSave); tSave=null;
@@ -421,7 +422,7 @@ async function flush(){
   lembraBackup();
   if(juntou){const a=document.activeElement; if(!a||a.tagName!=='INPUT')render();}}
 // Sem espaço: a cópia automática é só uma duplicata, pode sair para o treino ser gravado.
-function abreEspaco(){try{localStorage.removeItem(KCOP);localStorage.removeItem(KERR);}catch(e){}}
+function abreEspaco(){try{localStorage.removeItem(KCOP);localStorage.removeItem(KERR);localStorage.removeItem(KLENTO);}catch(e){}}
 
 /* ---- Duas abas abertas ao mesmo tempo (ex.: atalho na tela inicial + link no navegador) ----
    Cada aba guarda o estado na memória. Sem isto, a aba esquecida em segundo plano podia gravar
@@ -492,7 +493,7 @@ window.addEventListener('pagehide',()=>{guardaRolagem();flush();marcaVivo(false)
 // Marca que o app está aberto. Se ao abrir de novo a marca ainda estiver "aberto", ele fechou sem aviso.
 let ultMarca=0;
 function marcaVivo(aberto,forca){ const agora=Date.now();
-  if(aberto&&(document.hidden||(!forca&&agora-ultMarca<4000)))return;   // aba em segundo plano não conta como "aberta"
+  if(aberto&&(document.hidden||(!forca&&agora-ultMarca<10000)))return;   // aba em segundo plano não conta como "aberta"
   ultMarca=agora;
   try{ const m=performance&&performance.memory?Math.round(performance.memory.usedJSHeapSize/1048576):null;
     localStorage.setItem(KVIVO,JSON.stringify({aberto,t:agora,timer:rFim>agora,mem:m,n:document.getElementsByTagName('*').length,
@@ -653,7 +654,7 @@ async function travaTela(on){ wlQuer=on; try{
     wl=w; w.addEventListener('release',()=>{if(wl===w)wl=null;}); }
   else if(wl){ const w=wl; wl=null; await w.release(); } }catch(e){wlPend=false;} }
 // Esconde a barra do descanso e para o relógio, sem mexer no que está gravado.
-function escondeTimer(){clearInterval(rT);clearTimeout(tAuto);rT=null;tAuto=null;rFim=0;
+function escondeTimer(){clearInterval(rT);clearTimeout(tAuto);rT=null;tAuto=null;rFim=0;ultTique=0;
   const el=document.getElementById('rest');if(el)el.classList.remove('on','fim');
   travaTela(false);}
 function desc(sec,lbl){ clearTimeout(tAuto); tAuto=null;
@@ -663,10 +664,13 @@ function rodaTimer(){
   const el=document.getElementById('rest'); if(!el)return;
   document.getElementById('rl').textContent=rLbl;
   el.classList.add('on'); el.classList.remove('fim');
-  clearInterval(rT); pinta(); rT=setInterval(pinta,1000); }
-let ultimoTxt='';
+  clearInterval(rT); ultTique=0; pinta(); rT=setInterval(pinta,1000); }
+let ultimoTxt='',ultTique=0;
 function pinta(){
   const el=document.getElementById('rest'); if(!el)return;
+  // o relógio deveria bater a cada 1s; se bateu bem depois, a tela ficou parada nesse intervalo
+  const ag=performance.now(); if(ultTique&&!document.hidden){const atraso=ag-ultTique-1000; if(atraso>=400)anotaLento('relógio atrasou',atraso,ultTique+1000);}
+  ultTique=ag;
   const ms=rFim-Date.now(), seg=Math.max(0,Math.ceil(ms/1000));
   const txt=Math.floor(seg/60)+':'+String(seg%60).padStart(2,'0');
   if(txt!==ultimoTxt){ultimoTxt=txt;document.getElementById('rt').textContent=txt;}
@@ -818,8 +822,8 @@ function treino(){
         h+=`<tr class="${ok?'ok':''}${tem?' tem':''}" id="r${i}_${k}${lb}">
         <td class="sn">${k+1}${lb?`<i>${lb}</i>`:''}</td>
         <td class="pv">${cheio(oRp)?(cheio(oKg)?`<b>${esc(oKg)}</b>kg×<b>${esc(oRp)}</b>`:`<b>${esc(oRp)}</b> reps`):'—'}</td>
-        <td class="in"><input type="text" inputmode="decimal" autocomplete="off" enterkeyhint="next" aria-label="Série ${k+1}${lb?' '+lb:''}, carga em kg" placeholder="${ph?esc(ph):'kg'}" data-ph="${esc(ref)}" value="${esc(c['kg'+sf])}" onfocus="selTudo(this)" oninput="põe(${i},${k},'kg${sf}',this)"></td>
-        <td class="in"><input type="text" inputmode="numeric" pattern="[0-9]*" autocomplete="off" enterkeyhint="next" aria-label="Série ${k+1}${lb?' '+lb:''}, repetições" placeholder="${x.a}-${x.b}" value="${esc(c['reps'+sf])}" onfocus="selTudo(this)" oninput="põe(${i},${k},'reps${sf}',this)" onchange="fim(${i},${k})"></td>
+        <td class="in"><input type="text" inputmode="decimal" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" enterkeyhint="next" aria-label="Série ${k+1}${lb?' '+lb:''}, carga em kg" placeholder="${ph?esc(ph):'kg'}" data-ph="${esc(ref)}" value="${esc(c['kg'+sf])}" onfocus="selTudo(this)" oninput="põe(${i},${k},'kg${sf}',this)"></td>
+        <td class="in"><input type="text" inputmode="numeric" pattern="[0-9]*" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" enterkeyhint="next" aria-label="Série ${k+1}${lb?' '+lb:''}, repetições" placeholder="${x.a}-${x.b}" value="${esc(c['reps'+sf])}" onfocus="selTudo(this)" oninput="põe(${i},${k},'reps${sf}',this)" onchange="fim(${i},${k})"></td>
         <td class="xx"><button onclick="limpa(${i},${k},'${sf}')" aria-label="Apagar série ${k+1}">×</button></td></tr>`;});
       if(!uni&&cheio(c.kg))hoje=String(c.kg);}
     h+=`</table><div class="foot"><button class="add" onclick="maisSerie(${i})">+ série</button></div></div>`;});
@@ -1058,16 +1062,20 @@ function ajustes(){
       <div style="height:9px"></div>
       <button class="btn g" onclick="importaPrograma()">Aplicar</button></div></div>`;
 
-  let errs=[];try{errs=JSON.parse(localStorage.getItem(KERR)||'[]');}catch(e){}
-  if(errs.length)h+=`<div class="card"><h2>Diagnóstico</h2><p>O que o app registrou de erros e fechamentos inesperados. Se ele travar ou fechar, copie e me mande.</p>
-    <textarea class="box" id="errbox" readonly>${esc(errs.map(x=>x.t+' — '+x.m).join('\n'))}</textarea>
+  const diag=linhasDiag();
+  if(diag.length)h+=`<div class="card"><h2>Diagnóstico</h2><p>Erros, fechamentos inesperados e momentos em que a tela travou. Copie e me mande.</p>
+    <textarea class="box" id="errbox" readonly>${esc(diag.join('\n'))}</textarea>
     <div class="frow" style="margin-top:9px"><button class="btn g" onclick="copiaTexto(textoDiag())">Copiar</button>
     <button class="btn g" onclick="limpaErros()">Limpar</button></div></div>`;
   h+=`<div class="card"><button class="btn dan" onclick="apagaTudo()">Apagar todos os dados</button></div>`;
   document.getElementById('v2').innerHTML=h;}
-function textoDiag(){let errs=[];try{errs=JSON.parse(localStorage.getItem(KERR)||'[]');}catch(e){}
-  return errs.map(x=>x.t+' — '+x.m).join('\n')+'\n'+navigator.userAgent;}
-function limpaErros(){try{localStorage.removeItem(KERR);}catch(e){} ajustes();}
+function linhasDiag(){let errs=[],lentos=[];
+  try{errs=JSON.parse(localStorage.getItem(KERR)||'[]');}catch(e){}
+  try{lentos=JSON.parse(localStorage.getItem(KLENTO)||'[]');}catch(e){}
+  return errs.map(x=>x.t+' — '+x.m).concat(lentos.map(x=>x.t+' — parado '+x.ms+' ms ('+x.tipo+(x.det?': '+x.det:'')+')'+
+    (x.timer?' · cronômetro rodando':'')+(x.tec?' · teclado aberto':'')+(x.durante?' · durante: '+x.durante:'')+' · '+x.n+' elementos'));}
+function textoDiag(){return linhasDiag().join('\n')+'\n'+navigator.userAgent;}
+function limpaErros(){try{localStorage.removeItem(KERR);localStorage.removeItem(KLENTO);}catch(e){} ajustes();}
 const KEST='tracker-danificado';
 function descartaEstragado(){ask('Descartar a cópia dos dados danificados?',()=>{try{localStorage.removeItem(KEST);}catch(e){} ajustes();},null,'Descartar');}
 function revela(id){const e=document.getElementById(id);e.classList.toggle('hide');
@@ -1273,6 +1281,41 @@ function fechaCfg(){tab='1';document.getElementById('cfg').classList.add('hide')
 // Pede ao navegador para não apagar os dados quando o celular fica sem espaço (Chrome e Safari decidem sozinhos, sem perguntar).
 function pedePersistencia(){try{ if(/Firefox/.test(navigator.userAgent))return;
   if(navigator.storage&&navigator.storage.persisted)navigator.storage.persisted().then(p=>{if(!p&&navigator.storage.persist)navigator.storage.persist();}).catch(()=>{});}catch(e){}}
+
+/* ---- Medidor de travamentos ----
+   Anota quando a tela fica parada por 150 ms ou mais (ou o relógio do descanso atrasa), com o que o app
+   estava fazendo naquele momento. Não muda nada no uso: só aparece em ⚙ → Diagnóstico. */
+const KLENTO='tracker-lentidao', acoes=[];
+const ultLento={};
+function mede(nome,fn){return function(){const a=performance.now();
+  try{return fn.apply(this,arguments);}finally{acoes.push({n:nome,a,b:performance.now()});if(acoes.length>40)acoes.shift();}};}
+function anotaLento(tipo,ms,ini,det){const agora=Date.now(); if(agora-(ultLento[tipo]||0)<1500)return; ultLento[tipo]=agora;
+  const fimT=ini+ms,durante=[...new Set(acoes.filter(x=>x.b>=ini-30&&x.a<=fimT+30).map(x=>x.n))].join(', ');
+  const ae=document.activeElement;
+  try{const a=JSON.parse(localStorage.getItem(KLENTO)||'[]');
+    a.push({t:new Date().toLocaleString('pt-BR'),ms:Math.round(ms),tipo,det:det||'',timer:rFim>agora?1:0,tec:ae&&ae.tagName==='INPUT'?1:0,
+      durante,n:document.getElementsByTagName('*').length});
+    localStorage.setItem(KLENTO,JSON.stringify(a.slice(-25)));}catch(e){}}
+// quadros lentos: separa o tempo de código do tempo de desenhar a tela (Chrome/Android)
+try{const tipos=PerformanceObserver.supportedEntryTypes||[];
+  if(tipos.includes('long-animation-frame'))new PerformanceObserver(l=>l.getEntries().forEach(e=>{if(e.duration<150||document.hidden)return;
+      const sc=e.scripts||[],js=Math.round(sc.reduce((a,x)=>a+x.duration,0));
+      const des=e.styleAndLayoutStart?Math.round(e.startTime+e.duration-e.styleAndLayoutStart):0;
+      const top=sc.slice().sort((a,b)=>b.duration-a.duration)[0],quem=top?(top.invoker||top.sourceFunctionName||''):'';
+      anotaLento('quadro',e.duration,e.startTime,'código '+js+' ms, desenho '+des+' ms'+(quem?', '+String(quem).slice(0,40):''));}))
+    .observe({type:'long-animation-frame'});
+  else new PerformanceObserver(l=>l.getEntries().forEach(e=>{if(e.duration>=150&&!document.hidden)anotaLento('tarefa',e.duration,e.startTime);}))
+    .observe({type:'longtask'});}catch(e){}
+// toque ou tecla que demorou a aparecer na tela
+try{new PerformanceObserver(l=>l.getEntries().forEach(e=>{if(e.duration<150||document.hidden)return;
+    anotaLento(/key|input/.test(e.name)?'tecla':'toque',e.duration,e.startTime,
+      'espera '+Math.round(e.processingStart-e.startTime)+' ms, código '+Math.round(e.processingEnd-e.processingStart)+
+      ' ms, desenho '+Math.round(e.startTime+e.duration-e.processingEnd)+' ms');}))
+  .observe({type:'event',durationThreshold:104});}catch(e){}
+render=mede('tela',render); treino=mede('lista',treino); ajustes=mede('ajustes',ajustes); flush=mede('gravar',flush);
+sincroniza=mede('outra aba',sincroniza); bipe=mede('bipe',bipe); vaiParaProximo=mede('rolar',vaiParaProximo);
+põe=mede('digitar',põe); fimAgora=mede('fim da série',fimAgora); desc=mede('início do descanso',desc); para=mede('fim do descanso',para);
+copiaDoDia=mede('cópia do dia',copiaDoDia); travaTela=mede('tela acesa',travaTela);
 
 (async function(){
  try{
